@@ -1,61 +1,61 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from views.pyqt5_exten.TableWidgetDragRows import TableWidgetDragRows
+from view.pyqt5_exten.TableWidgetDragRows import TableWidgetDragRows
 
 
 class Ui_DomenEditorWindow(object):
     def setupUi(self, DomenEditorWindow, domen=None):
-        DomenEditorWindow.setObjectName("DomenEditorWindow")
+        DomenEditorWindow.setObjectName('DomenEditorWindow')
         DomenEditorWindow.resize(351, 375)
         DomenEditorWindow.setMinimumSize(QtCore.QSize(351, 375))
         DomenEditorWindow.setMaximumSize(QtCore.QSize(351, 375))
         self.centralwidget = QtWidgets.QWidget(DomenEditorWindow)
-        self.centralwidget.setObjectName("centralwidget")
+        self.centralwidget.setObjectName('centralwidget')
         self.domenNameLabel = QtWidgets.QLabel(self.centralwidget)
         self.domenNameLabel.setGeometry(QtCore.QRect(10, 0, 91, 16))
-        self.domenNameLabel.setObjectName("domenNameLabel")
+        self.domenNameLabel.setObjectName('domenNameLabel')
         self.domenNameText = QtWidgets.QLineEdit(self.centralwidget)
         self.domenNameText.setGeometry(QtCore.QRect(10, 20, 331, 20))
-        self.domenNameText.setObjectName("domenNameText")
+        self.domenNameText.setObjectName('domenNameText')
         self.domenValLabel = QtWidgets.QLabel(self.centralwidget)
         self.domenValLabel.setGeometry(QtCore.QRect(10, 50, 61, 16))
-        self.domenValLabel.setObjectName("domenValLabel")
+        self.domenValLabel.setObjectName('domenValLabel')
         self.domenValView = TableWidgetDragRows(self.centralwidget)
         self.domenValView.setGeometry(QtCore.QRect(10, 70, 331, 141))
-        self.domenValView.setObjectName("domenValView")
+        self.domenValView.setObjectName('domenValView')
         self.domenValView.setColumnCount(1)
-        self.domenValView.setHorizontalHeaderLabels(["Значения"])
+        self.domenValView.setHorizontalHeaderLabels(['Значения'])
         self.domenValView.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
 
         self.domenValText = QtWidgets.QLineEdit(self.centralwidget)
-        self.domenValText.setGeometry(QtCore.QRect(10, 230, 291, 20))
-        self.domenValText.setObjectName("domenValText")
+        self.domenValText.setGeometry(QtCore.QRect(10, 250, 291, 20))
+        self.domenValText.setObjectName('domenValText')
         self.domenValInpLabel = QtWidgets.QLabel(self.centralwidget)
         self.domenValInpLabel.setGeometry(QtCore.QRect(10, 210, 61, 16))
-        self.domenValInpLabel.setObjectName("domenValInpLabel")
+        self.domenValInpLabel.setObjectName('domenValInpLabel')
         self.domenAddButton = QtWidgets.QPushButton(self.centralwidget)
         self.domenAddButton.setGeometry(QtCore.QRect(300, 229, 22, 22))
-        self.domenAddButton.setObjectName("domenAddButton")
+        self.domenAddButton.setObjectName('domenAddButton')
         self.delDomenValButton = QtWidgets.QPushButton(self.centralwidget)
-        self.delDomenValButton.setGeometry(QtCore.QRect(10, 260, 331, 23))
-        self.delDomenValButton.setObjectName("delDomenValButton")
+        self.delDomenValButton.setGeometry(QtCore.QRect(10, 260, 331, 25))
+        self.delDomenValButton.setObjectName('delDomenValButton')
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 290, 331, 16))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
+        self.line.setObjectName('line')
         self.cancelButton = QtWidgets.QPushButton(self.centralwidget)
-        self.cancelButton.setGeometry(QtCore.QRect(260, 310, 75, 23))
-        self.cancelButton.setObjectName("cancelButton")
+        self.cancelButton.setGeometry(QtCore.QRect(260, 310, 75, 25))
+        self.cancelButton.setObjectName('cancelButton')
         self.okButton = QtWidgets.QPushButton(self.centralwidget)
-        self.okButton.setGeometry(QtCore.QRect(180, 310, 75, 23))
-        self.okButton.setObjectName("okButton")
+        self.okButton.setGeometry(QtCore.QRect(180, 310, 75, 25))
+        self.okButton.setObjectName('okButton')
         DomenEditorWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DomenEditorWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 351, 21))
-        self.menubar.setObjectName("menubar")
+        self.menubar.setObjectName('menubar')
         DomenEditorWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(DomenEditorWindow)
-        self.statusbar.setObjectName("statusbar")
+        self.statusbar.setObjectName('statusbar')
         DomenEditorWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(DomenEditorWindow)
@@ -69,15 +69,15 @@ class Ui_DomenEditorWindow(object):
 
     def retranslateUi(self, DomenEditorWindow):
         _translate = QtCore.QCoreApplication.translate
-        DomenEditorWindow.setWindowTitle(_translate("DomenEditorWindow", "Редактирование домена"))
-        self.domenNameLabel.setText(_translate("DomenEditorWindow", "Имя домена:"))
-        self.domenValLabel.setText(_translate("DomenEditorWindow", "Значения:"))
-        self.domenValInpLabel.setText(_translate("DomenEditorWindow", "Значение:"))
-        self.domenAddButton.setToolTip(_translate("DomenEditorWindow", "Добавить"))
-        self.domenAddButton.setText(_translate("DomenEditorWindow", "+"))
-        self.delDomenValButton.setText(_translate("DomenEditorWindow", "Удалить"))
-        self.cancelButton.setText(_translate("DomenEditorWindow", "Отмена"))
-        self.okButton.setText(_translate("DomenEditorWindow", "OK"))
+        DomenEditorWindow.setWindowTitle(_translate('DomenEditorWindow', 'Редактирование домена'))
+        self.domenNameLabel.setText(_translate('DomenEditorWindow', 'Имя домена:'))
+        self.domenValLabel.setText(_translate('DomenEditorWindow', 'Значения:'))
+        self.domenValInpLabel.setText(_translate('DomenEditorWindow', 'Значение:'))
+        self.domenAddButton.setToolTip(_translate('DomenEditorWindow', 'Добавить'))
+        self.domenAddButton.setText(_translate('DomenEditorWindow', '+'))
+        self.delDomenValButton.setText(_translate('DomenEditorWindow', 'Удалить'))
+        self.cancelButton.setText(_translate('DomenEditorWindow', 'Отмена'))
+        self.okButton.setText(_translate('DomenEditorWindow', 'OK'))
 
     def connectHotkeys(self):
         self.shortcutDel = QtWidgets.QShortcut(QtGui.QKeySequence('Delete'), self.domenEditorWindow)
@@ -96,8 +96,8 @@ class Ui_DomenEditorWindow(object):
 
         if self.domenValView.findItems(val, QtCore.Qt.MatchExactly):
             error = QtWidgets.QErrorMessage(self.domenEditorWindow)
-            error.setWindowTitle("Ошибка!")
-            error.showMessage("Такое значение уже есть")
+            error.setWindowTitle('Ошибка!')
+            error.showMessage('Такое значение уже есть')
             return False
 
         row = self.domenValView.rowCount()
@@ -110,12 +110,12 @@ class Ui_DomenEditorWindow(object):
             self.domenValView.removeRow(row_index)
 
     def okClick(self):
-        expSys = self.domenEditorWindow.prevWindow.expShellMainWindow.expertSystem
+        expSys = self.domenEditorWindow.prevWindow.es_main_window.expertSystem
         if expSys.getDomenByName(self.domenNameText.text()):
             if self.domen is not None and self.domen.getName() != self.domenNameText.text() or self.domen is None:
                 error = QtWidgets.QErrorMessage(self.domenEditorWindow)
-                error.setWindowTitle("Ошибка!")
-                error.showMessage("Данное имя уже используется")
+                error.setWindowTitle('Ошибка!')
+                error.showMessage('Данное имя уже используется')
                 return False
         self.domenValView.selectAll()
         domenVals = [item.text() for item in self.domenValView.selectedItems()]
@@ -125,7 +125,7 @@ class Ui_DomenEditorWindow(object):
                 self.domen.setValues(domenVals)
             except Exception as e:
                 error = QtWidgets.QErrorMessage(self.domenEditorWindow)
-                error.setWindowTitle("Ошибка!")
+                error.setWindowTitle('Ошибка!')
                 error.showMessage(str(e))
                 return False
         else:
@@ -140,7 +140,7 @@ class Ui_DomenEditorWindow(object):
             self.addValue(domenVal)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     DomenEditorWindow = QtWidgets.QMainWindow()

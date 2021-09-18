@@ -3,10 +3,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_answerWindow(object):
     def setupUi(self, answerWindow):
-        answerWindow.setObjectName("answerWindow")
+        answerWindow.setObjectName('answerWindow')
         answerWindow.resize(800, 700)
         self.centralwidget = QtWidgets.QWidget(answerWindow)
-        self.centralwidget.setObjectName("centralwidget")
+        self.centralwidget.setObjectName('centralwidget')
         self.answerTree = QtWidgets.QTreeWidget(self.centralwidget)
         self.answerTree.setGeometry(QtCore.QRect(10, 20, 781, 381))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -16,35 +16,35 @@ class Ui_answerWindow(object):
         self.answerTree.setSizePolicy(sizePolicy)
         self.answerTree.setColumnCount(1)
         self.answerTree.setHeaderLabels([''])
-        self.answerTree.setObjectName("answerTree")
+        self.answerTree.setObjectName('answerTree')
         self.descrLabel = QtWidgets.QLabel(self.centralwidget)
         self.descrLabel.setGeometry(QtCore.QRect(10, 0, 61, 16))
-        self.descrLabel.setObjectName("descrLabel")
+        self.descrLabel.setObjectName('descrLabel')
         self.goalLabel = QtWidgets.QLabel(self.centralwidget)
         self.goalLabel.setGeometry(QtCore.QRect(10, 410, 47, 13))
-        self.goalLabel.setObjectName("goalLabel")
+        self.goalLabel.setObjectName('goalLabel')
 
         self.memLabel = QtWidgets.QLabel(self.centralwidget)
         self.memLabel.setGeometry(QtCore.QRect(10, 450, 47, 13))
-        self.memLabel.setObjectName("goalLabel")
-        self.memLabel.setText("Раб.пам.")
+        self.memLabel.setObjectName('goalLabel')
+        self.memLabel.setText('Раб.пам.')
 
         self.workMem = QtWidgets.QTextEdit(self.centralwidget)
         self.workMem.setGeometry(QtCore.QRect(10, 480, 700, 150))
-        self.workMem.setObjectName("workMem")
+        self.workMem.setObjectName('workMem')
 
         self.expAllBtn = QtWidgets.QPushButton(self.centralwidget)
         self.expAllBtn.setGeometry(QtCore.QRect(10, 650, 130, 30))
-        self.expAllBtn.setObjectName("expAllBtn")
-        self.expAllBtn.setText("Развернуть / свернуть")
+        self.expAllBtn.setObjectName('expAllBtn')
+        self.expAllBtn.setText('Развернуть / свернуть')
 
         answerWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(answerWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
+        self.menubar.setObjectName('menubar')
         answerWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(answerWindow)
-        self.statusbar.setObjectName("statusbar")
+        self.statusbar.setObjectName('statusbar')
         answerWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(answerWindow)
@@ -53,9 +53,9 @@ class Ui_answerWindow(object):
 
     def retranslateUi(self, answerWindow):
         _translate = QtCore.QCoreApplication.translate
-        answerWindow.setWindowTitle(_translate("answerWindow", "Ответ"))
-        self.descrLabel.setText(_translate("answerWindow", "Обяснеие"))
-        self.goalLabel.setText(_translate("answerWindow", "Цель:"))
+        answerWindow.setWindowTitle(_translate('answerWindow', 'Ответ'))
+        self.descrLabel.setText(_translate('answerWindow', 'Обяснеие'))
+        self.goalLabel.setText(_translate('answerWindow', 'Цель:'))
 
     def expandCollapse(self):
         if not self.expanded:
@@ -70,19 +70,19 @@ class Ui_answerWindow(object):
         if var is None or es.getMemory().getVarVal(var) is None:
             self.answerTree.clear()
             self.expAllBtn.hide()
-            self.answerTree.addTopLevelItem(QtWidgets.QTreeWidgetItem(["Не удалось найти значение для цели"]))
+            self.answerTree.addTopLevelItem(QtWidgets.QTreeWidgetItem(['Не удалось найти значение для цели']))
             self.goalLabel.setText('Не удалось найти значение для цели')
         else:
-            self.goalLabel.setText("Цель: " + var.getName() + " = " + es.getMemory().getVarVal(var)['value'])
+            self.goalLabel.setText('Цель: ' + var.getName() + ' = ' + es.getMemory().getVarVal(var)['value'])
             self.expanded = False
             self.expAllBtn.clicked.connect(self.expandCollapse)
-        wMemText = ""
+        wMemText = ''
         for actFact in es.getMemory().getVarsAndVals().values():
-            wMemText += actFact['variable'].getName() + ": " + actFact['value'] + "\n"
+            wMemText += actFact['variable'].getName() + ': ' + actFact['value'] + '\n'
         self.workMem.setText(wMemText)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     answerWindow = QtWidgets.QMainWindow()

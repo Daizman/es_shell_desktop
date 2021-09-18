@@ -3,16 +3,17 @@ import jsonpickle
 from model.Memory import Memory
 from model.Domain import Domain
 from model.Var import Var
-from model.Fact import Fact
 from model.Rule import Rule
 
 from model.types.VarType import VarType
 
 
 class Shell:
-    def __init__(self, name):
+    def __init__(self, name=''):
         self.__name = name.upper().strip()
         self.__memory = Memory()
+
+        self.__observers = []
 
     @property
     def name(self):
@@ -106,4 +107,14 @@ class Shell:
     def backup(self, path):
         with open(path, 'w') as backup:
             backup.write(jsonpickle.encode(self))
+
+    def add_observer(self, in_observer):
+        self.__observers.append(in_observer)
+
+    def remove_observer(self, in_observer):
+        self.__observers.remove(in_observer)
+
+    def notify_observers(self):
+        for obs in self.__observers:
+            obs.model_is_changed()
 

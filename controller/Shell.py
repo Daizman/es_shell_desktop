@@ -1,12 +1,15 @@
-import model.Shell as ShellModel
+import view.Shell as ShellView
 
 
 class Shell:
-    def __init__(self, name):
-        self.__model = ShellModel.Shell(name)
+    def __init__(self, model):
+        self.model = model
+        self.view = ShellView.Shell(self, self.model)
+
+        self.view.show()
 
     def get_name(self):
-        return self.__model.name
+        return self.model.name
 
     def consult(self):
         pass
@@ -14,15 +17,15 @@ class Shell:
     def load(self, path):
         if not path or not path.strip():
             raise ValueError('Не найден файл с БЗ')
-        self.__model.load(path)
+        self.model.load(path)
 
     def backup(self, path):
         if not path or not path.strip():
             raise ValueError('Не указан файл для бекапа')
-        self.__model.backup(path)
+        self.model.backup(path)
 
     def get_goals(self):
-        return list(filter(lambda el: el.may_be_goal, self.__model.vars))
+        return list(filter(lambda el: el.may_be_goal, self.model.vars))
 
     def take_goal(self):
         pass

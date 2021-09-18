@@ -1,45 +1,45 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from models.VarType import VarType
-from views.AnswerWindow import Ui_answerWindow
+from view.AnswerWindow import Ui_answerWindow
 
 
 class Ui_ConsultWindow(object):
     def setupUi(self, ConsultWindow):
-        ConsultWindow.setObjectName("ConsultWindow")
+        ConsultWindow.setObjectName('ConsultWindow')
         ConsultWindow.resize(348, 150)
         self.centralwidget = QtWidgets.QWidget(ConsultWindow)
-        self.centralwidget.setObjectName("centralwidget")
+        self.centralwidget.setObjectName('centralwidget')
         self.dialogFrame = QtWidgets.QFrame(self.centralwidget)
         self.dialogFrame.setGeometry(QtCore.QRect(10, 10, 331, 471))
         self.dialogFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.dialogFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.dialogFrame.setObjectName("dialogFrame")
+        self.dialogFrame.setObjectName('dialogFrame')
         self.answerButton = QtWidgets.QPushButton(self.centralwidget)
-        self.answerButton.setGeometry(QtCore.QRect(240, 52, 101, 23))
-        self.answerButton.setObjectName("answerButton")
+        self.answerButton.setGeometry(QtCore.QRect(240, 52, 101, 25))
+        self.answerButton.setObjectName('answerButton')
         self.answerCombo = QtWidgets.QComboBox(self.centralwidget)
         self.answerCombo.setGeometry(QtCore.QRect(10, 52, 221, 22))
-        self.answerCombo.setObjectName("answerCombo")
+        self.answerCombo.setObjectName('answerCombo')
         self.exitButton = QtWidgets.QPushButton(self.centralwidget)
-        self.exitButton.setGeometry(QtCore.QRect(10, 82, 331, 23))
-        self.exitButton.setObjectName("exitButton")
+        self.exitButton.setGeometry(QtCore.QRect(10, 82, 331, 25))
+        self.exitButton.setObjectName('exitButton')
         self.questionText = QtWidgets.QLabel(self.centralwidget)
-        self.questionText.setText("Выберите цель консультации")
-        self.questionText.setGeometry(QtCore.QRect(10, 20, 171, 30))
-        self.questionText.setObjectName("questionText")
+        self.questionText.setText('Выберите цель консультации')
+        self.questionText.setGeometry(QtCore.QRect(10, 20, 170, 30))
+        self.questionText.setObjectName('questionText')
 
         ConsultWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(ConsultWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 348, 21))
-        self.menubar.setObjectName("menubar")
+        self.menubar.setObjectName('menubar')
         ConsultWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(ConsultWindow)
-        self.statusbar.setObjectName("statusbar")
+        self.statusbar.setObjectName('statusbar')
         ConsultWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(ConsultWindow)
         self.consultWindow = ConsultWindow
-        self.expShellMainWindow = ConsultWindow.prevWindow.expShellMainWindow
+        self.expShellMainWindow = ConsultWindow.prevWindow.es_main_window
 
         self.answerWindow = QtWidgets.QMainWindow()
         self.answerUI = Ui_answerWindow()
@@ -57,9 +57,9 @@ class Ui_ConsultWindow(object):
 
     def retranslateUi(self, ConsultWindow):
         _translate = QtCore.QCoreApplication.translate
-        ConsultWindow.setWindowTitle(_translate("ConsultWindow", "Консультация"))
-        self.answerButton.setText(_translate("ConsultWindow", "Ответить"))
-        self.exitButton.setText(_translate("ConsultWindow", "Выход"))
+        ConsultWindow.setWindowTitle(_translate('ConsultWindow', 'Консультация'))
+        self.answerButton.setText(_translate('ConsultWindow', 'Ответить'))
+        self.exitButton.setText(_translate('ConsultWindow', 'Выход'))
 
     def connectButtons(self):
         self.answerButton.clicked.connect(self.getAnswer)
@@ -71,7 +71,7 @@ class Ui_ConsultWindow(object):
             self.firstOpen = False
             var = es.getVariableByName(self.answerCombo.currentText())
             if es.consult(var, self, self.answerUI) == -1:
-                self.answerWindow.answerTree.addTopLevelItem(QtWidgets.QTreeWidgetItem("Произошел сбой"))
+                self.answerWindow.answerTree.addTopLevelItem(QtWidgets.QTreeWidgetItem('Произошел сбой'))
             self.answerUI.fillForm(es, var)
             self.answerWindow.show()
             self.consultWindow.close()
@@ -81,8 +81,8 @@ class Ui_ConsultWindow(object):
         variables = self.expShellMainWindow.expertSystem.getVariables()
         if not variables:
             error = QtWidgets.QErrorMessage(self.consultWindow)
-            error.setWindowTitle("Ошибка!")
-            error.showMessage("Список выводимых переменных пуст")
+            error.setWindowTitle('Ошибка!')
+            error.showMessage('Список выводимых переменных пуст')
             error.accepted.connect(lambda: self.consultWindow.close())
             return False
         for var in variables:
@@ -90,7 +90,7 @@ class Ui_ConsultWindow(object):
                 self.answerCombo.addItem(var.getName())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     ConsultWindow = QtWidgets.QMainWindow()
