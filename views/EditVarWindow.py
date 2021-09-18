@@ -117,7 +117,7 @@ class Ui_EditVarWindow(object):
         self.addDomenWindow.show()
 
     def onDomensChange(self):
-        self.editVarWindow.prevWindow.onDomensChange()
+        self.editVarWindow.prevWindow.on_domains_change()
         self.fillDomens()
         self.domenCombo.setCurrentIndex(self.domenCombo.count() - 1)
 
@@ -176,7 +176,7 @@ class Ui_EditVarWindow(object):
                                self.questionText.toPlainText(),
                                vt)
         expSys.updateDicts()
-        self.editVarWindow.prevWindow.onVarsChange()
+        self.editVarWindow.prevWindow.on_vars_change()
         self.editVarWindow.close()
 
 

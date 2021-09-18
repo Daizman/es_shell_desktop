@@ -86,12 +86,12 @@ class Ui_ConclusionEditorWindow(object):
         self.fillValues()
 
     def onVarsChange(self):
-        self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.onVarsChange()
+        self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.on_vars_change()
         self.fillVars()
         self.conclusionCombo.setCurrentIndex(self.conclusionCombo.count() - 1)
 
     def onDomensChange(self):
-        self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.onDomensChange()
+        self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.on_domains_change()
         self.fillVars()
         self.conclusionCombo.setCurrentIndex(self.conclusionCombo.count() - 1)
 

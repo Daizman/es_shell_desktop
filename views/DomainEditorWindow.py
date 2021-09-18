@@ -131,7 +131,7 @@ class Ui_DomenEditorWindow(object):
         else:
             expSys.addDomen(self.domenNameText.text(), domenVals)
         expSys.updateDicts()
-        self.domenEditorWindow.prevWindow.onDomensChange()
+        self.domenEditorWindow.prevWindow.on_domains_change()
         self.domenEditorWindow.close()
 
     def fillDomen(self):
