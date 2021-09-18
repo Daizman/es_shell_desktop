@@ -1,0 +1,11 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# My files
+tests*.py
+/backups
