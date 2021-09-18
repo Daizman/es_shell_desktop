@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from views.DomenEditorWindow import Ui_DomenEditorWindow
+from views.DomainEditorWindow import Ui_DomenEditorWindow
 from models.VarType import VarType
 
 

@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 from views.ConsultWindow import Ui_ConsultWindow
-from views.DomenEditorWindow import Ui_DomenEditorWindow
+from views.DomainEditorWindow import Ui_DomenEditorWindow
 from views.EditRuleWindow import Ui_EditRuleWindow
 from views.EditVarWindow import Ui_EditVarWindow
 from models.ExpertSystem import ExpertSystem
