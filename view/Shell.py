@@ -19,27 +19,26 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
         self.ui.setup_ui(self)
 
         self.model.add_observer(self)
-
-        # self.connect(self.ui., )
+        self.connect_buttons()
 
     def connect_buttons(self):
-        self.consult_button.clicked.connect(self.openConsultWindow)
+        self.consult_button.clicked.connect(self.open_consult_dialog)
 
         self.open_file.triggered.connect(self.load)
         self.save_file_as.triggered.connect(self.backup)
         self.exit.triggered.connect(self.exit_es)
 
-        self.add_rule_button.clicked.connect(self.openAddRuleWindow)
-        self.edit_rule_button.clicked.connect(self.openEditRuleWindow)
-        self.del_rule_button.clicked.connect(self.delRule)
+        self.add_rule_button.clicked.connect(self.open_add_rule_dialog)
+        self.edit_rule_button.clicked.connect(self.open_edit_rule_dialog)
+        self.del_rule_button.clicked.connect(self.delete_rule)
 
-        self.add_var_button.clicked.connect(self.openAddVarWindow)
-        self.edit_var_button.clicked.connect(self.openEditVarWindow)
-        self.del_var_button.clicked.connect(self.delVar)
+        self.add_var_button.clicked.connect(self.open_add_var_dialog)
+        self.edit_var_button.clicked.connect(self.open_edit_var_dialog)
+        self.del_var_button.clicked.connect(self.delete_var)
 
-        self.add_domain_button.clicked.connect(self.openAddDomenWindow)
-        self.edit_domain_button.clicked.connect(self.openEditDomenWindow)
-        self.del_domain_button.clicked.connect(self.delDomen)
+        self.add_domain_button.clicked.connect(self.open_add_domain_dialog)
+        self.edit_domain_button.clicked.connect(self.open_edit_domain_dialog)
+        self.del_domain_button.clicked.connect(self.delete_domain)
 
     def drop_rule_cb(self, drop_row, rows_to_move):
         for row_index, data in enumerate(rows_to_move):
@@ -54,10 +53,9 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
                                                 r'G:\10_tr\ExpSysShell\MyShell\\',
                                                 'ExpSys Files(*.json)',
                                                 options=options)
-
         try:
             self.controller.load(f_name)
-            self.model_is_changed()
+            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 
@@ -76,17 +74,47 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
         try:
             self.model.name = f_name.split('/')[-1]
             self.controller.backup(f_name)
-            self.model_is_changed()
+            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 
     def exit_es(self):
         self.model = ShellModel('')
-        self.model_is_changed()
+        self.notify_model_is_changed()
 
     def show_error(self, v_e):
         error_dialog = QErrorMessage(self)
         error_dialog.showMessage(v_e)
+
+    def open_consult_dialog(self):
+        pass
+
+    def open_add_rule_dialog(self):
+        pass
+
+    def open_edit_rule_dialog(self):
+        pass
+
+    def delete_rule(self):
+        pass
+
+    def open_add_var_dialog(self):
+        pass
+
+    def open_edit_var_dialog(self):
+        pass
+
+    def delete_var(self):
+        pass
+
+    def open_add_domain_dialog(self):
+        pass
+
+    def open_edit_domain_dialog(self):
+        pass
+
+    def delete_domain(self):
+        pass
 
     def domains_changed(self):
         pass
@@ -97,5 +125,5 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
     def rules_changed(self):
         pass
 
-    def model_is_changed(self):
+    def notify_model_is_changed(self):
         pass
