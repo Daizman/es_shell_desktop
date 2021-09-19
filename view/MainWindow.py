@@ -235,32 +235,6 @@ class UIMainWindow(object):
         self.addRuleUI.setupUi(self.addRuleWindow)
         self.addRuleWindow.show()
 
-    def onRulesChange(self):
-        rules = self.shell_view.expertSystem.getRules()
-        self.rules_view.clear()
-        self.rules_view.cellClicked.connect(self.onRuleSelect)
-        self.rules_view.setColumnCount(2)
-        self.rules_view.setHorizontalHeaderLabels(['Имя', 'Описание'])
-        self.rules_view.setRowCount(len(rules))
-        i = 0
-        for rule in reversed(rules):
-            rName = QtWidgets.QTableWidgetItem(rule.getName())
-            rName.setToolTip(rule.getName())
-            self.rules_view.setItem(i, 0, rName)
-            descr = rule.getDescription() if rule.getDescription() != '' else str(rule)
-            ruleItem = QtWidgets.QTableWidgetItem(descr)
-            ruleItem.setToolTip(str(rule))
-            self.rules_view.setItem(i, 1, ruleItem)
-            i += 1
-
-    def onRuleSelect(self):
-        self.conclusion_text.clear()
-        self.requisite_text.clear()
-        selRule = self.shell_view.expertSystem.getRuleByName(self.rules_view.selectedItems()[0].text())
-        if selRule:
-            self.requisite_text.setText(', '.join([str(fact) for fact in selRule.getReasons()]))
-            self.conclusion_text.setText(', '.join([str(fact) for fact in selRule.getConclusions()]))
-
     def openEditRuleWindow(self):
         self.addRuleWindow = QtWidgets.QMainWindow()
         self.addRuleUI = Ui_EditRuleWindow()
@@ -274,17 +248,6 @@ class UIMainWindow(object):
         self.addRuleUI.setupUi(self.addRuleWindow, selRule)
         self.addRuleWindow.show()
 
-    def delRule(self):
-        if len(self.rules_view.selectedItems()) == 0:
-            error = QtWidgets.QErrorMessage(self.shell_view)
-            error.setWindowTitle('Ошибка!')
-            error.showMessage('Нужно выбрать правило')
-            return False
-        self.shell_view.expertSystem.deleteRule(self.rules_view.selectedItems()[0].text())
-        self.conclusion_text.clear()
-        self.requisite_text.clear()
-        self.onRulesChange()
-
     # работа с переменными
     def openAddVarWindow(self):
         self.addVarWindow = QtWidgets.QMainWindow()
@@ -292,34 +255,6 @@ class UIMainWindow(object):
         self.addVarWindow.prevWindow = self
         self.addVarUI.setupUi(self.addVarWindow)
         self.addVarWindow.show()
-
-    def onVarsChange(self):
-        esVars = self.shell_view.expertSystem.getVariables()
-        self.vars_view.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
-        self.vars_view.clear()
-        self.vars_view.cellClicked.connect(self.onVarSelect)
-        self.vars_view.setColumnCount(3)
-        self.vars_view.setHorizontalHeaderLabels(['Имя', 'Тип', 'Домен'])
-        self.vars_view.setRowCount(len(esVars))
-        i = 0
-        for var in esVars:
-            self.vars_view.setItem(i, 0, QtWidgets.QTableWidgetItem(var.getName()))
-            typeItem = QtWidgets.QTableWidgetItem(var.getVarTypeText())
-            typeItem.setToolTip(var.getVarTypeText())
-            self.vars_view.setItem(i, 1, typeItem)
-            domItem = QtWidgets.QTableWidgetItem(var.getDomen().getName())
-            domItem.setToolTip(str(var.getDomen()))
-            self.vars_view.setItem(i, 2, domItem)
-            i += 1
-        self.vars_view.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-
-    def onVarSelect(self):
-        self.question_text.clear()
-        self.domains_var_text.clear()
-        selVar = self.shell_view.expertSystem.getVariableByName(self.vars_view.selectedItems()[0].text())
-        if selVar:
-            self.question_text.setText(selVar.getQuestion())
-            self.domains_var_text.setText(';\n'.join(selVar.getDomen().getValues()))
 
     def openEditVarWindow(self):
         self.addVarWindow = QtWidgets.QMainWindow()
@@ -333,21 +268,6 @@ class UIMainWindow(object):
         self.addVarUI.setupUi(self.addVarWindow, selVar)
         self.addVarWindow.show()
 
-    def delVar(self):
-        if len(self.vars_view.selectedItems()) == 0:
-            error = QtWidgets.QErrorMessage(self.shell_view)
-            error.setWindowTitle('Ошибка!')
-            error.showMessage('Нужно выбрать переменную')
-            return False
-        try:
-            self.shell_view.expertSystem.deleteVariable(self.vars_view.selectedItems()[0].text())
-            self.question_text.clear()
-            self.onVarsChange()
-        except Exception as e:
-            error = QtWidgets.QErrorMessage(self.shell_view)
-            error.setWindowTitle('Ошибка!')
-            error.showMessage(str(e))
-
     # работа с доменами
     def openAddDomenWindow(self):
         self.addDomenWindow = QtWidgets.QMainWindow()
@@ -355,27 +275,6 @@ class UIMainWindow(object):
         self.addDomenUI = Ui_DomenEditorWindow()
         self.addDomenUI.setupUi(self.addDomenWindow)
         self.addDomenWindow.show()
-
-    def onDomensChange(self):
-        domens = self.shell_view.expertSystem.getDomens()
-        self.domains_view.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
-        self.domains_view.clear()
-        self.domains_view.setColumnCount(1)
-        self.domains_view.cellClicked.connect(self.onDomenSelect)
-        self.domains_view.setHorizontalHeaderLabels(['Имя'])
-        self.domains_view.setRowCount(len(domens))
-        i = 0
-        for dom in domens:
-            self.domains_view.setItem(i, 0, QtWidgets.QTableWidgetItem(dom.getName()))
-            i += 1
-        self.domains_view.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-
-    def onDomenSelect(self):
-        self.domain_values.clear()
-        selDomName = self.domains_view.selectedItems()[0].text()
-        selDom = self.shell_view.expertSystem.getDomenByName(selDomName)
-        if selDom:
-            self.domain_values.setText(',\n'.join(selDom.getValues()))
 
     def openEditDomenWindow(self):
         self.addDomenWindow = QtWidgets.QMainWindow()
@@ -388,18 +287,3 @@ class UIMainWindow(object):
             selDom = self.shell_view.expertSystem.getDomenByName(self.domains_view.selectedItems()[0].text())
         self.addDomenUI.setupUi(self.addDomenWindow, selDom)
         self.addDomenWindow.show()
-
-    def delDomen(self):
-        if len(self.domain_values.selectedItems()) == 0:
-            error = QtWidgets.QErrorMessage(self.shell_view)
-            error.setWindowTitle('Ошибка!')
-            error.showMessage('Нужно выбрать домен')
-            return False
-        try:
-            self.shell_view.expertSystem.deleteDomen(self.domains_view.selectedItems()[0].text())
-            self.domain_values.clear()
-            self.onDomensChange()
-        except Exception as e:
-            error = QtWidgets.QErrorMessage(self.shell_view)
-            error.setWindowTitle('Ошибка!')
-            error.showMessage(str(e))
