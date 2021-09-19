@@ -128,7 +128,7 @@ class UiRequisiteEditorWindow(object):
         var = self.requisite_combo.currentText()
         if var == '':
             return False
-        values = self.es_main_window.expertSystem.getVariableByName(var).getDomen().getValues()
+        values = self.es_main_window.expertSystem.getVariableByName(var).getdomain().getValues()
         for val in values:
             self.requisite_value_combo.addItem(val)
 

@@ -20,7 +20,8 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
         self.__controller = controller
         self.__model = model
 
-        self.__old = deepcopy(model)
+        if model.name:
+            self.__old = deepcopy(model)
 
         self.ui = UIDomainWindow()
         self.ui.setup_ui(self)
@@ -72,16 +73,18 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
             self.show_error(v_e)
 
     def restore_domain(self):
-        self.__model.remove_observer(self)
-        self.__model.values = self.__old.values
-        self.__model.name = self.__old.name
+        if self.__old:
+            self.__model.remove_observer(self)
+            self.__model.values = self.__old.values
+            self.__model.name = self.__old.name
         self.close()
 
     def notify_model_is_changed(self):
         self.ui.domain_val_view.clear()
-        values = self.__model.values
+        self.ui.domain_name_text.setText(self.__model.name)
         self.ui.domain_val_view.setColumnCount(1)
         self.ui.domain_val_view.setHorizontalHeaderLabels(['Значения'])
+        values = self.__model.values
         self.ui.domain_val_view.setRowCount(len(values))
         for i, value in enumerate(values):
             self.ui.domain_val_view.setItem(i, 0, QTableWidgetItem(value))

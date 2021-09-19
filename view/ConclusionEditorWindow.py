@@ -90,7 +90,7 @@ class Ui_ConclusionEditorWindow(object):
         self.fillVars()
         self.conclusionCombo.setCurrentIndex(self.conclusionCombo.count() - 1)
 
-    def onDomensChange(self):
+    def ondomainsChange(self):
         self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.on_domains_change()
         self.fillVars()
         self.conclusionCombo.setCurrentIndex(self.conclusionCombo.count() - 1)
@@ -107,7 +107,7 @@ class Ui_ConclusionEditorWindow(object):
         var = self.conclusionCombo.currentText()
         if var == '':
             return False
-        vals = self.expShellMainWindow.expertSystem.getVariableByName(var).getDomen().getValues()
+        vals = self.expShellMainWindow.expertSystem.getVariableByName(var).getdomain().getValues()
         for val in vals:
             self.conclusionValueCombo.addItem(val)
 

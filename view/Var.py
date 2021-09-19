@@ -27,6 +27,7 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
 
         self.__model.add_observer(self)
         self.connect_buttons()
+        self.connect_events()
 
     def add_domain(self):
         pass
@@ -50,7 +51,17 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
         self.close()
 
     def connect_buttons(self):
-        pass
+        self.ui.domain_add_button.clicked.connect(self.add_domain)
+        self.ui.ok_button.clicked.connect(lambda: self.close())
+        self.ui.cancel_button.clicked.connect(self.restore_var)
+
+    def connect_events(self):
+        self.ui.var_name_text.textChanged.connect(self.__controller.set_name)
+        self.ui.domain_combo.currentTextChanged.connect(self.__controller.set_domain)
+        self.ui.var_type_radio1.setChecked.connect(self.__controller.set_var_type)
+        self.ui.var_type_radio2.setChecked.connect(self.__controller.set_var_type)
+        self.ui.var_type_radio3.setChecked.connect(self.__controller.set_var_type)
+        self.ui.question_text.textChanged.connect(self.__controller.set_question)
 
     def show_error(self, e):
         error_dialog = QErrorMessage(self)

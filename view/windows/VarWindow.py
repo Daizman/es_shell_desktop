@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'EditVarWindow.ui'
+# Form implementation generated from reading ui file 'var_view.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -9,161 +9,158 @@
 
 
 from PyQt5 import QtCore, QtWidgets
-from view.windows.DomainWindow import Ui_DomenEditorWindow
-from models.VarType import VarType
 
 
 class UIVarWindow(object):
-    def setup_ui(self, EditVarWindow, var=None):
-        EditVarWindow.setObjectName('EditVarWindow')
-        EditVarWindow.resize(380, 380)
-        EditVarWindow.setMinimumSize(QtCore.QSize(380, 380))
-        EditVarWindow.setMaximumSize(QtCore.QSize(380, 380))
-        self.centralwidget = QtWidgets.QWidget(EditVarWindow)
-        self.centralwidget.setObjectName('central_widget')
-        self.varNameLabel = QtWidgets.QLabel(self.centralwidget)
-        self.varNameLabel.setGeometry(QtCore.QRect(10, 10, 91, 16))
-        self.varNameLabel.setObjectName('varNameLabel')
-        self.varNameText = QtWidgets.QLineEdit(self.centralwidget)
-        self.varNameText.setGeometry(QtCore.QRect(10, 30, 361, 20))
-        self.varNameText.setObjectName('varNameText')
-        self.domenLabel = QtWidgets.QLabel(self.centralwidget)
-        self.domenLabel.setGeometry(QtCore.QRect(10, 60, 47, 13))
-        self.domenLabel.setObjectName('domenLabel')
-        self.domenCombo = QtWidgets.QComboBox(self.centralwidget)
-        self.domenCombo.setGeometry(QtCore.QRect(10, 80, 341, 22))
-        self.domenCombo.setObjectName('domenCombo')
-        self.domenAddButton = QtWidgets.QPushButton(self.centralwidget)
-        self.domenAddButton.setGeometry(QtCore.QRect(350, 79, 24, 24))
-        self.domenAddButton.setObjectName('domain_add_button')
-        self.varTypeLabel = QtWidgets.QLabel(self.centralwidget)
-        self.varTypeLabel.setGeometry(QtCore.QRect(10, 110, 91, 16))
-        self.varTypeLabel.setObjectName('varTypeLabel')
-        self.varTypeRadio1 = QtWidgets.QRadioButton(self.centralwidget)
-        self.varTypeRadio1.setGeometry(QtCore.QRect(10, 130, 361, 17))
-        self.varTypeRadio1.setObjectName('varTypeRadio1')
-        self.varTypeRadio1.setChecked(True)
-        self.varTypeRadio2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.varTypeRadio2.setGeometry(QtCore.QRect(10, 150, 361, 17))
-        self.varTypeRadio2.setObjectName('varTypeRadio2')
-        self.varTypeRadio3 = QtWidgets.QRadioButton(self.centralwidget)
-        self.varTypeRadio3.setGeometry(QtCore.QRect(10, 170, 361, 17))
-        self.varTypeRadio3.setObjectName('varTypeRadio3')
-        self.questionTextLabel = QtWidgets.QLabel(self.centralwidget)
-        self.questionTextLabel.setGeometry(QtCore.QRect(10, 190, 361, 16))
-        self.questionTextLabel.setObjectName('questionTextLabel')
-        self.questionText = QtWidgets.QTextEdit(self.centralwidget)
-        self.questionText.setGeometry(QtCore.QRect(10, 210, 361, 71))
-        self.questionText.setObjectName('questionText')
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(10, 290, 361, 20))
+    def setup_ui(self, var_view):
+        var_view.setObjectName('var_view')
+        var_view.resize(380, 380)
+
+        self.central_widget = QtWidgets.QWidget(var_view)
+        self.central_widget.setObjectName('central_widget')
+
+        self.var_name_label = QtWidgets.QLabel(self.central_widget)
+        self.var_name_label.setGeometry(QtCore.QRect(10, 10, 90, 15))
+        self.var_name_label.setObjectName('var_name_label')
+
+        self.var_name_text = QtWidgets.QLineEdit(self.central_widget)
+        self.var_name_text.setGeometry(QtCore.QRect(10, 30, 360, 20))
+        self.var_name_text.setObjectName('var_name_text')
+
+        self.domain_label = QtWidgets.QLabel(self.central_widget)
+        self.domain_label.setGeometry(QtCore.QRect(10, 60, 45, 15))
+        self.domain_label.setObjectName('domain_label')
+
+        self.domain_combo = QtWidgets.QComboBox(self.central_widget)
+        self.domain_combo.setGeometry(QtCore.QRect(10, 80, 340, 20))
+        self.domain_combo.setObjectName('domain_combo')
+
+        self.domain_add_button = QtWidgets.QPushButton(self.central_widget)
+        self.domain_add_button.setGeometry(QtCore.QRect(350, 80, 25, 25))
+        self.domain_add_button.setObjectName('domain_add_button')
+
+        self.var_type_label = QtWidgets.QLabel(self.central_widget)
+        self.var_type_label.setGeometry(QtCore.QRect(10, 110, 90, 15))
+        self.var_type_label.setObjectName('var_type_label')
+
+        self.var_type_radio1 = QtWidgets.QRadioButton(self.central_widget)
+        self.var_type_radio1.setGeometry(QtCore.QRect(10, 130, 360, 20))
+        self.var_type_radio1.setObjectName('var_type_radio1')
+        self.var_type_radio1.setChecked(True)
+
+        self.var_type_radio2 = QtWidgets.QRadioButton(self.central_widget)
+        self.var_type_radio2.setGeometry(QtCore.QRect(10, 150, 360, 20))
+        self.var_type_radio2.setObjectName('var_type_radio2')
+
+        self.var_type_radio3 = QtWidgets.QRadioButton(self.central_widget)
+        self.var_type_radio3.setGeometry(QtCore.QRect(10, 170, 360, 20))
+        self.var_type_radio3.setObjectName('var_type_radio3')
+
+        self.question_text_label = QtWidgets.QLabel(self.central_widget)
+        self.question_text_label.setGeometry(QtCore.QRect(10, 190, 360, 15))
+        self.question_text_label.setObjectName('question_text_label')
+
+        self.question_text = QtWidgets.QTextEdit(self.central_widget)
+        self.question_text.setGeometry(QtCore.QRect(10, 210, 360, 70))
+        self.question_text.setObjectName('question_text')
+
+        self.line = QtWidgets.QFrame(self.central_widget)
+        self.line.setGeometry(QtCore.QRect(10, 290, 360, 20))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName('line')
-        self.cancelButton = QtWidgets.QPushButton(self.centralwidget)
-        self.cancelButton.setGeometry(QtCore.QRect(290, 310, 75, 25))
-        self.cancelButton.setObjectName('cancel_button')
-        self.okButton = QtWidgets.QPushButton(self.centralwidget)
-        self.okButton.setGeometry(QtCore.QRect(210, 310, 75, 25))
-        self.okButton.setObjectName('ok_button')
-        EditVarWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(EditVarWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 380, 21))
-        self.menubar.setObjectName('menu_bar')
-        EditVarWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(EditVarWindow)
-        self.statusbar.setObjectName('status_bar')
-        EditVarWindow.setStatusBar(self.statusbar)
 
-        self.retranslate_ui(EditVarWindow)
-        self.editVarWindow = EditVarWindow
-        self.expShellMainWindow = EditVarWindow.prevWindow.es_main_window
-        self.connectButtons()
-        self.fillDomens()
-        QtCore.QMetaObject.connectSlotsByName(EditVarWindow)
-        self.var = var if var is not None else None
-        if self.var is not None:
-            self.fillVar()
+        self.cancel_button = QtWidgets.QPushButton(self.central_widget)
+        self.cancel_button.setGeometry(QtCore.QRect(290, 310, 75, 25))
+        self.cancel_button.setObjectName('cancel_button')
 
-    def retranslate_ui(self, EditVarWindow):
+        self.ok_button = QtWidgets.QPushButton(self.central_widget)
+        self.ok_button.setGeometry(QtCore.QRect(210, 310, 75, 25))
+        self.ok_button.setObjectName('ok_button')
+
+        var_view.setCentralWidget(self.central_widget)
+
+        self.menu_bar = QtWidgets.QMenuBar(var_view)
+        self.menu_bar.setGeometry(QtCore.QRect(0, 0, 380, 20))
+        self.menu_bar.setObjectName('menu_bar')
+        var_view.setMenuBar(self.menu_bar)
+
+        self.status_bar = QtWidgets.QStatusBar(var_view)
+        self.status_bar.setObjectName('status_bar')
+        var_view.setStatusBar(self.status_bar)
+
+        self.retranslate_ui(var_view)
+        QtCore.QMetaObject.connectSlotsByName(var_view)
+
+    def retranslate_ui(self, var_view):
         _translate = QtCore.QCoreApplication.translate
-        EditVarWindow.setWindowTitle(_translate('EditVarWindow', 'Редактирование переменной'))
-        self.varNameLabel.setText(_translate('EditVarWindow', 'Имя переменной'))
-        self.domenLabel.setText(_translate('EditVarWindow', 'Домен'))
-        self.domenAddButton.setText(_translate('EditVarWindow', '+'))
-        self.varTypeLabel.setText(_translate('EditVarWindow', 'Тип переменной'))
-        self.varTypeRadio1.setText(_translate('EditVarWindow', 'Запрашиваемая'))
-        self.varTypeRadio2.setText(_translate('EditVarWindow', 'Выводимая'))
-        self.varTypeRadio3.setText(_translate('EditVarWindow', 'Запрашиваемо-выводимая'))
-        self.questionTextLabel.setText(_translate('EditVarWindow', 'Текст вопроса(если не указать, будет: {имя_переменной}?)'))
-        self.cancelButton.setText(_translate('EditVarWindow', 'Отмена'))
-        self.okButton.setText(_translate('EditVarWindow', 'OK'))
+        var_view.setWindowTitle(_translate('var_view', 'Редактирование переменной'))
+        self.var_name_label.setText(_translate('var_view', 'Имя переменной'))
+        self.domain_label.setText(_translate('var_view', 'Домен'))
+        self.domain_add_button.setText(_translate('var_view', '+'))
+        self.var_type_label.setText(_translate('var_view', 'Тип переменной'))
+        self.var_type_radio1.setText(_translate('var_view', 'Запрашиваемая'))
+        self.var_type_radio2.setText(_translate('var_view', 'Выводимая'))
+        self.var_type_radio3.setText(_translate('var_view', 'Запрашиваемо-выводимая'))
+        self.question_text_label.setText(_translate('var_view', 'Текст вопроса(если не указать, будет: {имя_переменной}?)'))
+        self.cancel_button.setText(_translate('var_view', 'Отмена'))
+        self.ok_button.setText(_translate('var_view', 'OK'))
 
-    def connectButtons(self):
-        self.domenAddButton.clicked.connect(self.addDomen)
-        self.okButton.clicked.connect(self.okClick)
-        self.cancelButton.clicked.connect(lambda: self.editVarWindow.close())
+    def adddomain(self):
+        self.adddomainWindow = QtWidgets.QMainWindow()
+        self.adddomainWindow.prevWindow = self
+        self.adddomainUI = Ui_domainEditorWindow()
+        self.adddomainUI.setup_ui(self.adddomainWindow)
+        self.adddomainWindow.show()
 
-    def onNameFocusOut(self):
-        question = self.varNameText.text() + '?'
-        if question != self.questionText.toPlainText():
-            self.questionText.setText(question)
-
-    def addDomen(self):
-        self.addDomenWindow = QtWidgets.QMainWindow()
-        self.addDomenWindow.prevWindow = self
-        self.addDomenUI = Ui_DomenEditorWindow()
-        self.addDomenUI.setup_ui(self.addDomenWindow)
-        self.addDomenWindow.show()
-
-    def onDomensChange(self):
+    def ondomainsChange(self):
         self.editVarWindow.prevWindow.on_domains_change()
-        self.fillDomens()
-        self.domenCombo.setCurrentIndex(self.domenCombo.count() - 1)
+        self.filldomains()
+        self.domain_combo.setCurrentIndex(self.domain_combo.count() - 1)
 
-    def fillDomens(self):
-        self.domenCombo.clear()
-        domens = self.editVarWindow.prevWindow.es_main_window.expertSystem.getDomens()
-        for domen in domens:
-            self.domenCombo.addItem(domen.getName())
+    def filldomains(self):
+        self.domain_combo.clear()
+        domains = self.editVarWindow.prevWindow.es_main_window.expertSystem.getdomains()
+        for domain in domains:
+            self.domain_combo.addItem(domain.getName())
 
     def fillVar(self):
-        self.varNameText.setText(self.var.getName())
-        self.questionText.setText(self.var.getQuestion())
-        domIdx = self.domenCombo.findText(self.var.getDomen().getName())
-        self.domenCombo.setCurrentIndex(domIdx)
+        self.var_name_text.setText(self.var.getName())
+        self.question_text.setText(self.var.getQuestion())
+        domIdx = self.domain_combo.findText(self.var.getdomain().getName())
+        self.domain_combo.setCurrentIndex(domIdx)
         vt = self.var.getVarType()
         if vt == VarType.REQUESTED:
-            self.varTypeRadio1.setChecked(True)
+            self.var_type_radio1.setChecked(True)
         elif vt == VarType.INFERRED:
-            self.varTypeRadio2.setChecked(True)
+            self.var_type_radio2.setChecked(True)
         else:
-            self.varTypeRadio3.setChecked(True)
+            self.var_type_radio3.setChecked(True)
 
     def okClick(self):
         expSys = self.editVarWindow.prevWindow.es_main_window.expertSystem
-        if self.domenCombo.currentText() == '':
+        if self.domain_combo.currentText() == '':
             error = QtWidgets.QErrorMessage(self.editVarWindow)
             error.setWindowTitle('Ошибка!')
             error.showMessage('Необходимо выбрать домен')
             return False
-        if expSys.getVariableByName(self.varNameText.text()):
-            if self.var is not None and self.var.getName() != self.varNameText.text() or self.var is None:
+        if expSys.getVariableByName(self.var_name_text.text()):
+            if self.var is not None and self.var.getName() != self.var_name_text.text() or self.var is None:
                 error = QtWidgets.QErrorMessage(self.editVarWindow)
                 error.setWindowTitle('Ошибка!')
                 error.showMessage('Данное имя уже используется')
                 return False
-        if self.varTypeRadio1.isChecked():
+        if self.var_type_radio1.isChecked():
             vt = VarType.REQUESTED
-        elif self.varTypeRadio2.isChecked():
+        elif self.var_type_radio2.isChecked():
             vt = VarType.INFERRED
         else:
             vt = VarType.OUTPUT_REQUESTED
         if self.var is not None:
             try:
-                self.var.setName(self.varNameText.text())
-                self.var.setDomen(expSys.getDomenByName(self.domenCombo.currentText()))
-                self.var.setQuestion(self.questionText.toPlainText())
+                self.var.setName(self.var_name_text.text())
+                self.var.setdomain(expSys.getdomainByName(self.domain_combo.currentText()))
+                self.var.setQuestion(self.question_text.toPlainText())
                 self.var.setVarType(vt)
             except Exception as e:
                 error = QtWidgets.QErrorMessage(self.editVarWindow)
@@ -171,9 +168,9 @@ class UIVarWindow(object):
                 error.showMessage(str(e))
                 return False
         else:
-            expSys.addVariable(self.varNameText.text(),
-                               expSys.getDomenByName(self.domenCombo.currentText()),
-                               self.questionText.toPlainText(),
+            expSys.addVariable(self.var_name_text.text(),
+                               expSys.getdomainByName(self.domain_combo.currentText()),
+                               self.question_text.toPlainText(),
                                vt)
         expSys.updateDicts()
         self.editVarWindow.prevWindow.on_vars_change()

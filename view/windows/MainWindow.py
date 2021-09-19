@@ -269,21 +269,21 @@ class UIMainWindow(object):
         self.addVarWindow.show()
 
     # работа с доменами
-    def openAddDomenWindow(self):
-        self.addDomenWindow = QtWidgets.QMainWindow()
-        self.addDomenWindow.prevWindow = self
-        self.addDomenUI = Ui_DomenEditorWindow()
-        self.addDomenUI.setup_ui(self.addDomenWindow)
-        self.addDomenWindow.show()
+    def openAdddomainWindow(self):
+        self.adddomainWindow = QtWidgets.QMainWindow()
+        self.adddomainWindow.prevWindow = self
+        self.adddomainUI = Ui_domainEditorWindow()
+        self.adddomainUI.setup_ui(self.adddomainWindow)
+        self.adddomainWindow.show()
 
-    def openEditDomenWindow(self):
-        self.addDomenWindow = QtWidgets.QMainWindow()
-        self.addDomenWindow.prevWindow = self
-        self.addDomenUI = Ui_DomenEditorWindow()
+    def openEditdomainWindow(self):
+        self.adddomainWindow = QtWidgets.QMainWindow()
+        self.adddomainWindow.prevWindow = self
+        self.adddomainUI = Ui_domainEditorWindow()
         selDomItems = self.domains_view.selectedItems()
         selDom = None
         self.domain_values.clear()
         if len(selDomItems) > 0:
-            selDom = self.shell_view.expertSystem.getDomenByName(self.domains_view.selectedItems()[0].text())
-        self.addDomenUI.setup_ui(self.addDomenWindow, selDom)
-        self.addDomenWindow.show()
+            selDom = self.shell_view.expertSystem.getdomainByName(self.domains_view.selectedItems()[0].text())
+        self.adddomainUI.setup_ui(self.adddomainWindow, selDom)
+        self.adddomainWindow.show()
