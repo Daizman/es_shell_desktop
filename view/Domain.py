@@ -22,6 +22,7 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
 
         if model.name:
             self.__old = deepcopy(model)
+            self.notify_model_is_changed()
 
         self.ui = UIDomainWindow()
         self.ui.setup_ui(self)

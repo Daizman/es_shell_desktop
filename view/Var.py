@@ -3,12 +3,11 @@ from PyQt5.QtWidgets import QErrorMessage,\
     QDialog, \
     QTableWidgetItem
 
-from PyQt5.QtGui import QKeySequence
-
 from utils.Observer import Observer
 from utils.ObserverMeta import ObserverMeta
 
 from view.windows.VarWindow import UIVarWindow
+from model.types.VarType import VarType
 
 from copy import deepcopy
 
@@ -20,7 +19,11 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
         self.__controller = controller
         self.__model = model
 
-        self.__old = deepcopy(model)
+        if model.name:
+            self.__old = deepcopy(model)
+            self.notify_model_is_changed()
+        else:
+            self.refresh_domain_combo()
 
         self.ui = UIVarWindow()
         self.ui.setup_ui(self)
@@ -32,22 +35,14 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
     def add_domain(self):
         pass
 
-    def change_domain(self):
-        pass
-
-    def fill_domains(self):
-        pass
-
-    def fill_var(self):
-        pass
-
     def restore_var(self):
-        self.__model.remove_observer(self)
-        self.__model.name = self.__old.name
-        self.__model.question = self.__old.question
-        self.__model.var_type = self.__old.var_type
-        self.__model.may_be_goal = self.__old.may_be_goal
-        self.__model.domain = self.__old.domain
+        if self.__old:
+            self.__model.remove_observer(self)
+            self.__model.name = self.__old.name
+            self.__model.question = self.__old.question
+            self.__model.var_type = self.__old.var_type
+            self.__model.may_be_goal = self.__old.may_be_goal
+            self.__model.domain = self.__old.domain
         self.close()
 
     def connect_buttons(self):
@@ -68,5 +63,18 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
         error_dialog.setWindowTitle('Ошибка!')
         error_dialog.showMessage(e)
 
+    def refresh_domain_combo(self):
+        self.ui.domain_combo.clear()
+        self.ui.domain_combo.addItems(map(str, self.__controller.domains))
+
     def notify_model_is_changed(self):
-        pass
+        self.ui.var_name_text.setText(self.__model.name)
+        self.refresh_domain_combo()
+        self.ui.domain_combo.setCurrentText(str(self.__model.domain.name))
+        if self.__model.var_type == VarType.REQUESTED:
+            self.ui.var_type_radio1.setChecked()
+        elif self.__model.var_type == VarType.INFERRED:
+            self.ui.var_type_radio2.setChecked()
+        else:
+            self.ui.var_type_radio3.setChecked()
+        self.ui.question_text.setText(self.__model.question)
