@@ -22,8 +22,7 @@ class UIDomainWindow(object):
         self.domain_val_label.setGeometry(QtCore.QRect(10, 50, 60, 15))
         self.domain_val_label.setObjectName('domain_val_label')
 
-        self.domain_val_view = TableWidgetDragRows(self.central_widget,
-                                                   drop_event_callback=domain_view.change_value_order)
+        self.domain_val_view = TableWidgetDragRows(self.central_widget)
         self.domain_val_view.setGeometry(QtCore.QRect(10, 70, 330, 140))
         self.domain_val_view.setObjectName('domain_val_view')
         self.domain_val_view.setColumnCount(1)
@@ -31,7 +30,7 @@ class UIDomainWindow(object):
         self.domain_val_view.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
 
         self.domain_val_text = QtWidgets.QLineEdit(self.central_widget)
-        self.domain_val_text.setGeometry(QtCore.QRect(10, 250, 290, 20))
+        self.domain_val_text.setGeometry(QtCore.QRect(10, 230, 290, 20))
         self.domain_val_text.setObjectName('domain_val_text')
 
         self.domain_val_inp_label = QtWidgets.QLabel(self.central_widget)
@@ -39,7 +38,7 @@ class UIDomainWindow(object):
         self.domain_val_inp_label.setObjectName('domain_val_inp_label')
 
         self.domain_add_button = QtWidgets.QPushButton(self.central_widget)
-        self.domain_add_button.setGeometry(QtCore.QRect(300, 229, 22, 22))
+        self.domain_add_button.setGeometry(QtCore.QRect(300, 230, 20, 20))
         self.domain_add_button.setObjectName('domain_add_button')
 
         self.remove_domain_val_button = QtWidgets.QPushButton(self.central_widget)

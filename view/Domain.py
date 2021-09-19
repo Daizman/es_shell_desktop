@@ -1,36 +1,30 @@
-from PyQt5.QtCore import QObject
-from PyQt5.QtWidgets import QErrorMessage,\
+from PyQt5.QtWidgets import QErrorMessage, \
     QShortcut, \
     QDialog, \
-    QTableWidgetItem
+    QTableWidgetItem, \
+    QWidget, \
+    QMainWindow
 
 from PyQt5.QtGui import QKeySequence
-
-from utils.Observer import Observer
-from utils.ObserverMeta import *
+from PyQt5.QtCore import *
 
 from view.windows.DomainWindow import UIDomainWindow
 
-from copy import deepcopy
+from functools import partial
 
 
-class Domain(ObserverClass):
-    __metaclass__ = ObserverMeta
+class Domain(QMainWindow):
+    change_signal = pyqtSignal()
 
-    def __init__(self, controller, model, parent=None):
+    def __init__(self, parent=None):
         super(Domain, self).__init__(parent)
 
-        self.__controller = controller
-        self.__model = model
+        self.name = ''
+        self.values = []
 
         self.ui = UIDomainWindow()
         self.ui.setup_ui(self)
 
-        if model.name:
-            self.__old = deepcopy(model)
-            self.notify_model_is_changed()
-
-        self.__model.add_observer(self)
         self.connect_buttons()
         self.connect_events()
         self.connect_hotkeys()
@@ -40,55 +34,48 @@ class Domain(ObserverClass):
         error_dialog.setWindowTitle('Ошибка!')
         error_dialog.showMessage(e)
 
+    def clear(self):
+        self.ui.domain_val_view.clear()
+        self.ui.domain_name_text.clear()
+
     def connect_buttons(self):
         self.ui.domain_add_button.clicked.connect(self.add_value)
         self.ui.remove_domain_val_button.clicked.connect(self.remove_value)
-        self.ui.ok_button.clicked.connect(lambda: self.close())
 
-        self.cancel_button.clicked.connect(self.restore_domain)
+        self.ui.ok_button.clicked.connect(self.change_signal)
+        self.ui.cancel_button.clicked.connect(lambda: self.close())
 
     def connect_events(self):
-        self.ui.domain_name_text.textChanged.connect(self.__controller.set_name)
+        self.ui.domain_name_text.textChanged.connect(partial(setattr, self, "name"))
+        self.ui.domain_val_view.set_drop_event_callback(self.change_value_order)
 
-    def change_value_order(self):
-        current_order = self.ui.domain_val_view.items()
-        try:
-            self.__controller.set_values(current_order)
-        except ValueError as v_e:
-            self.show_error(v_e)
+    def change_value_order(self, *args):
+        self.values = self.ui.domain_val_view.items(QMimeData())
 
     def connect_hotkeys(self):
         self.ui.shortcut_del = QShortcut(QKeySequence('Delete'), self)
+        self.ui.shortcut_add = QShortcut(QKeySequence('Return'), self)
         self.ui.shortcut_del.activated.connect(self.remove_value)
+        self.ui.shortcut_add.activated.connect(self.add_value)
 
     def add_value(self):
-        new_val = self.ui.domain_val_text.text()
-        try:
-            self.__controller.add_value(new_val)
-        except ValueError as v_e:
-            self.show_error(v_e)
+        new_val = self.ui.domain_val_text.text().strip().upper()
+        if new_val in self.values:
+            self.show_error('Значение уже есть!')
+        else:
+            self.values.append(new_val)
+        self.refresh_values()
 
     def remove_value(self):
         rows = self.ui.domain_val_view.selectedItems()
-        try:
-            for row in reversed(rows):
-                self.__controller.remove_value(row.text())
-        except ValueError as v_e:
-            self.show_error(v_e)
+        for row in reversed(rows):
+            self.values.remove(row.text())
+        self.refresh_values()
 
-    def restore_domain(self):
-        if self.__old:
-            self.__model.remove_observer(self)
-            self.__model.values = self.__old.values
-            self.__model.name = self.__old.name
-        self.close()
-
-    def notify_model_is_changed(self):
+    def refresh_values(self):
         self.ui.domain_val_view.clear()
-        self.ui.domain_name_text.setText(self.__model.name)
         self.ui.domain_val_view.setColumnCount(1)
         self.ui.domain_val_view.setHorizontalHeaderLabels(['Значения'])
-        values = self.__model.values
-        self.ui.domain_val_view.setRowCount(len(values))
-        for i, value in enumerate(values):
+        self.ui.domain_val_view.setRowCount(len(self.values))
+        for i, value in enumerate(self.values):
             self.ui.domain_val_view.setItem(i, 0, QTableWidgetItem(value))

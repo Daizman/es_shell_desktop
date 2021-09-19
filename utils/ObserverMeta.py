@@ -4,7 +4,3 @@ from abc import ABCMeta
 
 class ObserverMeta(type(QObject), type(ABCMeta)):
     pass
-
-
-class ObserverClass(QObject):
-    pass

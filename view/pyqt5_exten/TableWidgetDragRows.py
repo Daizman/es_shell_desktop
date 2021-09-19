@@ -16,7 +16,11 @@ class TableWidgetDragRows(QTableWidget):
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setDragDropMode(QAbstractItemView.InternalMove)
-        self.drop_event_callback = kwargs['drop_event_callback']
+        if 'drop_event_callback' in kwargs.keys():
+            self.drop_event_callback = kwargs['drop_event_callback']
+
+    def set_drop_event_callback(self, drop_event_callback):
+        self.drop_event_callback = drop_event_callback
 
     def dropEvent(self, event: QDropEvent):
         if not event.isAccepted() and event.source() == self:
@@ -38,8 +42,8 @@ class TableWidgetDragRows(QTableWidget):
                 for column_index, column_data in enumerate(data):
                     self.setItem(row_index, column_index, column_data)
             event.accept()
-            if self.dropEventCallback is not None:
-                self.dropEventCallback(drop_row, rows_to_move)
+            if self.drop_event_callback:
+                self.drop_event_callback(drop_row, rows_to_move)
         super().dropEvent(event)
 
     def drop_on(self, event):
