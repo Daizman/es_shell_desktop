@@ -1,38 +1,34 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from view.windows.VarWindow import Ui_EditVarWindow
-from model.Fact import Fact
 
 
-class UiRequisiteEditorWindow(object):
-    def __init__(self, requisite_editor_window, requisite=None):
-        requisite_editor_window.setObjectName('requisite_editor_window')
-        requisite_editor_window.resize(355, 179)
-        requisite_editor_window.setMinimumSize(QtCore.QSize(355, 179))
-        requisite_editor_window.setMaximumSize(QtCore.QSize(355, 179))
+class UIRequisiteWindow(object):
+    def setup_ui(self, requisite_view):
+        requisite_view.setObjectName('requisite_view')
+        requisite_view.resize(355, 180)
 
-        self.central_widget = QtWidgets.QWidget(requisite_editor_window)
+        self.central_widget = QtWidgets.QWidget(requisite_view)
         self.central_widget.setObjectName('central_widget')
 
         self.requisite_combo = QtWidgets.QComboBox(self.central_widget)
-        self.requisite_combo.setGeometry(QtCore.QRect(10, 10, 301, 22))
+        self.requisite_combo.setGeometry(QtCore.QRect(10, 10, 300, 20))
         self.requisite_combo.setObjectName('requisite_combo')
 
         self.requisite_value_combo = QtWidgets.QComboBox(self.central_widget)
-        self.requisite_value_combo.setGeometry(QtCore.QRect(10, 60, 341, 22))
+        self.requisite_value_combo.setGeometry(QtCore.QRect(10, 60, 340, 20))
         self.requisite_value_combo.setObjectName('requisite_value_combo')
 
         self.line = QtWidgets.QFrame(self.central_widget)
-        self.line.setGeometry(QtCore.QRect(10, 90, 341, 16))
+        self.line.setGeometry(QtCore.QRect(10, 90, 340, 15))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName('line')
 
         self.requisite_add_button = QtWidgets.QPushButton(self.central_widget)
-        self.requisite_add_button.setGeometry(QtCore.QRect(310, 9, 41, 24))
+        self.requisite_add_button.setGeometry(QtCore.QRect(310, 9, 40, 25))
         self.requisite_add_button.setObjectName('requisite_add_button')
 
         self.eq_label = QtWidgets.QLabel(self.central_widget)
-        self.eq_label.setGeometry(QtCore.QRect(180, 40, 16, 16))
+        self.eq_label.setGeometry(QtCore.QRect(180, 40, 15, 15))
 
         font = QtGui.QFont()
         font.setPointSize(16)
@@ -48,44 +44,29 @@ class UiRequisiteEditorWindow(object):
         self.ok_button.setGeometry(QtCore.QRect(190, 110, 75, 25))
         self.ok_button.setObjectName('ok_button')
 
-        requisite_editor_window.setCentralWidget(self.central_widget)
+        requisite_view.setCentralWidget(self.central_widget)
 
-        self.menubar = QtWidgets.QMenuBar(requisite_editor_window)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 355, 21))
+        self.menubar = QtWidgets.QMenuBar(requisite_view)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 355, 20))
         self.menubar.setObjectName('menu_bar')
 
-        requisite_editor_window.setMenuBar(self.menubar)
+        requisite_view.setMenuBar(self.menubar)
 
-        self.statusbar = QtWidgets.QStatusBar(requisite_editor_window)
+        self.statusbar = QtWidgets.QStatusBar(requisite_view)
         self.statusbar.setObjectName('status_bar')
 
-        requisite_editor_window.setStatusBar(self.statusbar)
+        requisite_view.setStatusBar(self.statusbar)
 
-        self.retranslate_ui(requisite_editor_window)
+        self.retranslate_ui(requisite_view)
+        QtCore.QMetaObject.connectSlotsByName(requisite_view)
 
-        self.es_main_window = requisite_editor_window.prev_window.es_main_window
-        self.requisite_editor_window = requisite_editor_window
-
-        self.add_var_window = QtWidgets.QMainWindow()
-        self.add_var_ui = Ui_EditVarWindow()
-
-        self.connect_buttons()
-        self.fill_vars()
-
-        self.requisite = requisite if requisite is not None else None
-
-        if self.requisite is not None:
-            self.fill_requisite()
-
-        QtCore.QMetaObject.connectSlotsByName(requisite_editor_window)
-
-    def retranslate_ui(self, requisite_editor_window):
+    def retranslate_ui(self, requisite_view):
         _translate = QtCore.QCoreApplication.translate
-        requisite_editor_window.setWindowTitle(_translate('requisite_editor_window', 'Факт посылки'))
-        self.requisite_add_button.setText(_translate('requisite_editor_window', '+'))
-        self.eq_label.setText(_translate('requisite_editor_window', '='))
-        self.cancel_button.setText(_translate('requisite_editor_window', 'Отмена'))
-        self.ok_button.setText(_translate('requisite_editor_window', 'OK'))
+        requisite_view.setWindowTitle(_translate('requisite_view', 'Факт посылки'))
+        self.requisite_add_button.setText(_translate('requisite_view', '+'))
+        self.eq_label.setText(_translate('requisite_view', '='))
+        self.cancel_button.setText(_translate('requisite_view', 'Отмена'))
+        self.ok_button.setText(_translate('requisite_view', 'OK'))
 
     def connect_buttons(self):
         self.ok_button.clicked.connect(self.ok)
@@ -148,12 +129,3 @@ class UiRequisiteEditorWindow(object):
             self.requisite_editor_window.prevWindow.requisiteFacts.append(Fact(var, val))
         self.requisite_editor_window.prevWindow.onRequisiteChanged()
         self.requisite_editor_window.close()
-
-
-if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    RequisiteEditorWindow = QtWidgets.QMainWindow()
-    ui = UiRequisiteEditorWindow(RequisiteEditorWindow)
-    RequisiteEditorWindow.show()
-    sys.exit(app.exec_())

@@ -1,6 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from view.RequisiteEditorWindow import Ui_RequisiteEditorWindow
-from view.ConclusionEditorWindow import Ui_ConclusionEditorWindow
+from PyQt5 import QtCore, QtWidgets
+from view.windows.RequisiteWindow import Ui_RequisiteEditorWindow
+from view.windows.ConclusionWindow import UIConclusionWindow
 
 
 class Ui_EditRuleWindow(object):
@@ -171,8 +171,8 @@ class Ui_EditRuleWindow(object):
     def addConclusion(self):
         self.addConclusionWindow = QtWidgets.QMainWindow()
         self.addConclusionWindow.prevWindow = self
-        self.addConclusionUI = Ui_ConclusionEditorWindow()
-        self.addConclusionUI.setupUi(self.addConclusionWindow)
+        self.addConclusionUI = UIConclusionWindow()
+        self.addConclusionUI.setup_ui(self.addConclusionWindow)
         self.addConclusionWindow.show()
 
     def editRequisite(self):
@@ -187,10 +187,10 @@ class Ui_EditRuleWindow(object):
     def editConclusion(self):
         self.addConclusionWindow = QtWidgets.QMainWindow()
         self.addConclusionWindow.prevWindow = self
-        self.addConclusionUI = Ui_ConclusionEditorWindow()
+        self.addConclusionUI = UIConclusionWindow()
         selFactItems = self.conclusionView.selectedItems()
         selFact = self.findConclusionFact(selFactItems[0].text(), selFactItems[1].text()) if selFactItems else None
-        self.addConclusionUI.setupUi(self.addConclusionWindow, selFact)
+        self.addConclusionUI.setup_ui(self.addConclusionWindow, selFact)
         self.addConclusionWindow.show()
 
     def deleteRequisite(self):
