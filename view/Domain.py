@@ -10,6 +10,8 @@ from utils.ObserverMeta import ObserverMeta
 
 from view.windows.DomainWindow import UIDomainWindow
 
+from copy import deepcopy
+
 
 class Domain(QDialog, Observer, metaclass=ObserverMeta):
     def __init__(self, controller, model, parent=None):
@@ -18,13 +20,14 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
         self.__controller = controller
         self.__model = model
 
-        self.__old = model
+        self.__old = deepcopy(model)
 
         self.ui = UIDomainWindow()
         self.ui.setup_ui(self)
 
         self.__model.add_observer(self)
         self.connect_buttons()
+        self.connect_events()
         self.connect_hotkeys()
 
     def show_error(self, e):
@@ -39,6 +42,16 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
 
         self.cancel_button.clicked.connect(self.restore_domain)
 
+    def connect_events(self):
+        self.ui.domain_name_text.textChanged.connect(self.__controller.set_name)
+
+    def change_value_order(self):
+        current_order = self.ui.domain_val_view.items()
+        try:
+            self.__controller.set_values(current_order)
+        except ValueError as v_e:
+            self.show_error(v_e)
+
     def connect_hotkeys(self):
         self.ui.shortcut_del = QShortcut(QKeySequence('Delete'), self)
         self.ui.shortcut_del.activated.connect(self.remove_value)
@@ -47,7 +60,6 @@ class Domain(QDialog, Observer, metaclass=ObserverMeta):
         new_val = self.ui.domain_val_text.text()
         try:
             self.__controller.add_value(new_val)
-            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 

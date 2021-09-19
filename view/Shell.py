@@ -60,7 +60,6 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
                                                 options=options)
         try:
             self.__controller.load(f_name)
-            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 
@@ -106,7 +105,6 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
             return False
         try:
             self.__controller.remove_domain(self.ui.domains_view.selectedItems()[0].text())
-            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 
@@ -122,7 +120,6 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
             return False
         try:
             self.__controller.remove_var(self.ui.vars_view.selectedItems()[0].text())
-            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 
@@ -138,7 +135,6 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
             return False
         try:
             self.__controller.remove_rule(self.ui.rules_view.selectedItems()[0].text())
-            self.notify_model_is_changed()
         except ValueError as v_e:
             self.show_error(v_e)
 

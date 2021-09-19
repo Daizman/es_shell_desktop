@@ -47,7 +47,9 @@ class Var:
             raise ValueError('Переменной нельзя присвоить пустой домен')
         if domain != self.domain and self.used:
             raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
+        self.__domain.remove_var(self)
         self.__domain = domain
+        self.__domain.connect_var(self)
         self.notify_observers()
 
     @property
@@ -134,4 +136,4 @@ class Var:
 
     def notify_observers(self):
         for obs in self.__observers:
-            obs.model_is_changed()
+            obs.notify_model_is_changed()

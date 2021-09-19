@@ -116,5 +116,5 @@ class Shell:
 
     def notify_observers(self):
         for obs in self.__observers:
-            obs.model_is_changed()
+            obs.notify_model_is_changed()
 

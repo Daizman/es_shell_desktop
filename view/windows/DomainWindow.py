@@ -22,7 +22,8 @@ class UIDomainWindow(object):
         self.domain_val_label.setGeometry(QtCore.QRect(10, 50, 60, 15))
         self.domain_val_label.setObjectName('domain_val_label')
 
-        self.domain_val_view = TableWidgetDragRows(self.central_widget)
+        self.domain_val_view = TableWidgetDragRows(self.central_widget,
+                                                   drop_event_callback=domain_view.change_value_order)
         self.domain_val_view.setGeometry(QtCore.QRect(10, 70, 330, 140))
         self.domain_val_view.setObjectName('domain_val_view')
         self.domain_val_view.setColumnCount(1)

@@ -10,6 +10,8 @@ from utils.ObserverMeta import ObserverMeta
 
 from view.windows.VarWindow import UIVarWindow
 
+from copy import deepcopy
+
 
 class Var(QDialog, Observer, metaclass=ObserverMeta):
     def __init__(self, controller, model, parent=None):
@@ -18,13 +20,42 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
         self.__controller = controller
         self.__model = model
 
-        self.__old = model
+        self.__old = deepcopy(model)
 
         self.ui = UIVarWindow()
         self.ui.setup_ui(self)
 
         self.__model.add_observer(self)
         self.connect_buttons()
+
+    def add_domain(self):
+        pass
+
+    def change_domain(self):
+        pass
+
+    def fill_domains(self):
+        pass
+
+    def fill_var(self):
+        pass
+
+    def restore_var(self):
+        self.__model.remove_observer(self)
+        self.__model.name = self.__old.name
+        self.__model.question = self.__old.question
+        self.__model.var_type = self.__old.var_type
+        self.__model.may_be_goal = self.__old.may_be_goal
+        self.__model.domain = self.__old.domain
+        self.close()
+
+    def connect_buttons(self):
+        pass
+
+    def show_error(self, e):
+        error_dialog = QErrorMessage(self)
+        error_dialog.setWindowTitle('Ошибка!')
+        error_dialog.showMessage(e)
 
     def notify_model_is_changed(self):
         pass
