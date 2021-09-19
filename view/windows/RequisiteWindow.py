@@ -9,13 +9,13 @@ class UIRequisiteWindow(object):
         self.central_widget = QtWidgets.QWidget(requisite_view)
         self.central_widget.setObjectName('central_widget')
 
-        self.requisite_combo = QtWidgets.QComboBox(self.central_widget)
-        self.requisite_combo.setGeometry(QtCore.QRect(10, 10, 300, 20))
-        self.requisite_combo.setObjectName('requisite_combo')
+        self.combo = QtWidgets.QComboBox(self.central_widget)
+        self.combo.setGeometry(QtCore.QRect(10, 10, 300, 20))
+        self.combo.setObjectName('combo')
 
-        self.requisite_value_combo = QtWidgets.QComboBox(self.central_widget)
-        self.requisite_value_combo.setGeometry(QtCore.QRect(10, 60, 340, 20))
-        self.requisite_value_combo.setObjectName('requisite_value_combo')
+        self.value_combo = QtWidgets.QComboBox(self.central_widget)
+        self.value_combo.setGeometry(QtCore.QRect(10, 60, 340, 20))
+        self.value_combo.setObjectName('value_combo')
 
         self.line = QtWidgets.QFrame(self.central_widget)
         self.line.setGeometry(QtCore.QRect(10, 90, 340, 15))
@@ -23,9 +23,9 @@ class UIRequisiteWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName('line')
 
-        self.requisite_add_button = QtWidgets.QPushButton(self.central_widget)
-        self.requisite_add_button.setGeometry(QtCore.QRect(310, 9, 40, 25))
-        self.requisite_add_button.setObjectName('requisite_add_button')
+        self.add_button = QtWidgets.QPushButton(self.central_widget)
+        self.add_button.setGeometry(QtCore.QRect(310, 10, 40, 25))
+        self.add_button.setObjectName('add_button')
 
         self.eq_label = QtWidgets.QLabel(self.central_widget)
         self.eq_label.setGeometry(QtCore.QRect(180, 40, 15, 15))
@@ -46,16 +46,16 @@ class UIRequisiteWindow(object):
 
         requisite_view.setCentralWidget(self.central_widget)
 
-        self.menubar = QtWidgets.QMenuBar(requisite_view)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 355, 20))
-        self.menubar.setObjectName('menu_bar')
+        self.menu_bar = QtWidgets.QMenuBar(requisite_view)
+        self.menu_bar.setGeometry(QtCore.QRect(0, 0, 355, 20))
+        self.menu_bar.setObjectName('menu_bar')
 
-        requisite_view.setMenuBar(self.menubar)
+        requisite_view.setMenuBar(self.menu_bar)
 
-        self.statusbar = QtWidgets.QStatusBar(requisite_view)
-        self.statusbar.setObjectName('status_bar')
+        self.status_bar = QtWidgets.QStatusBar(requisite_view)
+        self.status_bar.setObjectName('status_bar')
 
-        requisite_view.setStatusBar(self.statusbar)
+        requisite_view.setStatusBar(self.status_bar)
 
         self.retranslate_ui(requisite_view)
         QtCore.QMetaObject.connectSlotsByName(requisite_view)
@@ -63,22 +63,22 @@ class UIRequisiteWindow(object):
     def retranslate_ui(self, requisite_view):
         _translate = QtCore.QCoreApplication.translate
         requisite_view.setWindowTitle(_translate('requisite_view', 'Факт посылки'))
-        self.requisite_add_button.setText(_translate('requisite_view', '+'))
+        self.add_button.setText(_translate('requisite_view', '+'))
         self.eq_label.setText(_translate('requisite_view', '='))
         self.cancel_button.setText(_translate('requisite_view', 'Отмена'))
         self.ok_button.setText(_translate('requisite_view', 'OK'))
 
     def connect_buttons(self):
         self.ok_button.clicked.connect(self.ok)
-        self.requisite_add_button.clicked.connect(self.add_var)
-        self.requisite_combo.currentTextChanged.connect(self.on_select_var)
+        self.add_button.clicked.connect(self.add_var)
+        self.combo.currentTextChanged.connect(self.on_select_var)
         self.cancel_button.clicked.connect(lambda: self.requisite_editor_window.close())
 
     def fill_requisite(self):
-        var_index = self.requisite_combo.findText(self.requisite.getVar().getName())
-        self.requisite_combo.setCurrentIndex(var_index)
-        val_idx = self.requisite_value_combo.findText(self.requisite.getVal())
-        self.requisite_value_combo.setCurrentIndex(val_idx)
+        var_index = self.combo.findText(self.requisite.getVar().getName())
+        self.combo.setCurrentIndex(var_index)
+        val_idx = self.value_combo.findText(self.requisite.getVal())
+        self.value_combo.setCurrentIndex(val_idx)
 
     def add_var(self):
         self.add_var_window.prevWindow = self
@@ -91,37 +91,37 @@ class UIRequisiteWindow(object):
     def on_vars_change(self):
         self.requisite_editor_window.prevWindow.editRuleWindow.prevWindow.on_vars_change()
         self.fill_vars()
-        self.requisite_combo.setCurrentIndex(self.requisite_combo.count() - 1)
+        self.combo.setCurrentIndex(self.combo.count() - 1)
 
     def on_domains_change(self):
         self.requisite_editor_window.prevWindow.editRuleWindow.prevWindow.on_domains_change()
         self.fill_vars()
-        self.requisite_combo.setCurrentIndex(self.requisite_combo.count() - 1)
+        self.combo.setCurrentIndex(self.combo.count() - 1)
 
     def fill_vars(self):
-        self.requisite_combo.clear()
+        self.combo.clear()
         es_vars = self.es_main_window.expertSystem.getVariables()
         for var in es_vars:
-            self.requisite_combo.addItem(var.getName())
+            self.combo.addItem(var.getName())
 
     def fill_values(self):
-        self.requisite_value_combo.clear()
-        var = self.requisite_combo.currentText()
+        self.value_combo.clear()
+        var = self.combo.currentText()
         if var == '':
             return False
         values = self.es_main_window.expertSystem.getVariableByName(var).getdomain().getValues()
         for val in values:
-            self.requisite_value_combo.addItem(val)
+            self.value_combo.addItem(val)
 
     def ok(self):
         exp_sys = self.requisite_editor_window.prevWindow.es_main_window.expertSystem
-        if self.requisite_combo.currentText() == '':
+        if self.combo.currentText() == '':
             error = QtWidgets.QErrorMessage(self.requisite_editor_window)
             error.setWindowTitle('Ошибка!')
             error.showMessage('Необходимо указать переменную')
             return False
-        var = exp_sys.getVariableByName(self.requisite_combo.currentText())
-        val = self.requisite_value_combo.currentText()
+        var = exp_sys.getVariableByName(self.combo.currentText())
+        val = self.value_combo.currentText()
         if self.requisite is not None:
             self.requisite.setVar(var)
             self.requisite.setVal(val)

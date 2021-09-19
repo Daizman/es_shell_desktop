@@ -8,13 +8,13 @@ class UIConclusionWindow(object):
         self.central_widget = QtWidgets.QWidget(conclusion_view)
         self.central_widget.setObjectName('central_widget')
 
-        self.conclusion_add_button = QtWidgets.QPushButton(self.central_widget)
-        self.conclusion_add_button.setGeometry(QtCore.QRect(310, 10, 40, 25))
-        self.conclusion_add_button.setObjectName('conclusion_add_button')
+        self.add_button = QtWidgets.QPushButton(self.central_widget)
+        self.add_button.setGeometry(QtCore.QRect(310, 10, 40, 25))
+        self.add_button.setObjectName('add_button')
 
-        self.conclusion_combo = QtWidgets.QComboBox(self.central_widget)
-        self.conclusion_combo.setGeometry(QtCore.QRect(10, 10, 300, 20))
-        self.conclusion_combo.setObjectName('conclusion_combo')
+        self.combo = QtWidgets.QComboBox(self.central_widget)
+        self.combo.setGeometry(QtCore.QRect(10, 10, 300, 20))
+        self.combo.setObjectName('combo')
 
         self.line = QtWidgets.QFrame(self.central_widget)
         self.line.setGeometry(QtCore.QRect(10, 90, 340, 15))
@@ -37,9 +37,9 @@ class UIConclusionWindow(object):
         self.ok_button.setGeometry(QtCore.QRect(190, 110, 75, 25))
         self.ok_button.setObjectName('ok_button')
 
-        self.conclusion_value_combo = QtWidgets.QComboBox(self.central_widget)
-        self.conclusion_value_combo.setGeometry(QtCore.QRect(10, 60, 340, 20))
-        self.conclusion_value_combo.setObjectName('conclusion_value_combo')
+        self.value_combo = QtWidgets.QComboBox(self.central_widget)
+        self.value_combo.setGeometry(QtCore.QRect(10, 60, 340, 20))
+        self.value_combo.setObjectName('value_combo')
 
         conclusion_view.setCentralWidget(self.central_widget)
 
@@ -58,22 +58,22 @@ class UIConclusionWindow(object):
     def retranslate_ui(self, conclusion_view):
         _translate = QtCore.QCoreApplication.translate
         conclusion_view.setWindowTitle(_translate('conclusion_view', 'Факт заключения'))
-        self.conclusion_add_button.setText(_translate('conclusion_view', '+'))
+        self.add_button.setText(_translate('conclusion_view', '+'))
         self.eq_label.setText(_translate('conclusion_view', '='))
         self.cancel_button.setText(_translate('conclusion_view', 'Отмена'))
         self.ok_button.setText(_translate('conclusion_view', 'OK'))
 
     def connectButtons(self):
         self.ok_button.clicked.connect(self.okClick)
-        self.conclusion_add_button.clicked.connect(self.addVar)
-        self.conclusion_combo.currentTextChanged.connect(self.onSelectVar)
+        self.add_button.clicked.connect(self.addVar)
+        self.combo.currentTextChanged.connect(self.onSelectVar)
         self.cancel_button.clicked.connect(lambda: self.conclusionEditorWindow.close())
 
     def fillConclusion(self):
-        varIdx = self.conclusion_combo.findText(self.conclusion.getVar().getName())
-        self.conclusion_combo.setCurrentIndex(varIdx)
-        valIdx = self.conclusion_value_combo.findText(self.conclusion.getVal())
-        self.conclusion_value_combo.setCurrentIndex(valIdx)
+        varIdx = self.combo.findText(self.conclusion.getVar().getName())
+        self.combo.setCurrentIndex(varIdx)
+        valIdx = self.value_combo.findText(self.conclusion.getVal())
+        self.value_combo.setCurrentIndex(valIdx)
 
     def addVar(self):
         self.addVarWindow = QtWidgets.QMainWindow()
@@ -88,38 +88,38 @@ class UIConclusionWindow(object):
     def onVarsChange(self):
         self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.on_vars_change()
         self.fillVars()
-        self.conclusion_combo.setCurrentIndex(self.conclusion_combo.count() - 1)
+        self.combo.setCurrentIndex(self.combo.count() - 1)
 
     def ondomainsChange(self):
         self.conclusionEditorWindow.prevWindow.editRuleWindow.prevWindow.on_domains_change()
         self.fillVars()
-        self.conclusion_combo.setCurrentIndex(self.conclusion_combo.count() - 1)
+        self.combo.setCurrentIndex(self.combo.count() - 1)
 
     def fillVars(self):
-        self.conclusion_combo.clear()
+        self.combo.clear()
         esVars = self.expShellMainWindow.expertSystem.getVariables()
         for var in esVars:
             if var.getVarType() != VarType.REQUESTED:
-                self.conclusion_combo.addItem(var.getName())
+                self.combo.addItem(var.getName())
 
     def fillValues(self):
-        self.conclusion_value_combo.clear()
-        var = self.conclusion_combo.currentText()
+        self.value_combo.clear()
+        var = self.combo.currentText()
         if var == '':
             return False
         vals = self.expShellMainWindow.expertSystem.getVariableByName(var).getdomain().getValues()
         for val in vals:
-            self.conclusion_value_combo.addItem(val)
+            self.value_combo.addItem(val)
 
     def okClick(self):
         expSys = self.conclusionEditorWindow.prevWindow.es_main_window.expertSystem
-        if self.conclusion_combo.currentText() == '':
+        if self.combo.currentText() == '':
             error = QtWidgets.QErrorMessage(self.conclusionEditorWindow)
             error.setWindowTitle('Ошибка!')
             error.showMessage('Необходимо указать переменную')
             return False
-        var = expSys.getVariableByName(self.conclusion_combo.currentText())
-        val = self.conclusion_value_combo.currentText()
+        var = expSys.getVariableByName(self.combo.currentText())
+        val = self.value_combo.currentText()
         if self.conclusion is not None:
             self.conclusion.setVar(var)
             self.conclusion.setVal(val)

@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QErrorMessage,\
     QShortcut, \
     QDialog, \
@@ -6,26 +7,28 @@ from PyQt5.QtWidgets import QErrorMessage,\
 from PyQt5.QtGui import QKeySequence
 
 from utils.Observer import Observer
-from utils.ObserverMeta import ObserverMeta
+from utils.ObserverMeta import *
 
 from view.windows.DomainWindow import UIDomainWindow
 
 from copy import deepcopy
 
 
-class Domain(QDialog, Observer, metaclass=ObserverMeta):
+class Domain(ObserverClass):
+    __metaclass__ = ObserverMeta
+
     def __init__(self, controller, model, parent=None):
-        super(QDialog, self).__init__(parent)
+        super(Domain, self).__init__(parent)
 
         self.__controller = controller
         self.__model = model
 
+        self.ui = UIDomainWindow()
+        self.ui.setup_ui(self)
+
         if model.name:
             self.__old = deepcopy(model)
             self.notify_model_is_changed()
-
-        self.ui = UIDomainWindow()
-        self.ui.setup_ui(self)
 
         self.__model.add_observer(self)
         self.connect_buttons()

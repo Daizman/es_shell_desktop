@@ -1,10 +1,13 @@
-import view.Domain as DomainView
+from view.Domain import Domain as DomainView
+import sys
+from PyQt5.QtWidgets import QApplication
+from model.Domain import Domain as DomainModel
 
 
 class Domain:
     def __init__(self, model):
         self.__model = model
-        self.__view = DomainView.Domain(self, self.__model)
+        self.__view = DomainView(self, self.__model)
 
         self.__view.show()
 
@@ -22,3 +25,12 @@ class Domain:
 
     def remove_value(self, value):
         self.__model.remove_value(value)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    _model = DomainModel('Test')
+    controller = Domain(_model)
+
+    sys.exit(app.exec_())
