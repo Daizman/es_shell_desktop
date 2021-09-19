@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow,\
 from utils.Observer import Observer
 from utils.ObserverMeta import ObserverMeta
 
-from view.MainWindow import UIMainWindow
+from view.windows.MainWindow import UIMainWindow
 
 from model.Shell import Shell as ShellModel
 

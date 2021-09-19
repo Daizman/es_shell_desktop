@@ -8,7 +8,7 @@ from PyQt5.QtGui import QKeySequence
 from utils.Observer import Observer
 from utils.ObserverMeta import ObserverMeta
 
-from view.DomainWindow import UIDomainWindow
+from view.windows.DomainWindow import UIDomainWindow
 
 
 class Domain(QDialog, Observer, metaclass=ObserverMeta):

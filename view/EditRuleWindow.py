@@ -165,7 +165,7 @@ class Ui_EditRuleWindow(object):
         self.addRequisiteWindow = QtWidgets.QMainWindow()
         self.addRequisiteWindow.prevWindow = self
         self.addRequisiteUI = Ui_RequisiteEditorWindow()
-        self.addRequisiteUI.setupUi(self.addRequisiteWindow)
+        self.addRequisiteUI.setup_ui(self.addRequisiteWindow)
         self.addRequisiteWindow.show()
 
     def addConclusion(self):
@@ -181,7 +181,7 @@ class Ui_EditRuleWindow(object):
         self.addRequisiteUI = Ui_RequisiteEditorWindow()
         selFactItems = self.requisiteView.selectedItems()
         selFact = self.findRequistedFact(selFactItems[0].text(), selFactItems[1].text()) if selFactItems else None
-        self.addRequisiteUI.setupUi(self.addRequisiteWindow, selFact)
+        self.addRequisiteUI.setup_ui(self.addRequisiteWindow, selFact)
         self.addRequisiteWindow.show()
 
     def editConclusion(self):

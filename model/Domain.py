@@ -20,6 +20,7 @@ class Domain:
         if name.upper().strip() != self.name and self.used:
             raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
         self.__name = name.upper().strip()
+        self.notify_observers()
 
     @property
     def connected_vars(self):
@@ -32,6 +33,7 @@ class Domain:
     @values.setter
     def values(self, values):
         self.__values = values
+        self.notify_observers()
 
     @property
     def used(self):
@@ -62,17 +64,20 @@ class Domain:
         if self.used:
             raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
         self.values.append(value)
+        self.notify_observers()
 
     def remove_value(self, value):
         value = str(value).upper().strip()
         if self.used:
             raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
         self.values.remove(value)
+        self.notify_observers()
 
     def connect_var(self, var):
         if not var or not var.name.strip():
             raise ValueError('Необходимо указать имя переменной')
         self.connected_vars.append(var)
+        self.notify_observers()
 
     def remove_var(self, var):
         if not var or not var.name.strip():
@@ -81,6 +86,7 @@ class Domain:
             raise ValueError('Попытка удалить переменную, которая не связана с доменом')
         self.connected_vars.remove(var)
         var.domain = []
+        self.notify_observers()
 
     def add_observer(self, in_observer):
         self.__observers.append(in_observer)

@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from view.EditVarWindow import Ui_EditVarWindow
+from view.windows.VarWindow import Ui_EditVarWindow
 from model.Fact import Fact
 
 
@@ -101,7 +101,7 @@ class UiRequisiteEditorWindow(object):
 
     def add_var(self):
         self.add_var_window.prevWindow = self
-        self.add_var_ui.setupUi(self.add_var_window)
+        self.add_var_ui.setup_ui(self.add_var_window)
         self.add_var_window.show()
 
     def on_select_var(self):

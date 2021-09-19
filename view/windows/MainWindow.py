@@ -221,7 +221,7 @@ class UIMainWindow(object):
         self.consultWindow = QtWidgets.QMainWindow()
         self.consultUI = Ui_ConsultWindow()
         self.consultWindow.prevWindow = self
-        self.consultUI.setupUi(self.consultWindow)
+        self.consultUI.setup_ui(self.consultWindow)
         self.consultWindow.show()
 
     # работа с правилами
@@ -232,7 +232,7 @@ class UIMainWindow(object):
         self.addRuleWindow.selIndex = self.shell_view.expertSystem.getRuleIndex(selIt[0].text()) + 1 if selIt \
             else len(self.shell_view.expertSystem.getRules())
         self.addRuleWindow.prevWindow = self
-        self.addRuleUI.setupUi(self.addRuleWindow)
+        self.addRuleUI.setup_ui(self.addRuleWindow)
         self.addRuleWindow.show()
 
     def openEditRuleWindow(self):
@@ -245,7 +245,7 @@ class UIMainWindow(object):
         self.conclusion_text.clear()
         if len(selRuleItems) > 0:
             selRule = self.shell_view.expertSystem.getRuleByName(self.rules_view.selectedItems()[0].text())
-        self.addRuleUI.setupUi(self.addRuleWindow, selRule)
+        self.addRuleUI.setup_ui(self.addRuleWindow, selRule)
         self.addRuleWindow.show()
 
     # работа с переменными
@@ -253,7 +253,7 @@ class UIMainWindow(object):
         self.addVarWindow = QtWidgets.QMainWindow()
         self.addVarUI = Ui_EditVarWindow()
         self.addVarWindow.prevWindow = self
-        self.addVarUI.setupUi(self.addVarWindow)
+        self.addVarUI.setup_ui(self.addVarWindow)
         self.addVarWindow.show()
 
     def openEditVarWindow(self):
@@ -265,7 +265,7 @@ class UIMainWindow(object):
         self.question_text.clear()
         if len(selVarItems) > 0:
             selVar = self.shell_view.expertSystem.getVariableByName(self.vars_view.selectedItems()[0].text())
-        self.addVarUI.setupUi(self.addVarWindow, selVar)
+        self.addVarUI.setup_ui(self.addVarWindow, selVar)
         self.addVarWindow.show()
 
     # работа с доменами
@@ -273,7 +273,7 @@ class UIMainWindow(object):
         self.addDomenWindow = QtWidgets.QMainWindow()
         self.addDomenWindow.prevWindow = self
         self.addDomenUI = Ui_DomenEditorWindow()
-        self.addDomenUI.setupUi(self.addDomenWindow)
+        self.addDomenUI.setup_ui(self.addDomenWindow)
         self.addDomenWindow.show()
 
     def openEditDomenWindow(self):
@@ -285,5 +285,5 @@ class UIMainWindow(object):
         self.domain_values.clear()
         if len(selDomItems) > 0:
             selDom = self.shell_view.expertSystem.getDomenByName(self.domains_view.selectedItems()[0].text())
-        self.addDomenUI.setupUi(self.addDomenWindow, selDom)
+        self.addDomenUI.setup_ui(self.addDomenWindow, selDom)
         self.addDomenWindow.show()
