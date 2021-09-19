@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from view.DomainEditorWindow import Ui_DomenEditorWindow
+from view.DomainWindow import Ui_DomenEditorWindow
 from models.VarType import VarType
 
 
@@ -20,7 +20,7 @@ class Ui_EditVarWindow(object):
         EditVarWindow.setMinimumSize(QtCore.QSize(380, 380))
         EditVarWindow.setMaximumSize(QtCore.QSize(380, 380))
         self.centralwidget = QtWidgets.QWidget(EditVarWindow)
-        self.centralwidget.setObjectName('centralwidget')
+        self.centralwidget.setObjectName('central_widget')
         self.varNameLabel = QtWidgets.QLabel(self.centralwidget)
         self.varNameLabel.setGeometry(QtCore.QRect(10, 10, 91, 16))
         self.varNameLabel.setObjectName('varNameLabel')
@@ -35,7 +35,7 @@ class Ui_EditVarWindow(object):
         self.domenCombo.setObjectName('domenCombo')
         self.domenAddButton = QtWidgets.QPushButton(self.centralwidget)
         self.domenAddButton.setGeometry(QtCore.QRect(350, 79, 24, 24))
-        self.domenAddButton.setObjectName('domenAddButton')
+        self.domenAddButton.setObjectName('domain_add_button')
         self.varTypeLabel = QtWidgets.QLabel(self.centralwidget)
         self.varTypeLabel.setGeometry(QtCore.QRect(10, 110, 91, 16))
         self.varTypeLabel.setObjectName('varTypeLabel')
@@ -62,17 +62,17 @@ class Ui_EditVarWindow(object):
         self.line.setObjectName('line')
         self.cancelButton = QtWidgets.QPushButton(self.centralwidget)
         self.cancelButton.setGeometry(QtCore.QRect(290, 310, 75, 25))
-        self.cancelButton.setObjectName('cancelButton')
+        self.cancelButton.setObjectName('cancel_button')
         self.okButton = QtWidgets.QPushButton(self.centralwidget)
         self.okButton.setGeometry(QtCore.QRect(210, 310, 75, 25))
-        self.okButton.setObjectName('okButton')
+        self.okButton.setObjectName('ok_button')
         EditVarWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(EditVarWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 380, 21))
-        self.menubar.setObjectName('menubar')
+        self.menubar.setObjectName('menu_bar')
         EditVarWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(EditVarWindow)
-        self.statusbar.setObjectName('statusbar')
+        self.statusbar.setObjectName('status_bar')
         EditVarWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(EditVarWindow)

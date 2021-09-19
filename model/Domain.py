@@ -7,6 +7,8 @@ class Domain:
         self.__values = values[:] if values else []
         self.__connected_vars = []
 
+        self.__observers = []
+
     @property
     def name(self):
         return self.__name
@@ -79,3 +81,13 @@ class Domain:
             raise ValueError('Попытка удалить переменную, которая не связана с доменом')
         self.connected_vars.remove(var)
         var.domain = []
+
+    def add_observer(self, in_observer):
+        self.__observers.append(in_observer)
+
+    def remove_observer(self, in_observer):
+        self.__observers.remove(in_observer)
+
+    def notify_observers(self):
+        for obs in self.__observers:
+            obs.model_is_changed()

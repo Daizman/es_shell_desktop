@@ -17,32 +17,32 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
         super(QMainWindow, self).__init__(parent)
 
         self.__controller = controller
-        self.model = model
+        self.__model = model
 
         self.ui = UIMainWindow()
         self.ui.setup_ui(self)
 
-        self.model.add_observer(self)
+        self.__model.add_observer(self)
         self.connect_buttons()
 
     def connect_buttons(self):
-        self.consult_button.clicked.connect(self.open_consult_dialog)
+        self.ui.consult_button.clicked.connect(self.open_consult_dialog)
 
-        self.open_file.triggered.connect(self.load)
-        self.save_file_as.triggered.connect(self.backup)
-        self.exit.triggered.connect(self.exit_es)
+        self.ui.open_file.triggered.connect(self.load)
+        self.ui.save_file_as.triggered.connect(self.backup)
+        self.ui.exit.triggered.connect(self.exit_es)
 
-        self.add_rule_button.clicked.connect(self.open_add_rule_dialog)
-        self.edit_rule_button.clicked.connect(self.open_edit_rule_dialog)
-        self.del_rule_button.clicked.connect(self.remove_rule)
+        self.ui.add_rule_button.clicked.connect(self.open_add_rule_dialog)
+        self.ui.edit_rule_button.clicked.connect(self.open_edit_rule_dialog)
+        self.ui.remove_rule_button.clicked.connect(self.remove_rule)
 
-        self.add_var_button.clicked.connect(self.open_add_var_dialog)
-        self.edit_var_button.clicked.connect(self.open_edit_var_dialog)
-        self.del_var_button.clicked.connect(self.remove_var)
+        self.ui.add_var_button.clicked.connect(self.open_add_var_dialog)
+        self.ui.edit_var_button.clicked.connect(self.open_edit_var_dialog)
+        self.ui.remove_var_button.clicked.connect(self.remove_var)
 
-        self.add_domain_button.clicked.connect(self.open_add_domain_dialog)
-        self.edit_domain_button.clicked.connect(self.open_edit_domain_dialog)
-        self.del_domain_button.clicked.connect(self.remove_domain)
+        self.ui.add_domain_button.clicked.connect(self.open_add_domain_dialog)
+        self.ui.edit_domain_button.clicked.connect(self.open_edit_domain_dialog)
+        self.ui.remove_domain_button.clicked.connect(self.remove_domain)
 
     def drop_rule_cb(self, drop_row, rows_to_move):
         for row_index, data in enumerate(rows_to_move):
@@ -69,7 +69,7 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getSaveFileName(self,
                                                 'QFileDialog.getSaveFileName()',
-                                                r'G:\10_tr\ExpSysShell\MyShell\\' + self.model.name,
+                                                r'G:\10_tr\ExpSysShell\MyShell\\' + self.__model.name,
                                                 'ExpSys Files(*.json)',
                                                 options=options)
 
@@ -77,13 +77,13 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
             f_name = f_name.replace('.json', '')
 
         try:
-            self.model.name = f_name.split('/')[-1]
+            self.__model.name = f_name.split('/')[-1]
             self.__controller.backup(f_name)
         except ValueError as v_e:
             self.show_error(v_e)
 
     def exit_es(self):
-        self.model = ShellModel('')
+        self.__model = ShellModel('')
         self.notify_model_is_changed()
 
     def show_error(self, e):
@@ -144,7 +144,7 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
 
     def change_domains_view(self):
         self.ui.domain_values.clear()
-        domains = self.model.domains
+        domains = self.__model.domains
         self.ui.domains_view.setEditTriggers(QAbstractItemView.AllEditTriggers)
         self.ui.domains_view.clear()
         self.ui.domains_view.setColumnCount(1)
@@ -164,7 +164,7 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
     def change_vars_view(self):
         self.ui.question_text.clear()
         self.ui.domains_var_text.clear()
-        _vars = self.model.vars
+        _vars = self.__model.vars
         self.ui.vars_view.setEditTriggers(QAbstractItemView.AllEditTriggers)
         self.ui.vars_view.clear()
         self.ui.vars_view.cellClicked.connect(self.change_var_description)
@@ -194,7 +194,7 @@ class Shell(QMainWindow, Observer, metaclass=ObserverMeta):
     def change_rules_view(self):
         self.ui.conclusion_text.clear()
         self.ui.requisite_text.clear()
-        rules = self.model.rules
+        rules = self.__model.rules
         self.ui.rules_view.clear()
         self.ui.rules_view.cellClicked.connect(self.change_rule_description)
         self.ui.rules_view.setColumnCount(2)

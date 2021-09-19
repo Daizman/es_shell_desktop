@@ -11,7 +11,7 @@ class Ui_EditRuleWindow(object):
         EditRuleWindow.setMaximumSize(QtCore.QSize(549, 379))
 
         self.centralwidget = QtWidgets.QWidget(EditRuleWindow)
-        self.centralwidget.setObjectName('centralwidget')
+        self.centralwidget.setObjectName('central_widget')
 
         self.ruleNameLabel = QtWidgets.QLabel(self.centralwidget)
         self.ruleNameLabel.setGeometry(QtCore.QRect(10, 0, 91, 16))
@@ -79,22 +79,22 @@ class Ui_EditRuleWindow(object):
 
         self.okButton = QtWidgets.QPushButton(self.centralwidget)
         self.okButton.setGeometry(QtCore.QRect(380, 310, 75, 25))
-        self.okButton.setObjectName('okButton')
+        self.okButton.setObjectName('ok_button')
 
         self.cancelButton = QtWidgets.QPushButton(self.centralwidget)
         self.cancelButton.setGeometry(QtCore.QRect(460, 310, 75, 25))
-        self.cancelButton.setObjectName('cancelButton')
+        self.cancelButton.setObjectName('cancel_button')
 
         EditRuleWindow.setCentralWidget(self.centralwidget)
 
         self.menubar = QtWidgets.QMenuBar(EditRuleWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 549, 21))
-        self.menubar.setObjectName('menubar')
+        self.menubar.setObjectName('menu_bar')
 
         EditRuleWindow.setMenuBar(self.menubar)
 
         self.statusbar = QtWidgets.QStatusBar(EditRuleWindow)
-        self.statusbar.setObjectName('statusbar')
+        self.statusbar.setObjectName('status_bar')
 
         EditRuleWindow.setStatusBar(self.statusbar)
 

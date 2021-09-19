@@ -52,12 +52,12 @@ class UiRequisiteEditorWindow(object):
 
         self.menubar = QtWidgets.QMenuBar(requisite_editor_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 355, 21))
-        self.menubar.setObjectName('menubar')
+        self.menubar.setObjectName('menu_bar')
 
         requisite_editor_window.setMenuBar(self.menubar)
 
         self.statusbar = QtWidgets.QStatusBar(requisite_editor_window)
-        self.statusbar.setObjectName('statusbar')
+        self.statusbar.setObjectName('status_bar')
 
         requisite_editor_window.setStatusBar(self.statusbar)
 
