@@ -1,13 +1,13 @@
-from PyQt5.QtWidgets import QErrorMessage,\
-    QShortcut, \
-    QDialog, \
-    QTableWidgetItem
+from PyQt5.QtWidgets import QErrorMessage, QDialog
 
 from utils.Observer import Observer
 from utils.ObserverMeta import ObserverMeta
 
 from view.windows.VarWindow import UIVarWindow
 from model.types.VarType import VarType
+
+from model.Domain import Domain as DomainModel
+from controller.Domain import Domain as DomainController
 
 from copy import deepcopy
 
@@ -33,7 +33,11 @@ class Var(QDialog, Observer, metaclass=ObserverMeta):
         self.connect_events()
 
     def add_domain(self):
-        pass
+        new_domain = DomainModel('')
+        new_domain_controller = DomainController(new_domain)
+        if new_domain.name:
+            self.__controller.add_domain(new_domain)
+            self.__controller.set_domain(new_domain.name)
 
     def restore_var(self):
         if self.__old:

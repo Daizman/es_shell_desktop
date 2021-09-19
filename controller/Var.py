@@ -10,6 +10,12 @@ class Var:
 
         self.__view.show()
 
+    def add_domain(self, domain):
+        try:
+            self.domains.append(domain)
+        except ValueError as v_e:
+            self.__view.show_error(v_e)
+
     def set_name(self):
         try:
             self.__model.name = self.__view.ui.var_name_text.text()
