@@ -2,7 +2,7 @@ from model.exceptions.UsedDomainError import UsedDomainError
 
 
 class Domain:
-    def __init__(self, name, values=None):
+    def __init__(self, name='', values=None):
         self.__name = name.upper().strip()
         self.__values = values[:] if values else []
         self.__connected_vars = []

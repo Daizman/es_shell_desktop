@@ -22,6 +22,12 @@ class TableWidgetDragRows(QTableWidget):
     def set_drop_event_callback(self, drop_event_callback):
         self.drop_event_callback = drop_event_callback
 
+    def get_all_rows_content(self):
+        self.selectAll()
+        rows = [item.text() for item in self.selectedItems()]
+        self.clearSelection()
+        return rows
+
     def dropEvent(self, event: QDropEvent):
         if not event.isAccepted() and event.source() == self:
             drop_row = self.drop_on(event)
