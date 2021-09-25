@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QTableWidgetItem
-from PyQt5.QtCore import *
+from PyQt5.QtCore import pyqtSignal
 
 from functools import partial
 
@@ -41,10 +41,6 @@ class Domain(IShowError):
     def setup_events(self):
         self.ui.domain_name_text.textChanged.connect(partial(setattr, self, 'ui_name'))
         self.ui.domain_val_view.set_drop_event_callback(self.change_value_order)
-
-    def clear(self):
-        self.ui.domain_val_view.clear()
-        self.ui.domain_name_text.clear()
 
     def change_value_order(self, *args):
         self.ui_values = self.ui.domain_val_view.get_all_rows_content()

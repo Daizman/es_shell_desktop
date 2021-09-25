@@ -1,13 +1,15 @@
-from view.Domain import Domain as DomainView
 import sys
+
 from PyQt5.QtWidgets import QApplication
+
+from view.Domain import Domain as DomainView
 from model.Domain import Domain as DomainModel
 
 
 class Domain:
-    def __init__(self, model):
+    def __init__(self, model, parent=None):
         self.__model = model
-        self.__view = DomainView(model)
+        self.__view = DomainView(model, parent)
 
         self.__view.change_signal.connect(self.change_domain)
 

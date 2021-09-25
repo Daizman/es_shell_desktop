@@ -1,84 +1,90 @@
-from PyQt5.QtWidgets import QErrorMessage, QDialog
+from PyQt5.QtCore import pyqtSignal
 
-from utils.Observer import Observer
-from utils.ObserverMeta import ObserverMeta
+from functools import partial
 
 from view.windows.VarWindow import UIVarWindow
+
 from model.types.VarType import VarType
 
 from model.Domain import Domain as DomainModel
 from controller.Domain import Domain as DomainController
 
-from copy import deepcopy
+from utils.Mixins import *
 
 
-class Var(QDialog, Observer, metaclass=ObserverMeta):
-    def __init__(self, controller, model, parent=None):
-        super(QDialog, self).__init__(parent)
+class Var(IShowError):
+    change_signal = pyqtSignal()
 
-        self.__controller = controller
-        self.__model = model
+    def __init__(self, var, domains, parent=None):
+        super(Var, self).__init__(parent)
 
-        if model.name:
-            self.__old = deepcopy(model)
-            self.notify_model_is_changed()
-        else:
-            self.refresh_domain_combo()
+        self.ui_name = var.name
+        self.ui_domain = var.domain
+        self.ui_type = var.var_type
+        self.ui_question = var.question
+
+        self.ui_domains = domains if domains else []
 
         self.ui = UIVarWindow()
         self.ui.setup_ui(self)
 
-        self.__model.add_observer(self)
-        self.connect_buttons()
-        self.connect_events()
+        self.ui.var_name_text.setText(self.ui_name)
+        self.ui.question_text.setText(self.ui_question)
+
+        if self.ui_type == VarType.INFERRED:
+            self.ui.var_type_radio_inferred.setChecked(True)
+        elif self.ui_type == VarType.REQUESTED:
+            self.ui.var_type_radio_requested.setChecked(True)
+        else:
+            self.ui.var_type_radio_out_requested.setChecked(True)
+
+        self.refresh_domains()
+
+        self.setup_buttons()
+        self.setup_events()
+
+    def setup_buttons(self):
+        self.ui.domain_add_button.clicked.connect(self.add_domain)
+        self.ui.domain_add_button.setShortcut('+')
+
+        self.ui.ok_button.clicked.connect(self.accept_changes)
+
+        self.ui.cancel_button.clicked.connect(self.close)
+        self.ui.cancel_button.setShortcut('Ctrl+Q')
+
+    def setup_events(self):
+        self.ui.var_name_text.textChanged.connect(partial(setattr, self, 'ui_name'))
+
+        self.ui.domain_combo.currentTextChanged[str].connect(self.change_domain)
+
+        self.ui.var_type_radio_inferred.clicked.connect(self.change_var_type)
+        self.ui.var_type_radio_requested.clicked.connect(self.change_var_type)
+        self.ui.var_type_radio_out_requested.clicked.connect(self.change_var_type)
+
+        self.ui.question_text.textChanged.connect(partial(setattr, self, 'ui_question'))
+
+    def refresh_domains(self):
+        self.ui.domain_combo.clear()
+        self.ui.domain_combo.addItems(map(str, self.ui_domains))
+
+    def change_domain(self, new_dom):
+        self.ui_domain = self.ui_domains[self.ui_domains.index(lambda a: str(a) == new_dom)]
+
+    def change_var_type(self):
+        sender = self.sender()
+        if sender == self.ui.var_type_radio_inferred:
+            self.ui_type = VarType.INFERRED
+        elif sender == self.ui.var_type_radio_requested:
+            self.ui_type = VarType.REQUESTED
+        else:
+            self.ui_type = VarType.OUTPUT_REQUESTED
+
+    def accept_changes(self):
+        if not self.ui_name.strip():
+            self.show_error('Не введено имя переменной')
+            return
+        self.change_signal.emit()
 
     def add_domain(self):
-        new_domain = DomainModel('')
+        new_domain = DomainModel()
         new_domain_controller = DomainController(new_domain)
-        if new_domain.name:
-            self.__controller.add_domain(new_domain)
-            self.__controller.set_domain(new_domain.name)
-
-    def restore_var(self):
-        if self.__old:
-            self.__model.remove_observer(self)
-            self.__model.name = self.__old.name
-            self.__model.question = self.__old.question
-            self.__model.var_type = self.__old.var_type
-            self.__model.may_be_goal = self.__old.may_be_goal
-            self.__model.domain = self.__old.domain
-        self.close()
-
-    def connect_buttons(self):
-        self.ui.domain_add_button.clicked.connect(self.add_domain)
-        self.ui.ok_button.clicked.connect(lambda: self.close())
-        self.ui.cancel_button.clicked.connect(self.restore_var)
-
-    def connect_events(self):
-        self.ui.var_name_text.textChanged.connect(self.__controller.set_name)
-        self.ui.domain_combo.currentTextChanged.connect(self.__controller.set_domain)
-        self.ui.var_type_radio1.setChecked.connect(self.__controller.set_var_type)
-        self.ui.var_type_radio2.setChecked.connect(self.__controller.set_var_type)
-        self.ui.var_type_radio3.setChecked.connect(self.__controller.set_var_type)
-        self.ui.question_text.textChanged.connect(self.__controller.set_question)
-
-    def show_error(self, e):
-        error_dialog = QErrorMessage(self)
-        error_dialog.setWindowTitle('Ошибка!')
-        error_dialog.showMessage(e)
-
-    def refresh_domain_combo(self):
-        self.ui.domain_combo.clear()
-        self.ui.domain_combo.addItems(map(str, self.__controller.domains))
-
-    def notify_model_is_changed(self):
-        self.ui.var_name_text.setText(self.__model.name)
-        self.refresh_domain_combo()
-        self.ui.domain_combo.setCurrentText(str(self.__model.domain.name))
-        if self.__model.var_type == VarType.REQUESTED:
-            self.ui.var_type_radio1.setChecked()
-        elif self.__model.var_type == VarType.INFERRED:
-            self.ui.var_type_radio2.setChecked()
-        else:
-            self.ui.var_type_radio3.setChecked()
-        self.ui.question_text.setText(self.__model.question)

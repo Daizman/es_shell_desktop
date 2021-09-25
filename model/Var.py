@@ -3,16 +3,15 @@ from model.exceptions.UsedVarError import UsedVarError
 
 
 class Var:
-    def __init__(self, name, domain, question='', var_type=VarType.REQUESTED, may_be_goal=False):
+    def __init__(self, name='', domain=None, question='', var_type=VarType.INFERRED, may_be_goal=False):
         self.__name = name.upper().strip()
         self.__question = question.strip() if question else f'{self.__name}?'
         self.__var_type = var_type
         self.__may_be_goal = may_be_goal
         self.__facts = []
         self.__domain = domain
-        self.__domain.connect_var(self)
-
-        self.__observers = []
+        if domain:
+            self.__domain.connect_var(self)
 
     @property
     def name(self):
@@ -26,7 +25,6 @@ class Var:
             raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
         self.__name = name.upper().strip()
         self.__question = f'{self.__name}?'
-        self.notify_observers()
 
     @property
     def may_be_goal(self):
@@ -35,7 +33,6 @@ class Var:
     @may_be_goal.setter
     def may_be_goal(self, may_be):
         self.__may_be_goal = may_be
-        self.notify_observers()
 
     @property
     def domain(self):
@@ -50,7 +47,6 @@ class Var:
         self.__domain.remove_var(self)
         self.__domain = domain
         self.__domain.connect_var(self)
-        self.notify_observers()
 
     @property
     def question(self):
@@ -63,7 +59,6 @@ class Var:
         if question.strip() != self.question and self.used:
             raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
         self.__question = question.strip()
-        self.notify_observers()
 
     @property
     def facts(self):
@@ -81,7 +76,6 @@ class Var:
             raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
         self.__var_type = var_type
         self.__question = f'{self.__name}?'
-        self.notify_observers()
 
     @property
     def var_type_str(self):
@@ -120,20 +114,8 @@ class Var:
         if fact in self.facts:
             raise ValueError('Попытка добавить существующий в связках факт')
         self.__facts.append(fact)
-        self.notify_observers()
 
     def remove_fact(self, fact):
         if not fact:
             raise ValueError('Попытка удалить пустой факт')
         self.__facts.remove(fact)
-        self.notify_observers()
-
-    def add_observer(self, in_observer):
-        self.__observers.append(in_observer)
-
-    def remove_observer(self, in_observer):
-        self.__observers.remove(in_observer)
-
-    def notify_observers(self):
-        for obs in self.__observers:
-            obs.notify_model_is_changed()

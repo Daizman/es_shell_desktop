@@ -1,44 +1,38 @@
-import view.Var as VarView
+import sys
+
+from PyQt5.QtWidgets import QApplication
+
+from view.Var import Var as VarView
+from model.Var import Var as VarModel
 from model.types.VarType import VarType
+
+from model.Domain import Domain
 
 
 class Var:
-    def __init__(self, model, domains):
+    def __init__(self, model, domains=None, parent=None):
         self.__model = model
-        self.__view = VarView.Var(self, self.__model)
-        self.domains = domains
+        self.__view = VarView(model, domains, parent)
+
+        self.__view.change_signal.connect(self.change_var)
 
         self.__view.show()
 
-    def add_domain(self, domain):
+    def change_var(self):
         try:
-            self.domains.append(domain)
+            pass
         except ValueError as v_e:
             self.__view.show_error(v_e)
 
-    def set_name(self):
-        try:
-            self.__model.name = self.__view.ui.var_name_text.text()
-        except ValueError as v_e:
-            self.__view.show_error(v_e)
+    @property
+    def model(self):
+        return self.__model
 
-    def set_domain(self):
-        try:
-            self.__model.domain = list(filter(lambda domain: domain.name == self.__view.ui.domain_combo.currentText(),
-                                              self.domains))[0]
-        except ValueError as v_e:
-            self.__view.show_error(v_e)
 
-    def set_var_type(self):
-        if self.__view.ui.var_type_radio1.isChecked():
-            self.__model.var_type = VarType.REQUESTED
-        elif self.__view.ui.var_type_radio2.isChecked():
-            self.__model.var_type = VarType.INFERRED
-        else:
-            self.__model.var_type = VarType.OUTPUT_REQUESTED
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-    def set_question(self):
-        try:
-            self.__model.question = self.__view.ui.question_text.text()
-        except ValueError as v_e:
-            self.__view.show_error(v_e)
+    _model = VarModel('Test_var')
+
+    controller = Var(_model)
+    sys.exit(app.exec_())
