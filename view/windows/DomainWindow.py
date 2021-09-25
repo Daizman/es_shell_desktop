@@ -42,6 +42,9 @@ class UIDomainWindow(object):
         self.ok_button = QtWidgets.QPushButton()
         self.ok_button.setObjectName('ok_button')
 
+        buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        self.button_box = QtWidgets.QDialogButtonBox(buttons)
+
         grid.addWidget(domain_name_label, 1, 0)
         grid.addWidget(self.domain_name_text, 1, 1, 1, 2)
 
@@ -54,8 +57,8 @@ class UIDomainWindow(object):
 
         grid.addWidget(self.remove_domain_val_button, 5, 0, 1, 3)
 
-        grid.addWidget(self.ok_button, 6, 0)
-        grid.addWidget(self.cancel_button, 6, 2)
+        grid.addWidget(self.button_box.buttons()[0], 6, 0)
+        grid.addWidget(self.button_box.buttons()[1], 6, 2)
 
         self.retranslate_ui(domain_view)
 

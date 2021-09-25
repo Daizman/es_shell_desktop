@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QDialog
 from PyQt5.QtCore import pyqtSignal
 
 from functools import partial
@@ -8,7 +8,7 @@ from view.windows.DomainWindow import UIDomainWindow
 from utils.Mixins import *
 
 
-class Domain(IShowError):
+class Domain(QDialog, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, domain, parent=None):
@@ -33,10 +33,9 @@ class Domain(IShowError):
         self.ui.remove_domain_val_button.clicked.connect(self.remove_value)
         self.ui.remove_domain_val_button.setShortcut('Delete')
 
-        self.ui.ok_button.clicked.connect(self.accept_changes)
+        self.ui.button_box.accepted.connect(self.accept_changes)
 
-        self.ui.cancel_button.clicked.connect(self.close)
-        self.ui.cancel_button.setShortcut('Ctrl+Q')
+        self.ui.button_box.rejected.connect(self.reject)
 
     def setup_events(self):
         self.ui.domain_name_text.textChanged.connect(partial(setattr, self, 'ui_name'))

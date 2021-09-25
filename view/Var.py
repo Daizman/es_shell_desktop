@@ -65,10 +65,14 @@ class Var(IShowError):
 
     def refresh_domains(self):
         self.ui.domain_combo.clear()
-        self.ui.domain_combo.addItems(map(str, self.ui_domains))
+        cur_dom = self.ui_domain
+        self.ui.domain_combo.addItems(map(lambda dom: dom.name, self.ui_domains))
+        if cur_dom:
+            self.ui.domain_combo.setCurrentText(cur_dom.name)
 
     def change_domain(self, new_dom):
-        self.ui_domain = self.ui_domains[self.ui_domains.index(lambda a: str(a) == new_dom)]
+        if new_dom:
+            self.ui_domain = list(filter(lambda dom: dom.name == new_dom, self.ui_domains))[0]
 
     def change_var_type(self):
         sender = self.sender()
@@ -87,4 +91,11 @@ class Var(IShowError):
 
     def add_domain(self):
         new_domain = DomainModel()
-        new_domain_controller = DomainController(new_domain)
+        new_domain_controller = DomainController(new_domain, self)
+        if new_domain_controller.get_domain():
+            if new_domain in self.ui_domains:
+                self.show_error('Такой домен уже есть')
+                return
+            self.ui_domain = new_domain
+            self.ui_domains.append(new_domain)
+            self.refresh_domains()

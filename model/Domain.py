@@ -38,14 +38,7 @@ class Domain:
     def __eq__(self, other):
         if type(other) != type(self):
             return False
-        other_values = other.getValues()
-        domain_size = len(self.name)
-        if domain_size != len(other_values):
-            return False
-        for i in range(other_values):
-            if other_values[i] != self.values[i]:
-                return False
-        return True
+        return self.name == other.name
 
     def __ne__(self, other):
         return not self.__eq__(other)
