@@ -1,9 +1,6 @@
-import sys
-
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QDialog
 
 from view.Domain import Domain as DomainView
-from model.Domain import Domain as DomainModel
 
 
 class Domain:
@@ -28,15 +25,3 @@ class Domain:
 
     def get_domain(self):
         return self.__view.exec()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    # _model = DomainModel('Test')
-    _model = DomainModel('Test_with_values')
-    _model.values = ['Stop', 'me', 'now']
-    controller = Domain(_model)
-    controller.get_domain()
-
-    sys.exit(app.exec_())

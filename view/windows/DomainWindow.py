@@ -36,12 +36,6 @@ class UIDomainWindow(object):
         self.remove_domain_val_button = QtWidgets.QPushButton()
         self.remove_domain_val_button.setObjectName('remove_domain_val_button')
 
-        self.cancel_button = QtWidgets.QPushButton()
-        self.cancel_button.setObjectName('cancel_button')
-
-        self.ok_button = QtWidgets.QPushButton()
-        self.ok_button.setObjectName('ok_button')
-
         buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
         self.button_box = QtWidgets.QDialogButtonBox(buttons)
 
@@ -68,5 +62,3 @@ class UIDomainWindow(object):
         self.domain_add_button.setToolTip(_translate('domain_view', 'Добавить'))
         self.domain_add_button.setText(_translate('domain_view', '+'))
         self.remove_domain_val_button.setText(_translate('domain_view', 'Удалить'))
-        self.cancel_button.setText(_translate('domain_view', 'Отмена'))
-        self.ok_button.setText(_translate('domain_view', 'OK'))

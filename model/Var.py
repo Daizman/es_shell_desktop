@@ -3,11 +3,11 @@ from model.exceptions.UsedVarError import UsedVarError
 
 
 class Var:
-    def __init__(self, name='', domain=None, question='', var_type=VarType.INFERRED, may_be_goal=False):
+    def __init__(self, name='', domain=None, question='', var_type=VarType.INFERRED, can_be_goal=False):
         self.__name = name.upper().strip()
         self.__question = question.strip() if question else f'{self.__name}?'
         self.__var_type = var_type
-        self.__may_be_goal = may_be_goal
+        self.__can_be_goal = can_be_goal
         self.__facts = []
         self.__domain = domain
         if domain:
@@ -27,12 +27,12 @@ class Var:
         self.__question = f'{self.__name}?'
 
     @property
-    def may_be_goal(self):
-        return self.__may_be_goal
+    def can_be_goal(self):
+        return self.__can_be_goal
 
-    @may_be_goal.setter
-    def may_be_goal(self, may_be):
-        self.__may_be_goal = may_be
+    @can_be_goal.setter
+    def can_be_goal(self, may_be):
+        self.__can_be_goal = may_be
 
     @property
     def domain(self):
@@ -91,10 +91,7 @@ class Var:
         return len(self.__facts) != 0
 
     def __eq__(self, other):
-        return other.name == self.name \
-               and other.domain == self.domain \
-               and other.question == self.question \
-               and other.var_type == self.var_type
+        return other.name == self.name
 
     def __ne__(self, other):
         return not self.__eq__(other)

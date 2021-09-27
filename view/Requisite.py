@@ -5,9 +5,6 @@ from PyQt5.QtWidgets import QErrorMessage,\
 
 from PyQt5.QtGui import QKeySequence
 
-from utils.Observer import Observer
-from utils.ObserverMeta import ObserverMeta
-
 from view.windows.RequisiteWindow import UIRequisiteWindow
 
 from copy import deepcopy

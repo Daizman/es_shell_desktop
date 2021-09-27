@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import pyqtSignal
 
 from functools import partial
@@ -12,7 +13,7 @@ from controller.Domain import Domain as DomainController
 from utils.Mixins import *
 
 
-class Var(IShowError):
+class Var(QDialog, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, var, domains, parent=None):
@@ -22,6 +23,7 @@ class Var(IShowError):
         self.ui_domain = var.domain
         self.ui_type = var.var_type
         self.ui_question = var.question
+        self.ui_can_be_goal = var.can_be_goal
 
         self.ui_domains = domains if domains else []
 
@@ -47,15 +49,16 @@ class Var(IShowError):
         self.ui.domain_add_button.clicked.connect(self.add_domain)
         self.ui.domain_add_button.setShortcut('+')
 
-        self.ui.ok_button.clicked.connect(self.accept_changes)
+        self.ui.button_box.accepted.clicked.connect(self.accept_changes)
 
-        self.ui.cancel_button.clicked.connect(self.close)
-        self.ui.cancel_button.setShortcut('Ctrl+Q')
+        self.ui.button_box.rejected.clicked.connect(self.reject)
 
     def setup_events(self):
         self.ui.var_name_text.textChanged.connect(partial(setattr, self, 'ui_name'))
 
         self.ui.domain_combo.currentTextChanged[str].connect(self.change_domain)
+
+        self.ui.can_be_goal.clicked.connect(partial(setattr, self, 'ui_can_be_goal'))
 
         self.ui.var_type_radio_inferred.clicked.connect(self.change_var_type)
         self.ui.var_type_radio_requested.clicked.connect(self.change_var_type)

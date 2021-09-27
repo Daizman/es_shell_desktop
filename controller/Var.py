@@ -1,12 +1,9 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QDialog
 
 from view.Var import Var as VarView
 from model.Var import Var as VarModel
-from model.types.VarType import VarType
-
-from model.Domain import Domain
 
 
 class Var:
@@ -20,13 +17,22 @@ class Var:
 
     def change_var(self):
         try:
-            pass
+            self.__model.name = self.__view.ui_name
+            self.__model.domain = self.__view.ui_domain
+            self.__model.can_be_goal = self.__view.ui_can_be_goal
+            self.__model.var_type = self.__view.ui_type
+            self.__model.question = self.__view.ui_question
+            self.__view.setResult(QDialog.Accepted)
+            self.__view.accept()
         except ValueError as v_e:
             self.__view.show_error(v_e)
 
     @property
     def model(self):
         return self.__model
+
+    def get_var(self):
+        return self.__view.exec()
 
 
 if __name__ == '__main__':

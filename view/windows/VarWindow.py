@@ -24,6 +24,8 @@ class UIVarWindow(object):
         self.domain_add_button = QtWidgets.QPushButton()
         self.domain_add_button.setObjectName('domain_add_button')
 
+        self.can_be_goal = QtWidgets.QCheckBox('Может быть целью', var_view)
+
         var_type_label = QtWidgets.QLabel('Тип переменной:')
 
         self.var_type_radio_inferred = QtWidgets.QRadioButton()
@@ -41,11 +43,8 @@ class UIVarWindow(object):
         self.question_text = QtWidgets.QTextEdit()
         self.question_text.setObjectName('question_text')
 
-        self.cancel_button = QtWidgets.QPushButton()
-        self.cancel_button.setObjectName('cancel_button')
-
-        self.ok_button = QtWidgets.QPushButton()
-        self.ok_button.setObjectName('ok_button')
+        buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        self.button_box = QtWidgets.QDialogButtonBox(buttons)
 
         grid.addWidget(var_name_label, 1, 0)
         grid.addWidget(self.var_name_text, 1, 1, 1, 5)
@@ -54,17 +53,19 @@ class UIVarWindow(object):
         grid.addWidget(self.domain_combo, 2, 1, 1, 4)
         grid.addWidget(self.domain_add_button, 2, 5)
 
-        grid.addWidget(var_type_label, 3, 0)
-        grid.addWidget(self.var_type_radio_inferred, 3, 1, 1, 5)
-        grid.addWidget(self.var_type_radio_requested, 4, 1, 1, 5)
-        grid.addWidget(self.var_type_radio_out_requested, 5, 1, 1, 5)
+        grid.addWidget(self.can_be_goal, 3, 0, 1, 5)
 
-        grid.addWidget(question_text_label, 6, 0, 1, 6)
+        grid.addWidget(var_type_label, 4, 0)
+        grid.addWidget(self.var_type_radio_inferred, 4, 1, 1, 5)
+        grid.addWidget(self.var_type_radio_requested, 5, 1, 1, 5)
+        grid.addWidget(self.var_type_radio_out_requested, 6, 1, 1, 5)
 
-        grid.addWidget(self.question_text, 7, 0, 4, 6)
+        grid.addWidget(question_text_label, 7, 0, 1, 6)
 
-        grid.addWidget(self.ok_button, 11, 0)
-        grid.addWidget(self.cancel_button, 11, 5)
+        grid.addWidget(self.question_text, 8, 0, 4, 6)
+
+        grid.addWidget(self.button_box.buttons()[0], 12, 0)
+        grid.addWidget(self.button_box.buttons()[1], 12, 5)
 
         self.retranslate_ui(var_view)
 
@@ -75,5 +76,3 @@ class UIVarWindow(object):
         self.var_type_radio_inferred.setText(_translate('var_view', 'Запрашиваемая'))
         self.var_type_radio_requested.setText(_translate('var_view', 'Выводимая'))
         self.var_type_radio_out_requested.setText(_translate('var_view', 'Запрашиваемо-выводимая'))
-        self.cancel_button.setText(_translate('var_view', 'Отмена'))
-        self.ok_button.setText(_translate('var_view', 'OK'))
