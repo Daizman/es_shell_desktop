@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UIFactWindow(object):
     def setup_ui(self, requisite_view):
         requisite_view.setObjectName('requisite_view')
-        requisite_view.resize(355, 180)
+        requisite_view.resize(355, 100)
 
         requisite_view.setWindowTitle('Факт')
 

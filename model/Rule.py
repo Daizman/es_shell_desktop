@@ -1,5 +1,5 @@
 class Rule:
-    def __init__(self, name, description='', reasons=None, conclusions=None):
+    def __init__(self, name='', description='', reasons=None, conclusions=None):
         self.__name = name.upper().strip()
         self.__description = description
         self.__reasons = reasons if reasons else []
