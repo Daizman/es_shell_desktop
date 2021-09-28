@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
-from view.windows.RequisiteWindow import Ui_RequisiteEditorWindow
+from view.windows.FactWindow import Ui_RequisiteEditorWindow
 from view.windows.ConclusionWindow import UIConclusionWindow
 
 

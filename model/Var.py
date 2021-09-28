@@ -44,7 +44,8 @@ class Var:
             raise ValueError('Переменной нельзя присвоить пустой домен')
         if domain != self.domain and self.used:
             raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
-        self.__domain.remove_var(self)
+        if self.__domain:
+            self.__domain.remove_var(self)
         self.__domain = domain
         self.__domain.connect_var(self)
 

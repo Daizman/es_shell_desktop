@@ -7,6 +7,8 @@ class UIDomainWindow(object):
         domain_view.setObjectName('domain_view')
         domain_view.resize(350, 375)
 
+        domain_view.setWindowTitle('Домен')
+
         grid = QtWidgets.QGridLayout()
         domain_view.setLayout(grid)
 

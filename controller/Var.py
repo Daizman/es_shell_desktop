@@ -1,9 +1,6 @@
-import sys
-
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QDialog
 
 from view.Var import Var as VarView
-from model.Var import Var as VarModel
 
 
 class Var:
@@ -12,8 +9,6 @@ class Var:
         self.__view = VarView(model, domains, parent)
 
         self.__view.change_signal.connect(self.change_var)
-
-        self.__view.show()
 
     def change_var(self):
         try:
@@ -33,12 +28,3 @@ class Var:
 
     def get_var(self):
         return self.__view.exec()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    _model = VarModel('Test_var')
-
-    controller = Var(_model)
-    sys.exit(app.exec_())

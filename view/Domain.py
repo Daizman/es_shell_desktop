@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTableWidgetItem, QDialog
+from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtCore import pyqtSignal
 
 from functools import partial
@@ -8,7 +8,7 @@ from view.windows.DomainWindow import UIDomainWindow
 from utils.Mixins import *
 
 
-class Domain(QDialog, IShowError):
+class Domain(IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, domain, parent=None):
@@ -55,6 +55,9 @@ class Domain(QDialog, IShowError):
     def accept_changes(self):
         if not self.ui_name.strip():
             self.show_error('Не введено имя домена')
+            return
+        if len(self.ui_values) == 0:
+            self.show_error('У домена нет значений')
             return
         self.change_signal.emit()
 

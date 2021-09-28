@@ -6,6 +6,8 @@ class UIVarWindow(object):
         var_view.setObjectName('var_view')
         var_view.resize(380, 350)
 
+        var_view.setWindowTitle('Переменная')
+
         grid = QtWidgets.QGridLayout()
         var_view.setLayout(grid)
 

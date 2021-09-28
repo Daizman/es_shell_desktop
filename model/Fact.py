@@ -1,8 +1,9 @@
 class Fact:
-    def __init__(self, var, value):
+    def __init__(self, var=None, value=None):
         self.__var = var
         self.__value = value
-        var.connect_fact(self)
+        if var:
+            var.connect_fact(self)
 
     @property
     def var(self):
@@ -12,7 +13,8 @@ class Fact:
     def var(self, var):
         if not var:
             raise ValueError('Попытка присвоить пустую переменную')
-        self.__var.remove_fact(self)
+        if self.__var:
+            self.__var.remove_fact(self)
         self.__var = var
         var.connect_fact(self)
 
@@ -24,6 +26,8 @@ class Fact:
     def value(self, value):
         if not value:
             raise ValueError('Попытка присвоить пустое значение')
+        if value not in self.var.domain.values:
+            raise ValueError('Попытка присвоить значение не из домена переменной')
         self.__value = value
 
     @property
@@ -38,6 +42,7 @@ class Fact:
     def __eq__(self, other):
         if other is not None and type(other) == 'Fact':
             return self.var == other.var and self.value == other.value
+        return False
 
     def __ne__(self, other):
         return not self.__eq__(other)

@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import pyqtSignal
 
 from functools import partial
@@ -13,7 +12,7 @@ from controller.Domain import Domain as DomainController
 from utils.Mixins import *
 
 
-class Var(QDialog, IShowError):
+class Var(IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, var, domains, parent=None):
@@ -49,9 +48,9 @@ class Var(QDialog, IShowError):
         self.ui.domain_add_button.clicked.connect(self.add_domain)
         self.ui.domain_add_button.setShortcut('+')
 
-        self.ui.button_box.accepted.clicked.connect(self.accept_changes)
+        self.ui.button_box.accepted.connect(self.accept_changes)
 
-        self.ui.button_box.rejected.clicked.connect(self.reject)
+        self.ui.button_box.rejected.connect(self.reject)
 
     def setup_events(self):
         self.ui.var_name_text.textChanged.connect(partial(setattr, self, 'ui_name'))
@@ -69,13 +68,16 @@ class Var(QDialog, IShowError):
     def refresh_domains(self):
         self.ui.domain_combo.clear()
         cur_dom = self.ui_domain
-        self.ui.domain_combo.addItems(map(lambda dom: dom.name, self.ui_domains))
+        for dom in self.ui_domains:
+            self.ui.domain_combo.addItem(dom.name)
         if cur_dom:
             self.ui.domain_combo.setCurrentText(cur_dom.name)
 
     def change_domain(self, new_dom):
-        if new_dom:
-            self.ui_domain = list(filter(lambda dom: dom.name == new_dom, self.ui_domains))[0]
+        for dom in self.ui_domains:
+            if new_dom and dom.name == new_dom:
+                self.ui_domain = dom
+                return
 
     def change_var_type(self):
         sender = self.sender()
@@ -89,6 +91,9 @@ class Var(QDialog, IShowError):
     def accept_changes(self):
         if not self.ui_name.strip():
             self.show_error('Не введено имя переменной')
+            return
+        if not self.ui_domain:
+            self.show_error('Не выбран домен')
             return
         self.change_signal.emit()
 
