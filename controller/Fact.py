@@ -9,6 +9,7 @@ from model.Fact import Fact as FactModel
 class Fact:
     def __init__(self, model, variants=None, parent=None):
         self.__model = model
+        self.variants = variants
         self.__view = FactView(model, variants, parent)
 
         self.__view.change_signal.connect(self.change_fact)
@@ -17,6 +18,7 @@ class Fact:
         try:
             self.__model.var = self.__view.ui_var
             self.__model.value = self.__view.ui_value
+            self.variants = self.__view.ui_vars
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:
@@ -25,6 +27,9 @@ class Fact:
     @property
     def model(self):
         return self.__model
+
+    def set_title(self, title):
+        self.__view.setWindowTitle(title)
 
     def get_fact(self):
         return self.__view.exec()
