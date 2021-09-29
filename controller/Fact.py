@@ -7,10 +7,9 @@ from model.Fact import Fact as FactModel
 
 
 class Fact:
-    def __init__(self, model, variants=None, parent=None):
+    def __init__(self, model, variants, domains, parent=None):
         self.__model = model
-        self.variants = variants
-        self.__view = FactView(model, variants, parent)
+        self.__view = FactView(model, variants, domains, parent)
 
         self.__view.change_signal.connect(self.change_fact)
 
@@ -18,7 +17,6 @@ class Fact:
         try:
             self.__model.var = self.__view.ui_var
             self.__model.value = self.__view.ui_value
-            self.variants = self.__view.ui_vars
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:
@@ -33,14 +31,3 @@ class Fact:
 
     def get_fact(self):
         return self.__view.exec()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    _model = FactModel()
-
-    controller = Fact(_model)
-    controller.get_fact()
-    sys.exit(app.exec_())
-

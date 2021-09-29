@@ -16,13 +16,14 @@ from utils.Mixins import *
 class Rule(IShowError):
     change_signal = pyqtSignal()
 
-    def __init__(self, rule, variants=None, parent=None):
+    def __init__(self, rule, variants, domains, parent=None):
         super(Rule, self).__init__(parent)
 
         self.ui_name = rule.name
         self.ui_description = rule.description
         self.ui_rule = rule
-        self.ui_variants = variants if variants else []
+        self.ui_variants = variants
+        self.ui_domains = domains
 
         self.ui = UIRuleWindow()
         self.ui.setup_ui(self)
@@ -97,7 +98,7 @@ class Rule(IShowError):
     def add_fact(self):
         source = self.sender()
         new_fact = FactModel()
-        new_fact_controller = FactController(new_fact, self.ui_variants, self)
+        new_fact_controller = FactController(new_fact, self.ui_variants, self.ui_domains, self)
         if source == self.ui.add_requisite_button:
             new_fact_controller.set_title('Добавление факта посылки')
         else:
@@ -121,7 +122,7 @@ class Rule(IShowError):
         if source == self.ui.edit_requisite_button and len(sel_reasons) > 0:
             reason_idx = sel_reasons[0].row()
             reason = self.ui_rule.reasons[reason_idx]
-            new_fact_controller = FactController(reason, self.ui_variants, self)
+            new_fact_controller = FactController(reason, self.ui_variants, self.ui_domains, self)
             new_fact_controller.set_title('Изменение факта посылки')
             fact_type = FactType.REASON
 
@@ -132,18 +133,18 @@ class Rule(IShowError):
             conclusion = self.ui_rule.conclusions[conclusion_idx] if conclusion_idx != -1 else None
 
             if reason:
-                new_fact_controller = FactController(reason, self.ui_variants, self)
+                new_fact_controller = FactController(reason, self.ui_variants, self.ui_domains, self)
                 new_fact_controller.set_title('Изменение факта посылки')
                 fact_type = FactType.REASON
             elif conclusion:
-                new_fact_controller = FactController(conclusion, self.ui_variants, self)
+                new_fact_controller = FactController(conclusion, self.ui_variants, self.ui_domains, self)
                 new_fact_controller.set_title('Изменение факта заключения')
                 fact_type = FactType.CONCLUSION
 
         elif source == self.ui.edit_conclusion_button and len(sel_conclusions) > 0:
             conclusion_idx = sel_conclusions[0].row()
             conclusion = self.ui_rule.conclusions[conclusion_idx]
-            new_fact_controller = FactController(conclusion, self.ui_variants, self)
+            new_fact_controller = FactController(conclusion, self.ui_variants, self.ui_domains, self)
             new_fact_controller.set_title('Изменение факта заключения')
             fact_type = FactType.CONCLUSION
 

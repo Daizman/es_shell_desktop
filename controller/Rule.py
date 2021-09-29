@@ -7,9 +7,9 @@ from view.Rule import Rule as RuleView
 
 
 class Rule:
-    def __init__(self, model, variants, parent=None):
+    def __init__(self, model, variants, domains, parent=None):
         self.__model = model
-        self.__view = RuleView(model, variants, parent)
+        self.__view = RuleView(model, variants, domains, parent)
 
         self.__view.change_signal.connect(self.change_rule)
 
@@ -35,8 +35,10 @@ class Rule:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
+    glob_variants_list = []
+    glob_domains_list = []
     _model = RuleModel()
 
-    controller = Rule(_model, [])
+    controller = Rule(_model, glob_variants_list, glob_domains_list)
     controller.get_rule()
     sys.exit(app.exec_())

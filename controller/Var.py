@@ -4,7 +4,7 @@ from view.Var import Var as VarView
 
 
 class Var:
-    def __init__(self, model, domains=None, parent=None):
+    def __init__(self, model, domains, parent=None):
         self.__model = model
         self.__view = VarView(model, domains, parent)
 

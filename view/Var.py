@@ -24,7 +24,9 @@ class Var(IShowError):
         self.ui_question = var.question
         self.ui_can_be_goal = var.can_be_goal
 
-        self.ui_domains = domains if domains else []
+        self.ui_domains = domains
+        if not self.ui_domain and len(domains) > 0:
+            self.ui_domain = domains[0]
 
         self.ui = UIVarWindow()
         self.ui.setup_ui(self)

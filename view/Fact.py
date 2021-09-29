@@ -13,13 +13,17 @@ from utils.Mixins import *
 class Fact(IShowError):
     change_signal = pyqtSignal()
 
-    def __init__(self, fact, variants, parent=None):
+    def __init__(self, fact, variants, domains, parent=None):
         super(Fact, self).__init__(parent)
 
         self.ui_var = fact.var
         self.ui_value = fact.value
-        self.ui_vars = variants if variants else []
-        self.ui_vars_str = [var.name for var in variants] if variants else []
+        self.ui_vars = variants
+        self.ui_domains = domains
+        self.ui_vars_str = [var.name for var in variants]
+
+        if not self.ui_var and len(variants) > 0:
+            self.ui_var = variants[0]
 
         self.ui = UIFactWindow()
         self.ui.setup_ui(self)
@@ -41,14 +45,15 @@ class Fact(IShowError):
 
     def refresh_fact(self):
         self.ui.combo.clear()
+        backup = self.ui_var
         self.ui.combo.addItems(self.ui_vars_str)
-        if not self.ui_var:
+        if not backup:
             return
-        self.ui.combo.setCurrentText(self.ui_var.name)
+        self.ui.combo.setCurrentText(backup.name)
 
-        if self.ui_var:
+        if backup:
             for var in self.ui_vars:
-                if var.name == self.ui_var.name:
+                if var.name == backup.name:
                     self.refresh_values(var)
                     return
 
@@ -58,10 +63,12 @@ class Fact(IShowError):
             self.ui.value_combo.addItem(val)
         if self.ui_value:
             self.ui.value_combo.setCurrentText(self.ui_value)
+        else:
+            self.ui.value_combo.setCurrentIndex(0)
 
     def add_var(self):
         new_var = VarModel()
-        new_var_controller = VarController(new_var, parent=self)
+        new_var_controller = VarController(new_var, self.ui_domains, parent=self)
         if new_var_controller.get_var():
             if new_var in self.ui_vars:
                 self.show_error('Такая переменная уже есть')
