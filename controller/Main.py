@@ -1,4 +1,4 @@
-import view.Shell as ShellView
+import view.Main as ShellView
 
 
 class Shell:

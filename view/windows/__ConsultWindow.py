@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 from models.VarType import VarType
-from view.windows.AnswerWindow import Ui_answerWindow
+from view.windows.__AnswerWindow import Ui_answerWindow
 
 
 class Ui_ConsultWindow(object):

@@ -13,8 +13,6 @@ class Shell:
         self.__name = name.upper().strip()
         self.__memory = Memory()
 
-        self.__observers = []
-
     @property
     def name(self):
         return self.__name
@@ -107,14 +105,3 @@ class Shell:
     def backup(self, path):
         with open(path, 'w') as backup:
             backup.write(jsonpickle.encode(self))
-
-    def add_observer(self, in_observer):
-        self.__observers.append(in_observer)
-
-    def remove_observer(self, in_observer):
-        self.__observers.remove(in_observer)
-
-    def notify_observers(self):
-        for obs in self.__observers:
-            obs.notify_model_is_changed()
-

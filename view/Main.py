@@ -9,7 +9,7 @@ from utils.ObserverMeta import ObserverMeta
 
 from view.windows.MainWindow import UIMainWindow
 
-from model.Shell import Shell as ShellModel
+from model.Main import Shell as ShellModel
 
 
 class Shell(QMainWindow, Observer, metaclass=ObserverMeta):

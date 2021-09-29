@@ -1,8 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 
-import model.Shell as ShellModel
-import controller.Shell as ShellController
+import model.Main as ShellModel
+import controller.Main as ShellController
 
 
 def main():
