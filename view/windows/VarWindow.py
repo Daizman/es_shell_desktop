@@ -43,7 +43,7 @@ class UIVarWindow(object):
         question_text_label = QtWidgets.QLabel('Текст вопроса(если не указать, будет: {имя_переменной}?)')
 
         self.question_text = QtWidgets.QTextEdit()
-        self.question_text.setObjectName('question_text')
+        self.question_text.setObjectName('question_te')
 
         buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
         self.button_box = QtWidgets.QDialogButtonBox(buttons)

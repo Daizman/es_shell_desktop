@@ -26,7 +26,7 @@ class Ui_ConsultWindow(object):
         self.questionText = QtWidgets.QLabel(self.centralwidget)
         self.questionText.setText('Выберите цель консультации')
         self.questionText.setGeometry(QtCore.QRect(10, 20, 170, 30))
-        self.questionText.setObjectName('question_text')
+        self.questionText.setObjectName('question_te')
 
         ConsultWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(ConsultWindow)

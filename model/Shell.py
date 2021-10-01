@@ -37,10 +37,6 @@ class Shell:
     def vars(self):
         return self.__memory.vars
 
-    @property
-    def memory(self):
-        return self.__memory
-
     @name.setter
     def name(self, name):
         if not name or not name.strip():

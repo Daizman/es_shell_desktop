@@ -52,9 +52,11 @@ class Memory:
         return self.vars_values[var_name]
 
     def remove_var_with_value(self, var, value):
-        if var.name in self.vars_values.keys():
-            if self.vars_values[var.name] == value:
-                self.vars_values.pop(var.name)
+        if (
+            var.name in self.vars_values.keys()
+            and self.vars_values[var.name] == value
+        ):
+            self.vars_values.pop(var.name)
 
     def clear_var_values(self):
         self.vars_values = {}
