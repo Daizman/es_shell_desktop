@@ -33,7 +33,7 @@ class TableWidgetDragRows(QTableWidget):
             drop_row = self.drop_on(event)
             if drop_row == self.rowCount():
                 return
-            rows = sorted(set(item.row() for item in self.selectedItems()))
+            rows = sorted({item.row() for item in self.selectedItems()})
             rows_to_move = [
                 [QTableWidgetItem(self.item(row_index, column_index)) for column_index in range(self.columnCount())]
                 for row_index in rows

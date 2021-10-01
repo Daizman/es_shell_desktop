@@ -29,7 +29,9 @@ class Domain:
 
     @values.setter
     def values(self, values):
-        self.__values = values
+        self.__values = []
+        for val in values:
+            self.add_value(val)
 
     @property
     def used(self):
@@ -53,12 +55,6 @@ class Domain:
         if self.used:
             raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
         self.values.append(value)
-
-    def remove_value(self, value):
-        value = str(value).upper().strip()
-        if self.used:
-            raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
-        self.values.remove(value)
 
     def connect_var(self, var):
         if not var or not var.name.strip():

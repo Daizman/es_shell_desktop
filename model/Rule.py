@@ -2,8 +2,8 @@ class Rule:
     def __init__(self, name='', description='', reasons=None, conclusions=None):
         self.__name = name.upper().strip()
         self.__description = description
-        self.__reasons = reasons if reasons else []
-        self.__conclusions = conclusions if conclusions else []
+        self.__reasons = reasons or []
+        self.__conclusions = conclusions or []
 
     @property
     def name(self):
@@ -34,7 +34,8 @@ class Rule:
         if not reasons:
             raise ValueError('Попытка установить пустую посылку для правила')
         self.clear_reasons()
-        self.__reasons = reasons
+        for reason in reasons:
+            self.add_reason(reason)
 
     @property
     def conclusions(self):
@@ -45,7 +46,8 @@ class Rule:
         if not conclusions:
             raise ValueError('Попытка установить пустые выводы из правила')
         self.clear_conclusions()
-        self.__conclusions = conclusions
+        for conclusion in conclusions:
+            self.add_conclusion(conclusion)
 
     def __str__(self):
         res = ''

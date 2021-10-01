@@ -1,9 +1,6 @@
-import sys
-
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QDialog
 
 from view.Fact import Fact as FactView
-from model.Fact import Fact as FactModel
 
 
 class Fact:

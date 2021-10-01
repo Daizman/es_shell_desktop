@@ -31,8 +31,8 @@ class Var:
         return self.__can_be_goal
 
     @can_be_goal.setter
-    def can_be_goal(self, may_be):
-        self.__can_be_goal = may_be
+    def can_be_goal(self, can_be: bool):
+        self.__can_be_goal = can_be
 
     @property
     def domain(self):
@@ -70,7 +70,7 @@ class Var:
         return self.__var_type
 
     @var_type.setter
-    def var_type(self, var_type):
+    def var_type(self, var_type: VarType):
         if not var_type or not isinstance(var_type, VarType):
             raise ValueError('Попытка присвоить неверный тип переменной')
         if self.used:
