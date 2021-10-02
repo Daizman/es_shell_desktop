@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QAction, QTableWidgetItem, QAbstractItemView, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QTableWidgetItem, QAbstractItemView, QFileDialog
+
+import sys
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -9,7 +11,7 @@ from view.windows.ShellWindow import UIShellWindow
 from utils.Mixins import *
 
 
-class Shell(IShowError):
+class Shell(QMainWindow):
     def __init__(self, shell, parent=None):
         super(Shell, self).__init__(parent)
 
@@ -102,3 +104,11 @@ class Shell(IShowError):
 
     def change_rule_description(self):
         pass
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    ui = Shell(None)
+    ui.show()
+    sys.exit(app.exec_())
