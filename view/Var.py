@@ -12,7 +12,7 @@ from controller.Domain import Domain as DomainController
 from utils.Mixins import *
 
 
-class Var(IShowError):
+class Var(IValidateMyFields, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, var, domains, parent=None):
@@ -23,6 +23,12 @@ class Var(IShowError):
         self.ui_type = var.var_type
         self.ui_question = var.question
         self.ui_can_be_goal = var.can_be_goal
+
+        self.fields_validators = {
+            'ui_name': IValidateMyFields.empty_string_validator,
+            'ui_domain': IValidateMyFields.empty_string_validator,
+            'ui_type': lambda field: type(field) == type(VarType)
+        }
 
         self.ui_domains = domains
         if not self.ui_domain and len(domains) > 0:
@@ -90,19 +96,10 @@ class Var(IShowError):
         else:
             self.ui_type = VarType.OUTPUT_REQUESTED
 
-    def accept_changes(self):
-        if not self.ui_name.strip():
-            self.show_error('Не введено имя переменной')
-            return
-        if not self.ui_domain:
-            self.show_error('Не выбран домен')
-            return
-        self.change_signal.emit()
-
     def add_domain(self):
         new_domain = DomainModel()
         new_domain_controller = DomainController(new_domain, self)
-        if new_domain_controller.get_domain():
+        if new_domain_controller.exec_view():
             if new_domain in self.ui_domains:
                 self.show_error('Такой домен уже есть')
                 return

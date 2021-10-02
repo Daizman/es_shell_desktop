@@ -1,2 +1,0 @@
-class UsedVarError(BaseException):
-    pass

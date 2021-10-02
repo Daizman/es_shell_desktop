@@ -8,7 +8,7 @@ from view.windows.DomainWindow import UIDomainWindow
 from utils.Mixins import *
 
 
-class Domain(IShowError):
+class Domain(IValidateMyFields, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, domain, parent=None):
@@ -16,6 +16,11 @@ class Domain(IShowError):
 
         self.ui_name = domain.name
         self.ui_values = domain.values[:]
+
+        self.fields_validators = {
+            'ui_name': IValidateMyFields.empty_string_validator,
+            'ui_values': IValidateMyFields.empty_array_validator
+        }
 
         self.ui = UIDomainWindow()
         self.ui.setup_ui(self)
@@ -51,15 +56,6 @@ class Domain(IShowError):
         else:
             self.ui_values.append(new_val)
         self.refresh_values()
-
-    def accept_changes(self):
-        if not self.ui_name.strip():
-            self.show_error('Не введено имя домена')
-            return
-        if len(self.ui_values) == 0:
-            self.show_error('У домена нет значений')
-            return
-        self.change_signal.emit()
 
     def remove_value(self):
         rows = self.ui.domain_val_view.selectedItems()

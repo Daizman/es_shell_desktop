@@ -1,5 +1,5 @@
 from model.types.VarType import VarType
-from model.exceptions.UsedVarError import UsedVarError
+from model.exceptions.UsedVar import UsedVar
 
 
 class Var:
@@ -22,7 +22,7 @@ class Var:
         if not name or not name.strip():
             raise ValueError('Переменной нельзя присвоить пустое имя')
         if name.upper().strip() != self.name and self.used:
-            raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
+            raise UsedVar('Переменная уже используется, поэтому ее нельзя изменять')
         self.__name = name.upper().strip()
         self.__question = f'{self.__name}?'
 
@@ -43,7 +43,7 @@ class Var:
         if not domain:
             raise ValueError('Переменной нельзя присвоить пустой домен')
         if domain != self.domain and self.used:
-            raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
+            raise UsedVar('Переменная уже используется, поэтому ее нельзя изменять')
         if self.__domain:
             self.__domain.remove_var(self)
         self.__domain = domain
@@ -58,7 +58,7 @@ class Var:
         if not question and not question.strip():
             raise ValueError('Нельзя установить пустой вопрос')
         if question.strip() != self.question and self.used:
-            raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
+            raise UsedVar('Переменная уже используется, поэтому ее нельзя изменять')
         self.__question = question.strip()
 
     @property
@@ -74,7 +74,7 @@ class Var:
         if not var_type or not isinstance(var_type, VarType):
             raise ValueError('Попытка присвоить неверный тип переменной')
         if self.used:
-            raise UsedVarError('Переменная уже используется, поэтому ее нельзя изменять')
+            raise UsedVar('Переменная уже используется, поэтому ее нельзя изменять')
         self.__var_type = var_type
         self.__question = f'{self.__name}?'
 

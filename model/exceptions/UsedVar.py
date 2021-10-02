@@ -1,0 +1,2 @@
+class UsedVar(BaseException):
+    pass

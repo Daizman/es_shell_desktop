@@ -13,7 +13,7 @@ from controller.Fact import Fact as FactController
 from utils.Mixins import *
 
 
-class Rule(IShowError):
+class Rule(IValidateMyFields, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, rule, variants, domains, parent=None):
@@ -24,6 +24,15 @@ class Rule(IShowError):
         self.ui_rule = rule
         self.ui_variants = variants
         self.ui_domains = domains
+
+        self.fields_validators = {
+            'ui_name': IValidateMyFields.empty_string_validator,
+            'ui_description': IValidateMyFields.empty_string_validator,
+            'ui_rule': lambda field: (
+                    IValidateMyFields.empty_array_validator(field.reasons) and
+                    IValidateMyFields.empty_array_validator(field.conclusions)
+            )
+        }
 
         self.ui = UIRuleWindow()
         self.ui.setup_ui(self)
@@ -76,21 +85,6 @@ class Rule(IShowError):
             self.ui.conclusion_tw.setItem(i, 0, QTableWidgetItem(conclusion.var.name))
             self.ui.conclusion_tw.setItem(i, 1, QTableWidgetItem(conclusion.value))
         self.ui.conclusion_tw.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
-    def accept_changes(self):
-        if not self.ui_name.strip():
-            self.show_error('Не введено название для правила')
-            return
-        if not self.ui_description.strip():
-            self.show_error('Не введено описание для правила')
-            return
-        if len(self.ui_rule.reasons):
-            self.show_error('Не введены посылки правила')
-            return
-        if len(self.ui_rule.conclusions):
-            self.show_error('Не введены выводы правила')
-            return
-        self.change_signal.emit()
 
     def description_text_change(self):
         self.ui_description = self.ui.description_le.toPlainText()

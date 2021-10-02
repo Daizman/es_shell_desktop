@@ -10,7 +10,7 @@ from controller.Var import Var as VarController
 from utils.Mixins import *
 
 
-class Fact(IShowError):
+class Fact(IValidateMyFields, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, fact, variants, domains, parent=None):
@@ -21,6 +21,11 @@ class Fact(IShowError):
         self.ui_vars = variants
         self.ui_domains = domains
         self.ui_vars_str = [var.name for var in variants]
+
+        self.fields_validators = {
+            'ui_var': lambda field: field and IValidateMyFields.empty_string_validator(field.name),
+            'ui_value': IValidateMyFields.empty_string_validator
+        }
 
         if not self.ui_var and len(variants) > 0:
             self.ui_var = variants[0]
@@ -85,12 +90,3 @@ class Fact(IShowError):
                 self.ui_value = var.domain.values[0] if var.domain.values else None
                 self.refresh_values(var)
                 return
-
-    def accept_changes(self):
-        if not self.ui_var:
-            self.show_error('Не выбрана переменная')
-            return
-        if not self.ui_value:
-            self.show_error('Не выбрано значение переменной')
-            return
-        self.change_signal.emit()

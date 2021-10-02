@@ -1,0 +1,2 @@
+class InvalidFieldValidator(BaseException):
+    pass

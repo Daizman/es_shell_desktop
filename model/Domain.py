@@ -1,4 +1,4 @@
-from model.exceptions.UsedDomainError import UsedDomainError
+from model.exceptions.UsedDomain import UsedDomain
 
 
 class Domain:
@@ -16,7 +16,7 @@ class Domain:
         if not name or not name.strip():
             raise ValueError('Необходимо указать имя домена')
         if name.upper().strip() != self.name and self.used:
-            raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
+            raise UsedDomain('Домен уже используется, поэтому его нельзя изменять')
         self.__name = name.upper().strip()
 
     @property
@@ -53,7 +53,7 @@ class Domain:
         if value in self.values:
             raise ValueError('Попытка добавить в домен существующее значение')
         if self.used:
-            raise UsedDomainError('Домен уже используется, поэтому его нельзя изменять')
+            raise UsedDomain('Домен уже используется, поэтому его нельзя изменять')
         self.values.append(value)
 
     def connect_var(self, var):
