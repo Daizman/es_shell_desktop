@@ -11,164 +11,23 @@ class UIShellWindow(object):
         self.central_widget = QtWidgets.QWidget(shell_view)
         self.central_widget.setObjectName('central_widget')
 
-        self.tab_panel = QtWidgets.QTabWidget(self.central_widget)
-        self.tab_panel.setEnabled(True)
+        v_layout = QtWidgets.QVBoxLayout()
+        h_layout = QtWidgets.QHBoxLayout()
+        h_layout.addLayout(v_layout)
+        self.central_widget.setLayout(h_layout)
 
-        self.tab_panel.setObjectName('tab_panel')
-
-        rule_tab = QtWidgets.QWidget()
-
-        rule_grid = QtWidgets.QGridLayout()
-        rule_tab.setLayout(rule_grid)
-
-        edit_rules_gb = QtWidgets.QGroupBox(rule_tab)
-
-        self.add_rule_button = QtWidgets.QPushButton(edit_rules_gb)
-        self.add_rule_button.setObjectName('add_rule_button')
-
-        self.edit_rule_button = QtWidgets.QPushButton(edit_rules_gb)
-        self.edit_rule_button.setObjectName('edit_rule_button')
-
-        self.remove_rule_button = QtWidgets.QPushButton(edit_rules_gb)
-        self.remove_rule_button.setObjectName('remove_rule_button')
-
-        requisite_gb = QtWidgets.QGroupBox(rule_tab)
-
-        self.requisite_te = QtWidgets.QTextEdit(requisite_gb)
-        self.requisite_te.setEnabled(False)
-        self.requisite_te.setObjectName('requisite_te')
-
-        conclusion_gb = QtWidgets.QGroupBox(rule_tab)
-
-        self.conclusion_te = QtWidgets.QTextEdit(conclusion_gb)
-        self.conclusion_te.setEnabled(False)
-        self.conclusion_te.setObjectName('conclusion_te')
-
-        self.rules_view = TableWidgetDragRows(rule_tab)
-        self.rules_view.setObjectName('rules_view')
-        self.rules_view.setColumnCount(2)
-        self.rules_view.setHorizontalHeaderLabels(['Имя', 'Описание'])
-        self.rules_view.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        self.rules_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-
-        self.tab_panel.addTab(rule_tab, 'Правила')
-
-        var_tab = QtWidgets.QWidget()
-
-        var_grid = QtWidgets.QGridLayout()
-        var_tab.setLayout(var_grid)
-
-        edit_var_gb = QtWidgets.QGroupBox(var_tab)
-
-        # self.add_var_button = QtWidgets.QPushButton(edit_var_gb)
-        # self.add_var_button.setObjectName('add_var_button')
-
-        # self.edit_var_button = QtWidgets.QPushButton(edit_var_gb)
-        # self.edit_var_button.setObjectName('edit_var_button')
-
-        # self.remove_var_button = QtWidgets.QPushButton(edit_var_gb)
-        # self.remove_var_button.setObjectName('remove_var_button')
-
-        question_gb = QtWidgets.QGroupBox(var_tab)
-
-        # self.question_te = QtWidgets.QTextEdit(question_gb)
-        # self.question_te.setEnabled(False)
-        # self.question_te.setObjectName('question_te')
-
-        domains_val_gb = QtWidgets.QGroupBox(var_tab)
-
-        # self.domains_val_te = QtWidgets.QTextEdit(domains_val_gb)
-        # self.domains_val_te.setEnabled(False)
-        # self.domains_val_te.setObjectName('domains_var_text')
-
-        # self.vars_view = QtWidgets.QTableWidget(var_tab)
-        # self.vars_view.setObjectName('vars_view')
-        # self.vars_view.setColumnCount(3)
-        # self.vars_view.setHorizontalHeaderLabels(['Имя', 'Тип', 'Домен'])
-        # self.vars_view.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-        # self.vars_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-
-        self.tab_panel.addTab(var_tab, 'Переменные')
-
-        domain_tab = QtWidgets.QWidget()
-
-        domain_grid = QtWidgets.QGridLayout()
-        domain_tab.setLayout(domain_grid)
-
-        domain_values_gb = QtWidgets.QGroupBox(domain_tab)
-
-        # self.domain_values_te = QtWidgets.QTextEdit(domain_values_gb)
-        # self.domain_values_te.setObjectName('domain_values')
-
-        # edit_domain_gb = QtWidgets.QGroupBox(domain_tab)
-        # edit_domain_gb.setObjectName('edit_domain_gb')
-
-        # self.add_domain_button = QtWidgets.QPushButton(edit_domain_gb)
-        # self.add_domain_button.setObjectName('add_domain_button')
-
-        # self.edit_domain_button = QtWidgets.QPushButton(edit_domain_gb)
-        # self.edit_domain_button.setObjectName('edit_domain_button')
-
-        # self.remove_domain_button = QtWidgets.QPushButton(edit_domain_gb)
-        # self.remove_domain_button.setObjectName('remove_domain_button')
-
-        # self.domains_view = QtWidgets.QTableWidget(domain_tab)
-        # self.domains_view.setObjectName('domains_view')
-        # self.domains_view.setColumnCount(1)
-        # self.domains_view.setHorizontalHeaderLabels(['Имя'])
-        # self.domains_view.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-
-        self.tab_panel.addTab(domain_tab, 'Домены')
+        self.tabs = QtWidgets.QTabWidget(self.central_widget)
+        self.tabs.setEnabled(True)
+        self.tabs.setObjectName('tabs')
+        self.tabs.addTab(self._gen_rule_tab(), 'Правила')
+        self.tabs.addTab(self._gen_var_tab(), 'Переменные')
+        self.tabs.addTab(self._gen_domain_tab(), 'Домены')
 
         shell_view.setCentralWidget(self.central_widget)
+        self._gen_menu(shell_view)
 
-        self.main_menu = QtWidgets.QMenuBar(shell_view)
-        self.main_menu.setObjectName('main_menu')
-
-        self.file_actions = QtWidgets.QMenu(self.main_menu)
-        self.file_actions.setObjectName('file_actions')
-        shell_view.setMenuBar(self.main_menu)
-
-        self.status_bar = QtWidgets.QStatusBar(shell_view)
-        self.status_bar.setObjectName('status_bar')
-        shell_view.setStatusBar(self.status_bar)
-
-        self.consult = QtWidgets.QAction(shell_view)
-        self.consult.setObjectName('consult')
-
-        self.open_file = QtWidgets.QAction(shell_view)
-        self.open_file.setObjectName('open_file')
-
-        self.save_file_as = QtWidgets.QAction(shell_view)
-        self.save_file_as.setObjectName('save_file_as')
-
-        self.exit = QtWidgets.QAction(shell_view)
-        self.exit.setObjectName('exit')
-
-        self.file_actions.addSeparator()
-        self.file_actions.addAction(self.consult)
-        self.file_actions.addSeparator()
-        self.file_actions.addAction(self.open_file)
-        self.file_actions.addAction(self.save_file_as)
-        self.file_actions.addSeparator()
-        self.file_actions.addAction(self.exit)
-
-        self.main_menu.addAction(self.file_actions.menuAction())
-
-        rule_grid.addWidget(self.rules_view, 0, 0, 12, 12)
-
-        rule_grid.addWidget(edit_rules_gb, 0, 12, 4, 2)
-        rule_grid.addWidget(self.add_rule_button, 2, 9, 1, 2)
-        rule_grid.addWidget(self.edit_rule_button, 3, 9, 1, 2)
-        rule_grid.addWidget(self.remove_rule_button, 4, 9, 1, 2)
-
-        rule_grid.addWidget(requisite_gb, 5, 9, 4, 2)
-        rule_grid.addWidget(self.requisite_te, 6, 9, 3, 2)
-
-        rule_grid.addWidget(conclusion_gb, 7, 9, 3, 2)
-        rule_grid.addWidget(self.conclusion_te, 8, 9, 2, 2)
-
-        self.tab_panel.setCurrentIndex(0)
+        self.tabs.setCurrentIndex(0)
+        h_layout.addWidget(self.tabs)
         self.retranslate_ui(shell_view)
 
     def retranslate_ui(self, shell_view):
@@ -177,14 +36,148 @@ class UIShellWindow(object):
         self.add_rule_button.setText(_translate('shell_view', 'Добавить'))
         self.edit_rule_button.setText(_translate('shell_view', 'Изменить'))
         self.remove_rule_button.setText(_translate('shell_view', 'Удалить'))
-        # self.add_var_button.setText(_translate('shell_view', 'Добавить'))
-        # self.edit_var_button.setText(_translate('shell_view', 'Изменить'))
-        # self.remove_var_button.setText(_translate('shell_view', 'Удалить'))
-        # self.add_domain_button.setText(_translate('shell_view', 'Добавить'))
-        # self.edit_domain_button.setText(_translate('shell_view', 'Изменить'))
-        # self.remove_domain_button.setText(_translate('shell_view', 'Удалить'))
-        self.file_actions.setTitle(_translate('shell_view', 'Файл'))
-        self.consult.setText(_translate('shell_view', 'Пройти консультацию'))
-        self.open_file.setText(_translate('shell_view', 'Открыть'))
-        self.save_file_as.setText(_translate('shell_view', 'Сохранить как'))
-        self.exit.setText(_translate('shell_view', 'Выход'))
+        self.add_var_button.setText(_translate('shell_view', 'Добавить'))
+        self.edit_var_button.setText(_translate('shell_view', 'Изменить'))
+        self.remove_var_button.setText(_translate('shell_view', 'Удалить'))
+        self.add_domain_button.setText(_translate('shell_view', 'Добавить'))
+        self.edit_domain_button.setText(_translate('shell_view', 'Изменить'))
+        self.remove_domain_button.setText(_translate('shell_view', 'Удалить'))
+        self.actions.setTitle(_translate('shell_view', 'Меню'))
+
+        for i, name in enumerate(['Пройти консультацию', 'Открыть', 'Сохранить как', 'Выход']):
+            shell_view.findChild(QtWidgets.QAction, self.actions.in_action_names[i]).setText(_translate('shell_view', name))
+
+    def _gen_menu(self, shell_view):
+        self.main_menu = QtWidgets.QMenuBar(shell_view)
+        self.main_menu.setObjectName('main_menu')
+        shell_view.setMenuBar(self.main_menu)
+        self.actions = QtWidgets.QMenu(self.main_menu)
+        self.actions.setObjectName('actions')
+        self.actions.in_action_names = ['consult', 'open_file', 'save_file_as', 'exit']
+
+        for act in self.actions.in_action_names:
+            self.actions.addSeparator()
+            self.actions.addAction(self._gen_action(shell_view, act))
+
+        self.main_menu.addAction(self.actions.menuAction())
+
+    def _gen_action(self, shell_view, action_name):
+        action = QtWidgets.QAction(shell_view)
+        action.setObjectName(action_name)
+        return action
+
+    def _gen_rule_tab(self):
+        rule_tab, layout, edit_rules_gb, buttons_layout = self._gen_tab_template()
+
+        self.add_rule_button = QtWidgets.QPushButton(edit_rules_gb)
+        self.edit_rule_button = QtWidgets.QPushButton(edit_rules_gb)
+        self.remove_rule_button = QtWidgets.QPushButton(edit_rules_gb)
+        buttons_layout.addWidget(self.add_rule_button)
+        buttons_layout.addWidget(self.edit_rule_button)
+        buttons_layout.addWidget(self.remove_rule_button)
+
+        self.requisite_te, req_gb = self._create_gb(
+            rule_tab, 'requisite_te'
+        )
+        req_gb.setTitle('Посылка')
+
+        self.conclusion_te, conc_gb = self._create_gb(
+            rule_tab, 'conclusion_te'
+        )
+        conc_gb.setTitle('Заключение')
+
+        self.rules_view = TableWidgetDragRows(rule_tab)
+        self.rules_view.setObjectName('rules_view')
+        self.rules_view.setColumnCount(2)
+        self.rules_view.setHorizontalHeaderLabels(['Имя', 'Описание'])
+        self.rules_view.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.rules_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
+        layout.addWidget(self.rules_view, 0, 0, 15, 4)
+        layout.addWidget(req_gb, 2, 4, 7, 1)
+        layout.addWidget(conc_gb, 9, 4, 6, 1)
+
+        return rule_tab
+
+    def _gen_var_tab(self):
+        var_tab, layout, edit_var_gb, buttons_layout = self._gen_tab_template()
+
+        self.add_var_button = QtWidgets.QPushButton(edit_var_gb)
+        self.edit_var_button = QtWidgets.QPushButton(edit_var_gb)
+        self.remove_var_button = QtWidgets.QPushButton(edit_var_gb)
+        buttons_layout.addWidget(self.add_var_button)
+        buttons_layout.addWidget(self.edit_var_button)
+        buttons_layout.addWidget(self.remove_var_button)
+
+        self.question_te, question_gb = self._create_gb(
+            var_tab, 'question_te'
+        )
+        question_gb.setTitle('Вопрос')
+
+        self.var_values_te, var_values_gb = self._create_gb(
+            var_tab, 'var_values_te'
+        )
+        var_values_gb.setTitle('Значения')
+
+        self.vars_view = QtWidgets.QTableWidget(var_tab)
+        self.vars_view.setObjectName('vars_view')
+        self.vars_view.setColumnCount(3)
+        self.vars_view.setHorizontalHeaderLabels(['Имя', 'Тип', 'Домен'])
+        self.vars_view.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        self.vars_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
+        layout.addWidget(self.vars_view, 0, 0, 15, 4)
+        layout.addWidget(question_gb, 2, 4, 7, 1)
+        layout.addWidget(var_values_gb, 9, 4, 6, 1)
+
+        return var_tab
+
+    def _gen_domain_tab(self):
+        domain_tab, layout, edit_domain_gb, buttons_layout = self._gen_tab_template()
+
+        self.add_domain_button = QtWidgets.QPushButton(edit_domain_gb)
+        self.edit_domain_button = QtWidgets.QPushButton(edit_domain_gb)
+        self.remove_domain_button = QtWidgets.QPushButton(edit_domain_gb)
+        buttons_layout.addWidget(self.add_domain_button)
+        buttons_layout.addWidget(self.edit_domain_button)
+        buttons_layout.addWidget(self.remove_domain_button)
+
+        self.domain_values_te, domain_values_gb = self._create_gb(
+            domain_tab, 'dom_values_te'
+        )
+        domain_values_gb.setTitle('Значения')
+
+        self.domains_view = QtWidgets.QTableWidget(domain_tab)
+        self.domains_view.setObjectName('domains_view')
+        self.domains_view.setColumnCount(1)
+        self.domains_view.setHorizontalHeaderLabels(['Имя'])
+        self.domains_view.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+
+        layout.addWidget(self.domains_view, 0, 0, 15, 4)
+        layout.addWidget(domain_values_gb, 2, 4, 13, 1)
+
+        return domain_tab
+
+    def _create_gb(self, tab, name):
+        gb = QtWidgets.QGroupBox(tab)
+        te = QtWidgets.QTextEdit(gb)
+        te.setEnabled(False)
+        te.setObjectName(name)
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(te)
+        gb.setLayout(layout)
+        gb.setMaximumWidth(200)
+
+        return te, gb
+
+    def _gen_tab_template(self):
+        tab = QtWidgets.QWidget()
+        layout = QtWidgets.QGridLayout()
+        gb = QtWidgets.QGroupBox(tab)
+        buttons_layout = QtWidgets.QVBoxLayout()
+        gb.setLayout(buttons_layout)
+        gb.setTitle('Редактирование')
+        layout.addWidget(gb, 0, 4, 2, 1)
+        tab.setLayout(layout)
+
+        return tab, layout, gb, buttons_layout
