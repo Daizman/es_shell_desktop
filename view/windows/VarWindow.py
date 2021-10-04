@@ -75,6 +75,6 @@ class UIVarWindow(object):
         _translate = QtCore.QCoreApplication.translate
         var_view.setWindowTitle(_translate('var_view', 'Редактирование переменной'))
         self.domain_add_button.setText(_translate('var_view', '+'))
-        self.var_type_radio_inferred.setText(_translate('var_view', 'Запрашиваемая'))
-        self.var_type_radio_requested.setText(_translate('var_view', 'Выводимая'))
+        self.var_type_radio_inferred.setText(_translate('var_view', 'Выводимая'))
+        self.var_type_radio_requested.setText(_translate('var_view', 'Запрашиваемая'))
         self.var_type_radio_out_requested.setText(_translate('var_view', 'Запрашиваемо-выводимая'))

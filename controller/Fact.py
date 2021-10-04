@@ -16,12 +16,17 @@ class Fact:
         try:
             self.__model.var = self.__view.ui_var
             self.__model.value = self.__view.ui_value
-            self.__variants = self.__view.ui_variants
-            self.__domains = self.__view.ui_domains
+            self._update_glob(self.__variants, self.__view.ui_variants)
+            self._update_glob(self.__domains, self.__view.ui_domains)
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:
             self.__view.show_error(v_e)
+
+    def _update_glob(self, glob_arr, local_arr):
+        glob_arr.clear()
+        for el in local_arr:
+            glob_arr.append(el)
 
     @property
     def model(self):

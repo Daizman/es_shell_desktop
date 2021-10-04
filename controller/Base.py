@@ -16,6 +16,7 @@ class Base(metaclass=ABCMeta):
                 _, view_prop = prop.split("__")
                 if hasattr(self._view, f'ui_{view_prop}'):
                     val = self._view.__getattribute__(f'ui_{view_prop}')
+                    val = val.strip().upper() if isinstance(val, str) else val
                     self._model.__setattr__(prop, val)
             self._view.setResult(QDialog.Accepted)
             self._view.accept()

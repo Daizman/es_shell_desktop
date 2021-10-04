@@ -150,7 +150,7 @@ class UIShellWindow(object):
     def _create_gb(self, tab, name):
         gb = QtWidgets.QGroupBox(tab)
         te = QtWidgets.QTextEdit(gb)
-        te.setEnabled(False)
+        te.textChanged.connect(te.undo)
         te.setObjectName(name)
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(te)

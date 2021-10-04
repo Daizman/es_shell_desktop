@@ -36,6 +36,7 @@ class Shell(QMainWindow, IShowError):
         self.ui.setup_ui(self)
 
         self.setup_buttons()
+        self.setup_events()
 
     def setup_buttons(self):
         acts = [self.open_consult_dialog, self.load, self.backup, self.exit_sys]
@@ -54,7 +55,11 @@ class Shell(QMainWindow, IShowError):
         self.ui.edit_domain_button.clicked.connect(self.open_edit_domain_dialog)
         self.ui.remove_domain_button.clicked.connect(self.remove_domain)
 
+    def setup_events(self):
         self.ui.rules_view.set_drop_event_callback(self.drop_rule_cb)
+        self.ui.domains_view.cellClicked[int, int].connect(self.fill_domain_info)
+        self.ui.vars_view.cellClicked[int, int].connect(self.fill_var_info)
+        self.ui.rules_view.cellClicked[int, int].connect(self.fill_rule_info)
 
     def refresh_all(self):
         self.refresh_rules()
@@ -63,7 +68,7 @@ class Shell(QMainWindow, IShowError):
 
     def refresh_rules(self):
         self.ui.rules_view.clearContents()
-        self.ui.rules_view.setRowCount(self.ui_shell_rules)
+        self.ui.rules_view.setRowCount(len(self.ui_shell_rules))
         for i, rule in enumerate(self.ui_shell_rules):
             name = QTableWidgetItem(rule.name)
             name.setToolTip(rule.name)
@@ -91,18 +96,35 @@ class Shell(QMainWindow, IShowError):
         for i, domain in enumerate(self.ui_shell_domains):
             self.ui.domains_view.setItem(i, 0, QTableWidgetItem(domain.name))
 
+    def fill_rule_info(self, row, col):
+        reasons = [f'{reason.var.name}={reason.value}' for reason in self.ui_shell_rules[row].reasons]
+        self.ui.requisite_te.setText('\n'.join(reasons))
+        conclusions = [f'{conclusion.var.name}={conclusion.value}' for conclusion in self.ui_shell_rules[row].conclusions]
+        self.ui.conclusion_te.setText('\n'.join(conclusions))
+
+    def fill_var_info(self, row, col):
+        self.ui.var_values_te.setText(str(self.ui_shell_vars[row].domain))
+        self.ui.question_te.setText(str(self.ui_shell_vars[row].question))
+
+    def fill_domain_info(self, row, col):
+        self.ui.domain_values_te.setText(str(self.ui_shell_domains[row]))
+
     def load(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getOpenFileName(self,
-                                                'QFileDialog.getOpenFileName()',
-                                                r'G:\10_tr\ExpSysShell\MyShell\\',
+                                                'Открытие ЭС',
+                                                r'D:\projects\es_shell_desktop\backups\\',
                                                 'ExpSys Files(*.json)',
                                                 options=options)
+        if not f_name.strip():
+            return
         try:
             self.load_shell_from(f_name)
         except ValueError as v_e:
             self.show_error(v_e)
+        except BaseException as b_e:
+            self.show_error(b_e)
 
     def load_shell_from(self, f_name):
         new_shell = ShellModel()
@@ -117,12 +139,14 @@ class Shell(QMainWindow, IShowError):
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getSaveFileName(self,
                                                 'QFileDialog.getSaveFileName()',
-                                                r'G:\10_tr\ExpSysShell\MyShell\\' + self.__model.name,
+                                                r'D:\projects\es_shell_desktop\backups\\' + self.ui_name,
                                                 'ExpSys Files(*.json)',
                                                 options=options)
+        if not f_name.strip():
+            return
 
-        if f_name.endswith('.json'):
-            f_name = f_name.replace('.json', '')
+        if not f_name.endswith('.json'):
+            f_name += '.json'
         try:
             self.backup_shell_to(f_name)
             self.change_signal.emit()
@@ -167,10 +191,24 @@ class Shell(QMainWindow, IShowError):
             self.refresh_all()
 
     def open_edit_domain_dialog(self):
-        pass
+        domain_idx = self.ui.domains_view.selectedIndexes()
+        if len(domain_idx) == 0:
+            self.show_error('Выберите домен')
+        else:
+            domain = self.ui_shell_domains[domain_idx[0].row()]
+            domain_controller = DomainController(domain, self)
+            if domain_controller.exec_view():
+                self.refresh_all()
 
     def remove_domain(self):
-        pass
+        for i in self.ui.domains_view.selectedIndexes():
+            domain = self.ui_shell_domains[i]
+            if domain.used:
+                self.show_error('Попытка удалить используемый домен')
+                return
+            self.ui_shell_domains.remove(domain)
+
+        self.refresh_all()
 
     def open_add_var_dialog(self):
         new_var = VarModel()
@@ -183,10 +221,24 @@ class Shell(QMainWindow, IShowError):
             self.refresh_all()
 
     def open_edit_var_dialog(self):
-        pass
+        var_idx = self.ui.vars_view.selectedItems()
+        if len(var_idx) == 0:
+            self.show_error('Выберите переменную')
+        else:
+            var = self.ui_shell_vars[var_idx[0].row()]
+            var_controller = VarController(var, self.ui_shell_domains, self)
+            if var_controller.get_var():
+                self.refresh_all()
 
     def remove_var(self):
-        pass
+        for i in self.ui.vars_view.selectedIndexes():
+            var = self.ui_shell_vars[i]
+            if var.used:
+                self.show_error('Попытка удалить используемую переменную')
+                return
+            self.ui_shell_vars.remove(var)
+
+        self.refresh_all()
 
     def open_add_rule_dialog(self):
         new_rule = RuleModel()
@@ -195,32 +247,25 @@ class Shell(QMainWindow, IShowError):
             if new_rule in self.ui_shell_rules:
                 self.show_error('Такое правило уже есть')
                 return
-            self.ui_shell_vars.append(new_rule)
-            self.remove_all()
+            self.ui_shell_rules.append(new_rule)
+            self.refresh_all()
 
     def open_edit_rule_dialog(self):
-        pass
+        rule_idx = self.ui.rules_view.selectedIndexes()
+        if len(rule_idx) == 0:
+            self.show_error('Выберите правило')
+        else:
+            rule = self.ui_shell_rules[rule_idx[0].row()]
+            rule_controller = RuleController(rule, self.ui_shell_vars, self.ui_shell_domains, self)
+            if rule_controller.get_rule():
+                self.refresh_all()
 
     def remove_rule(self):
-        pass
+        for i in self.ui.rules_view.selectedIndexes():
+            rule = self.ui_shell_rules[i]
+            self.ui_shell_rules.remove(rule)
 
-    def change_domains_view(self):
-        pass
-
-    def change_domain_description(self):
-        pass
-
-    def change_vars_view(self):
-        pass
-
-    def change_var_description(self):
-        pass
-
-    def change_rules_view(self):
-        pass
-
-    def change_rule_description(self):
-        pass
+        self.refresh_all()
 
 
 if __name__ == '__main__':

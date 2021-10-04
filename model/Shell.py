@@ -76,7 +76,9 @@ class Shell:
             restored_es_json = kb_backup.readline()
             restored_es = jsonpickle.decode(restored_es_json)
             self.__name = restored_es.name
-            self.__memory = restored_es.memory
+            self.domains = restored_es.domains
+            self.vars = restored_es.vars
+            self.rules = restored_es.rules
 
     def backup(self, path):
         with open(path, 'w') as backup:

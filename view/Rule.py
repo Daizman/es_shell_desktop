@@ -36,6 +36,9 @@ class Rule(IValidateMyFields, IShowErrorDialog):
         self.ui = UIRuleWindow()
         self.ui.setup_ui(self)
 
+        self.ui.name_le.setText(self.ui_name)
+        self.ui.description_le.setText(self.ui_description)
+
         self.refresh_requisite()
         self.refresh_conclusion()
 
@@ -98,10 +101,10 @@ class Rule(IValidateMyFields, IShowErrorDialog):
             new_fact_controller.set_title('Добавление факта заключения')
         if new_fact_controller.get_fact():
             if source == self.ui.add_requisite_button:
-                self.ui_reasons.push(new_fact)
+                self.ui_reasons.append(new_fact)
                 self.refresh_requisite()
             else:
-                self.ui_conclusions.push(new_fact)
+                self.ui_conclusions.append(new_fact)
                 self.refresh_conclusion()
 
     def edit_fact(self):

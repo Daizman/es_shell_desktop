@@ -13,7 +13,7 @@ class UIRuleWindow(object):
 
         grid.setSpacing(5)
 
-        name_l = QtWidgets.QLabel('Имя переменной:')
+        name_l = QtWidgets.QLabel('Имя правила:')
 
         self.name_le = QtWidgets.QLineEdit()
 

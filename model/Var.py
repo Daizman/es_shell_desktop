@@ -59,7 +59,7 @@ class Var:
             raise ValueError('Нельзя установить пустой вопрос')
         if question.strip() != self.question and self.used:
             raise UsedVar('Переменная уже используется, поэтому ее нельзя изменять')
-        self.__question = question.strip()
+        self.__question = question.strip() if question.strip() != '?' else f'{self.__name}?'
 
     @property
     def facts(self):

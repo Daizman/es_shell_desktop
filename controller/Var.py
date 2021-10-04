@@ -18,7 +18,9 @@ class Var:
             self.__model.can_be_goal = self.__view.ui_can_be_goal
             self.__model.var_type = self.__view.ui_type
             self.__model.question = self.__view.ui_question
-            self.__domains = self.__view.ui_domains
+            self.__domains.clear()
+            for domain in self.__view.ui_domains:
+                self.__domains.append(domain)
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:

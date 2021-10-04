@@ -64,13 +64,13 @@ class Var(IValidateMyFields, IShowErrorDialog):
 
         self.ui.domain_combo.currentTextChanged[str].connect(self.change_domain)
 
-        self.ui.can_be_goal.clicked.connect(partial(setattr, self, 'ui_can_be_goal'))
+        self.ui.can_be_goal.clicked.connect(self.change_can_be_goal)
 
         self.ui.var_type_radio_inferred.clicked.connect(self.change_var_type)
         self.ui.var_type_radio_requested.clicked.connect(self.change_var_type)
         self.ui.var_type_radio_out_requested.clicked.connect(self.change_var_type)
 
-        self.ui.question_text.textChanged.connect(partial(setattr, self, 'ui_question'))
+        self.ui.question_text.textChanged.connect(self.question_text_change)
 
     def refresh_domains(self):
         self.ui.domain_combo.clear()
@@ -86,14 +86,26 @@ class Var(IValidateMyFields, IShowErrorDialog):
                 self.ui_domain = dom
                 return
 
+    def change_can_be_goal(self):
+        if self.ui_type != VarType.INFERRED:
+            self.show_error('Целью не может быть не выводимая переменная')
+            self.ui.can_be_goal.setChecked(False)
+            return
+        self.ui_can_be_goal = self.ui.can_be_goal.isChecked()
+
+    def question_text_change(self):
+        self.ui_question = self.ui.question_text.toPlainText()
+
     def change_var_type(self):
         sender = self.sender()
         if sender == self.ui.var_type_radio_inferred:
             self.ui_type = VarType.INFERRED
         elif sender == self.ui.var_type_radio_requested:
             self.ui_type = VarType.REQUESTED
+            self.ui.can_be_goal.setChecked(False)
         else:
             self.ui_type = VarType.OUTPUT_REQUESTED
+            self.ui.can_be_goal.setChecked(False)
 
     def add_domain(self):
         new_domain = DomainModel()
