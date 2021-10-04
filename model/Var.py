@@ -63,7 +63,7 @@ class Var:
 
     @property
     def facts(self):
-        return self.__facts
+        return self.__facts[:]
 
     @property
     def var_type(self):

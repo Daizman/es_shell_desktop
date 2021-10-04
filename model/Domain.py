@@ -21,11 +21,11 @@ class Domain:
 
     @property
     def connected_vars(self):
-        return self.__connected_vars
+        return self.__connected_vars[:]
 
     @property
     def values(self):
-        return self.__values
+        return self.__values[:]
 
     @values.setter
     def values(self, values):

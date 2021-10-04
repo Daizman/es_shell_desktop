@@ -7,6 +7,8 @@ class Fact:
     def __init__(self, model, variants, domains, parent=None):
         self.__model = model
         self.__view = FactView(model, variants, domains, parent)
+        self.__variants = variants
+        self.__domains = domains
 
         self.__view.change_signal.connect(self.change_fact)
 
@@ -14,6 +16,8 @@ class Fact:
         try:
             self.__model.var = self.__view.ui_var
             self.__model.value = self.__view.ui_value
+            self.__variants = self.__view.ui_variants
+            self.__domains = self.__view.ui_domains
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:

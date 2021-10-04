@@ -87,11 +87,7 @@ class UIShellWindow(object):
         conc_gb.setTitle('Заключение')
 
         self.rules_view = TableWidgetDragRows(rule_tab)
-        self.rules_view.setObjectName('rules_view')
-        self.rules_view.setColumnCount(2)
-        self.rules_view.setHorizontalHeaderLabels(['Имя', 'Описание'])
-        self.rules_view.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        self.rules_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self._setup_view(self.rules_view, ['Имя', 'Описание'])
 
         layout.addWidget(self.rules_view, 0, 0, 15, 4)
         layout.addWidget(req_gb, 2, 4, 7, 1)
@@ -120,11 +116,7 @@ class UIShellWindow(object):
         var_values_gb.setTitle('Значения')
 
         self.vars_view = QtWidgets.QTableWidget(var_tab)
-        self.vars_view.setObjectName('vars_view')
-        self.vars_view.setColumnCount(3)
-        self.vars_view.setHorizontalHeaderLabels(['Имя', 'Тип', 'Домен'])
-        self.vars_view.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-        self.vars_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self._setup_view(self.vars_view, ['Имя', 'Тип', 'Домен'])
 
         layout.addWidget(self.vars_view, 0, 0, 15, 4)
         layout.addWidget(question_gb, 2, 4, 7, 1)
@@ -148,10 +140,7 @@ class UIShellWindow(object):
         domain_values_gb.setTitle('Значения')
 
         self.domains_view = QtWidgets.QTableWidget(domain_tab)
-        self.domains_view.setObjectName('domains_view')
-        self.domains_view.setColumnCount(1)
-        self.domains_view.setHorizontalHeaderLabels(['Имя'])
-        self.domains_view.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self._setup_view(self.domains_view, ['Имя'])
 
         layout.addWidget(self.domains_view, 0, 0, 15, 4)
         layout.addWidget(domain_values_gb, 2, 4, 13, 1)
@@ -169,6 +158,12 @@ class UIShellWindow(object):
         gb.setMaximumWidth(200)
 
         return te, gb
+
+    def _setup_view(self, view, cols):
+        view.setColumnCount(len(cols))
+        view.setHorizontalHeaderLabels(cols)
+        view.horizontalHeader().setSectionResizeMode(len(cols) - 1, QtWidgets.QHeaderView.Stretch)
+        view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
     def _gen_tab_template(self):
         tab = QtWidgets.QWidget()

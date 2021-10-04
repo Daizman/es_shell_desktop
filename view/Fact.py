@@ -18,8 +18,8 @@ class Fact(IValidateMyFields, IShowError):
 
         self.ui_var = fact.var
         self.ui_value = fact.value
-        self.ui_vars = variants
-        self.ui_domains = domains
+        self.ui_variants = variants[:]
+        self.ui_domains = domains[:]
         self.ui_vars_str = [var.name for var in variants]
 
         self.fields_validators = {
@@ -57,7 +57,7 @@ class Fact(IValidateMyFields, IShowError):
         self.ui.combo.setCurrentText(backup.name)
 
         if backup:
-            for var in self.ui_vars:
+            for var in self.ui_variants:
                 if var.name == backup.name:
                     self.refresh_values(var)
                     return
@@ -75,16 +75,16 @@ class Fact(IValidateMyFields, IShowError):
         new_var = VarModel()
         new_var_controller = VarController(new_var, self.ui_domains, parent=self)
         if new_var_controller.get_var():
-            if new_var in self.ui_vars:
+            if new_var in self.ui_variants:
                 self.show_error('Такая переменная уже есть')
                 return
             self.ui_var = new_var
-            self.ui_vars.append(new_var)
+            self.ui_variants.append(new_var)
             self.ui_vars_str.append(new_var.name)
             self.refresh_fact()
 
     def change_var(self, var_name):
-        for var in self.ui_vars:
+        for var in self.ui_variants:
             if var.name == var_name:
                 self.ui_var = var
                 self.ui_value = var.domain.values[0] if var.domain.values else None

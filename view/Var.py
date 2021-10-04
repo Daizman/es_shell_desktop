@@ -30,7 +30,7 @@ class Var(IValidateMyFields, IShowError):
             'ui_type': lambda field: type(field) == type(VarType)
         }
 
-        self.ui_domains = domains
+        self.ui_domains = domains[:]
         if not self.ui_domain and len(domains) > 0:
             self.ui_domain = domains[0]
 

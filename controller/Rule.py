@@ -10,6 +10,8 @@ class Rule:
     def __init__(self, model, variants, domains, parent=None):
         self.__model = model
         self.__view = RuleView(model, variants, domains, parent)
+        self.__variants = variants
+        self.__domains = domains
 
         self.__view.change_signal.connect(self.change_rule)
 
@@ -19,6 +21,8 @@ class Rule:
             self.__model.description = self.__view.ui_description
             self.__model.reasons = self.__view.ui_rule.reasons
             self.__model.conclusions = self.__view.ui_rule.conclusions
+            self.__variants = self.__view.ui_variants
+            self.__domains = self.__view.ui_domains
             self.__view.setResult(QDialog.Accepted)
             self.__view.accept()
         except ValueError as v_e:

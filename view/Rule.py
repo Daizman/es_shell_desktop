@@ -21,17 +21,16 @@ class Rule(IValidateMyFields, IShowError):
 
         self.ui_name = rule.name
         self.ui_description = rule.description
-        self.ui_rule = rule
-        self.ui_variants = variants
-        self.ui_domains = domains
+        self.ui_reasons = rule.reasons[:]
+        self.ui_conclusions = rule.conclusions[:]
+        self.ui_variants = variants[:]
+        self.ui_domains = domains[:]
 
         self.fields_validators = {
             'ui_name': IValidateMyFields.empty_string_validator,
             'ui_description': IValidateMyFields.empty_string_validator,
-            'ui_rule': lambda field: (
-                    IValidateMyFields.empty_array_validator(field.reasons) and
-                    IValidateMyFields.empty_array_validator(field.conclusions)
-            )
+            'ui_reasons': IValidateMyFields.empty_array_validator,
+            'ui_conclusions': IValidateMyFields.empty_array_validator
         }
 
         self.ui = UIRuleWindow()
@@ -72,16 +71,16 @@ class Rule(IValidateMyFields, IShowError):
 
     def refresh_requisite(self):
         self.ui.requisite_tw.clearContents()
-        self.ui.requisite_tw.setRowCount(len(self.ui_rule.reasons))
-        for i, reason in enumerate(self.ui_rule.reasons):
+        self.ui.requisite_tw.setRowCount(len(self.ui_reasons))
+        for i, reason in enumerate(self.ui_reasons):
             self.ui.requisite_tw.setItem(i, 0, QTableWidgetItem(reason.var.name))
             self.ui.requisite_tw.setItem(i, 1, QTableWidgetItem(reason.value))
         self.ui.requisite_tw.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def refresh_conclusion(self):
         self.ui.conclusion_tw.clearContents()
-        self.ui.conclusion_tw.setRowCount(len(self.ui_rule.conclusions))
-        for i, conclusion in enumerate(self.ui_rule.conclusions):
+        self.ui.conclusion_tw.setRowCount(len(self.ui_conclusions))
+        for i, conclusion in enumerate(self.ui_conclusions):
             self.ui.conclusion_tw.setItem(i, 0, QTableWidgetItem(conclusion.var.name))
             self.ui.conclusion_tw.setItem(i, 1, QTableWidgetItem(conclusion.value))
         self.ui.conclusion_tw.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -99,10 +98,10 @@ class Rule(IValidateMyFields, IShowError):
             new_fact_controller.set_title('Добавление факта заключения')
         if new_fact_controller.get_fact():
             if source == self.ui.add_requisite_button:
-                self.ui_rule.add_reason(new_fact)
+                self.ui_reasons.push(new_fact)
                 self.refresh_requisite()
             else:
-                self.ui_rule.add_conclusion(new_fact)
+                self.ui_conclusions.push(new_fact)
                 self.refresh_conclusion()
 
     def edit_fact(self):
@@ -115,7 +114,7 @@ class Rule(IValidateMyFields, IShowError):
 
         if source == self.ui.edit_requisite_button and len(sel_reasons) > 0:
             reason_idx = sel_reasons[0].row()
-            reason = self.ui_rule.reasons[reason_idx]
+            reason = self.ui_reasons[reason_idx]
             new_fact_controller = FactController(reason, self.ui_variants, self.ui_domains, self)
             new_fact_controller.set_title('Изменение факта посылки')
             fact_type = FactType.REASON
@@ -123,8 +122,8 @@ class Rule(IValidateMyFields, IShowError):
         elif source == self.edit_action and (len(sel_reasons) > 0 or len(sel_conclusions) > 0):
             reason_idx = sel_reasons[0].row() if len(sel_reasons) > 0 else -1
             conclusion_idx = sel_conclusions[0].row() if len(sel_conclusions) > 0 else -1
-            reason = self.ui_rule.reasons[reason_idx] if reason_idx != -1 else None
-            conclusion = self.ui_rule.conclusions[conclusion_idx] if conclusion_idx != -1 else None
+            reason = self.ui_reasons[reason_idx] if reason_idx != -1 else None
+            conclusion = self.ui_conclusions[conclusion_idx] if conclusion_idx != -1 else None
 
             if reason:
                 new_fact_controller = FactController(reason, self.ui_variants, self.ui_domains, self)
@@ -137,7 +136,7 @@ class Rule(IValidateMyFields, IShowError):
 
         elif source == self.ui.edit_conclusion_button and len(sel_conclusions) > 0:
             conclusion_idx = sel_conclusions[0].row()
-            conclusion = self.ui_rule.conclusions[conclusion_idx]
+            conclusion = self.ui_conclusions[conclusion_idx]
             new_fact_controller = FactController(conclusion, self.ui_variants, self.ui_domains, self)
             new_fact_controller.set_title('Изменение факта заключения')
             fact_type = FactType.CONCLUSION
@@ -155,22 +154,22 @@ class Rule(IValidateMyFields, IShowError):
 
         if source == self.ui.remove_requisite_button and len(sel_reasons) > 0:
             reason_idx = sel_reasons[0].row()
-            reason = self.ui_rule.reasons[reason_idx]
-            self.ui_rule.remove_reason(reason)
+            reason = self.ui_reasons[reason_idx]
+            self.ui_reasons.remove(reason)
             self.refresh_requisite()
         elif source == self.remove_action and (len(sel_reasons) > 0 or len(sel_conclusions) > 0):
             reason_idx = sel_reasons[0].row() if len(sel_reasons) > 0 else -1
             conclusion_idx = sel_conclusions[0].row() if len(sel_conclusions) > 0 else -1
-            reason = self.ui_rule.reasons[reason_idx] if reason_idx != -1 else None
-            conclusion = self.ui_rule.conclusions[conclusion_idx] if conclusion_idx != -1 else None
+            reason = self.ui_reasons[reason_idx] if reason_idx != -1 else None
+            conclusion = self.ui_conclusions[conclusion_idx] if conclusion_idx != -1 else None
             if reason:
-                self.ui_rule.remove_reason(reason)
+                self.ui_reasons.remove(reason)
                 self.refresh_requisite()
             elif conclusion:
-                self.ui_rule.remove_conclusion(conclusion)
+                self.ui_conclusions.remove(conclusion)
                 self.refresh_conclusion()
         elif source == self.ui.edit_conclusion_button and len(sel_conclusions) > 0:
             conclusion_idx = sel_conclusions[0].row()
-            conclusion = self.ui_rule.conclusions[conclusion_idx]
-            self.ui_rule.remove_conclusion(conclusion)
+            conclusion = self.ui_conclusions[conclusion_idx]
+            self.ui_conclusions.remove(conclusion)
             self.refresh_conclusion()

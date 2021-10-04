@@ -19,11 +19,11 @@ class Shell:
 
     @property
     def domains(self):
-        return self.__memory.domains
+        return self.__memory.domains[:]
 
     @property
     def rules(self):
-        return self.__memory.rules
+        return self.__memory.rules[:]
 
     @property
     def active_rules(self):
@@ -35,7 +35,7 @@ class Shell:
 
     @property
     def vars(self):
-        return self.__memory.vars
+        return self.__memory.vars[:]
 
     @name.setter
     def name(self, name):
