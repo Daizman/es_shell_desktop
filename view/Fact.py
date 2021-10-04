@@ -10,7 +10,7 @@ from controller.Var import Var as VarController
 from utils.Mixins import *
 
 
-class Fact(IValidateMyFields, IShowError):
+class Fact(IValidateMyFields, IShowErrorDialog):
     change_signal = pyqtSignal()
 
     def __init__(self, fact, variants, domains, parent=None):

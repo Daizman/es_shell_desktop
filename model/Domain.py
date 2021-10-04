@@ -4,7 +4,7 @@ from model.exceptions.UsedDomain import UsedDomain
 class Domain:
     def __init__(self, name='', values=None):
         self.__name = name.upper().strip()
-        self.__values = values[:] if values else []
+        self.__values = values or []
         self.__connected_vars = []
 
     @property
@@ -25,7 +25,7 @@ class Domain:
 
     @property
     def values(self):
-        return self.__values[:]
+        return self.__values
 
     @values.setter
     def values(self, values):

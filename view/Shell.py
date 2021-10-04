@@ -4,20 +4,33 @@ import sys
 
 from PyQt5.QtCore import pyqtSignal
 
-from functools import partial
-
 from view.windows.ShellWindow import UIShellWindow
+
+from model.Shell import Shell as ShellModel
+
+from model.Domain import Domain as DomainModel
+from controller.Domain import Domain as DomainController
+
+from model.Var import Var as VarModel
+from controller.Var import Var as VarController
+
+from model.Rule import Rule as RuleModel
+from controller.Rule import Rule as RuleController
 
 from utils.Mixins import *
 
 
-class Shell(QMainWindow):
+class Shell(QMainWindow, IShowError):
     change_signal = pyqtSignal()
 
     def __init__(self, shell, parent=None):
         super(Shell, self).__init__(parent)
 
-        self.ui_shell = shell
+        self.ui_name = shell.name
+
+        self.ui_shell_domains = shell.domains
+        self.ui_shell_vars = shell.vars
+        self.ui_shell_rules = shell.rules
 
         self.ui = UIShellWindow()
         self.ui.setup_ui(self)
@@ -41,6 +54,8 @@ class Shell(QMainWindow):
         self.ui.edit_domain_button.clicked.connect(self.open_edit_domain_dialog)
         self.ui.remove_domain_button.clicked.connect(self.remove_domain)
 
+        self.ui.rules_view.set_drop_event_callback(self.drop_rule_cb)
+
     def refresh_all(self):
         self.refresh_rules()
         self.refresh_vars()
@@ -48,8 +63,8 @@ class Shell(QMainWindow):
 
     def refresh_rules(self):
         self.ui.rules_view.clearContents()
-        self.ui.rules_view.setRowCount(self.ui_shell.rules)
-        for i, rule in enumerate(self.ui_shell.rules):
+        self.ui.rules_view.setRowCount(self.ui_shell_rules)
+        for i, rule in enumerate(self.ui_shell_rules):
             name = QTableWidgetItem(rule.name)
             name.setToolTip(rule.name)
             self.ui.rules_view.setItem(i, 0, name)
@@ -60,8 +75,8 @@ class Shell(QMainWindow):
 
     def refresh_vars(self):
         self.ui.vars_view.clearContents()
-        self.ui.vars_view.setRowCount(len(self.ui_shell.vars))
-        for i, var in enumerate(self.ui_shell.vars):
+        self.ui.vars_view.setRowCount(len(self.ui_shell_vars))
+        for i, var in enumerate(self.ui_shell_vars):
             self.ui.vars_view.setItem(i, 0, QTableWidgetItem(var.name))
             var_type = QTableWidgetItem(var.var_type_str)
             var_type.setToolTip(var.var_type_str)
@@ -72,15 +87,11 @@ class Shell(QMainWindow):
 
     def refresh_domains(self):
         self.ui.domains_view.clearContents()
-        self.ui.domains_view.setRowCount(len(self.ui_shell.domains))
-        for i, domain in enumerate(self.ui_shell.domains):
+        self.ui.domains_view.setRowCount(len(self.ui_shell_domains))
+        for i, domain in enumerate(self.ui_shell_domains):
             self.ui.domains_view.setItem(i, 0, QTableWidgetItem(domain.name))
 
-    def drop_rule_cb(self, drop_row, rows_to_move):
-        pass
-
     def load(self):
-        return
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getOpenFileName(self,
@@ -89,12 +100,19 @@ class Shell(QMainWindow):
                                                 'ExpSys Files(*.json)',
                                                 options=options)
         try:
-            self.__controller.load(f_name)
+            self.load_shell_from(f_name)
         except ValueError as v_e:
             self.show_error(v_e)
 
+    def load_shell_from(self, f_name):
+        new_shell = ShellModel()
+        new_shell.load(f_name)
+        self.ui_shell_domains = new_shell.domains
+        self.ui_shell_vars = new_shell.vars
+        self.ui_shell_rules = new_shell.rules
+        self.refresh_all()
+
     def backup(self):
-        return
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getSaveFileName(self,
@@ -105,21 +123,48 @@ class Shell(QMainWindow):
 
         if f_name.endswith('.json'):
             f_name = f_name.replace('.json', '')
-
         try:
-            self.__model.name = f_name.split('/')[-1]
-            self.__controller.backup(f_name)
+            self.backup_shell_to(f_name)
+            self.change_signal.emit()
         except ValueError as v_e:
             self.show_error(v_e)
+
+    def backup_shell_to(self, f_name):
+        self.ui_name = f_name.split('/')[-1]
+        shell = ShellModel(self.ui_name)
+        shell.domains = self.ui_shell_domains
+        shell.vars = self.ui_shell_vars
+        shell.rules = self.ui_shell_rules
+        shell.backup(f_name)
 
     def open_consult_dialog(self):
         pass
 
     def exit_sys(self):
-        pass
+        shell = ShellModel('')
+        self.ui_shell_domains = shell.domains
+        self.ui_shell_vars = shell.vars
+        self.ui_shell_rules = shell.rules
+        self.refresh_all()
+
+    def drop_rule_cb(self, drop_row, rows_to_move):
+        rules = self.ui_shell_rules
+        for row_index, data in enumerate(rows_to_move):
+            row_index += drop_row
+            temp = rules[drop_row]
+            self.ui_shell_rules[drop_row] = rules[rows_to_move]
+            self.ui_shell_rules[rows_to_move] = temp
+        self.refresh_rules()
 
     def open_add_domain_dialog(self):
-        pass
+        new_domain = DomainModel()
+        new_domain_controller = DomainController(new_domain, self)
+        if new_domain_controller.exec_view():
+            if new_domain in self.ui_shell_domains:
+                self.show_error('Такой домен уже есть')
+                return
+            self.ui_shell_domains.append(new_domain)
+            self.refresh_all()
 
     def open_edit_domain_dialog(self):
         pass
@@ -128,7 +173,14 @@ class Shell(QMainWindow):
         pass
 
     def open_add_var_dialog(self):
-        pass
+        new_var = VarModel()
+        new_var_controller = VarController(new_var, self.ui_shell_domains, parent=self)
+        if new_var_controller.get_var():
+            if new_var in self.ui_shell_vars:
+                self.show_error('Такая переменная уже есть')
+                return
+            self.ui_shell_vars.append(new_var)
+            self.refresh_all()
 
     def open_edit_var_dialog(self):
         pass
@@ -137,7 +189,14 @@ class Shell(QMainWindow):
         pass
 
     def open_add_rule_dialog(self):
-        pass
+        new_rule = RuleModel()
+        new_rule_controller = RuleController(new_rule, self.ui_shell_vars, self.ui_shell_domains, self)
+        if new_rule_controller.get_rule():
+            if new_rule in self.ui_shell_rules:
+                self.show_error('Такое правило уже есть')
+                return
+            self.ui_shell_vars.append(new_rule)
+            self.remove_all()
 
     def open_edit_rule_dialog(self):
         pass
@@ -167,6 +226,6 @@ class Shell(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    ui = Shell(None)
+    ui = Shell(ShellModel(''))
     ui.show()
     sys.exit(app.exec_())

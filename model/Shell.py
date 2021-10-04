@@ -21,21 +21,31 @@ class Shell:
     def domains(self):
         return self.__memory.domains[:]
 
+    @domains.setter
+    def domains(self, domains):
+        self.__memory.clear_domains()
+        for domain in domains:
+            self.__memory.add_domain(domain)
+
     @property
     def rules(self):
         return self.__memory.rules[:]
 
-    @property
-    def active_rules(self):
-        return self.__memory.active_rules
-
-    @active_rules.setter
-    def active_rules(self, rule):
-        self.__memory.active_rules = rule
+    @rules.setter
+    def rules(self, rules):
+        self.__memory.clear_rules()
+        for rule in rules:
+            self.__memory.add_rule(rule)
 
     @property
     def vars(self):
         return self.__memory.vars[:]
+
+    @vars.setter
+    def vars(self, variants):
+        self.__memory.clear_vars()
+        for var in variants:
+            self.__memory.add_var(var)
 
     @name.setter
     def name(self, name):
@@ -60,36 +70,6 @@ class Shell:
 
     def swap_rules(self, pos_from, pos_to):
         self.__memory.swap_rules(pos_from, pos_to)
-
-    def remove_rule(self, name):
-        self.__memory.remove_rule(self.get_rule_by_name(name))
-
-    def remove_var(self, name):
-        self.__memory.remove_var(self.get_var_by_name(name))
-
-    def remove_domain(self, name):
-        self.__memory.remove_domain(self.get_domain_by_name(name))
-
-    def get_rule_by_name(self, name):
-        return self.__memory.get_rule_by_name(name)
-
-    def get_var_by_name(self, name):
-        return self.__memory.get_var_by_name(name)
-
-    def get_domain_by_name(self, name):
-        return self.__memory.get_domain_by_name(name)
-
-    def add_active_rule(self, rule):
-        self.__memory.add_active_rule(rule)
-
-    def insert_active_rule(self, rule, pos):
-        self.__memory.insert_active_rule(rule, pos)
-
-    def remove_active_rule(self, rule):
-        self.__memory.remove_active_rule(rule)
-
-    def update_dicts(self):
-        self.__memory.update_dicts()
 
     def load(self, path):
         with open(path, 'r') as kb_backup:

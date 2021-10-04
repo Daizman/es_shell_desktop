@@ -12,7 +12,7 @@ from controller.Domain import Domain as DomainController
 from utils.Mixins import *
 
 
-class Var(IValidateMyFields, IShowError):
+class Var(IValidateMyFields, IShowErrorDialog):
     change_signal = pyqtSignal()
 
     def __init__(self, var, domains, parent=None):
@@ -26,8 +26,7 @@ class Var(IValidateMyFields, IShowError):
 
         self.fields_validators = {
             'ui_name': IValidateMyFields.empty_string_validator,
-            'ui_domain': IValidateMyFields.empty_string_validator,
-            'ui_type': lambda field: type(field) == type(VarType)
+            'ui_domain': lambda field: IValidateMyFields.empty_string_validator(field.name)
         }
 
         self.ui_domains = domains[:]

@@ -13,7 +13,7 @@ from controller.Fact import Fact as FactController
 from utils.Mixins import *
 
 
-class Rule(IValidateMyFields, IShowError):
+class Rule(IValidateMyFields, IShowErrorDialog):
     change_signal = pyqtSignal()
 
     def __init__(self, rule, variants, domains, parent=None):

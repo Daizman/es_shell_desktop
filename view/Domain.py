@@ -8,7 +8,7 @@ from view.windows.DomainWindow import UIDomainWindow
 from utils.Mixins import *
 
 
-class Domain(IValidateMyFields, IShowError):
+class Domain(IValidateMyFields, IShowErrorDialog):
     change_signal = pyqtSignal()
 
     def __init__(self, domain, parent=None):
@@ -53,6 +53,8 @@ class Domain(IValidateMyFields, IShowError):
         new_val = self.ui.domain_val_text.text().strip().upper()
         if new_val in self.ui_values:
             self.show_error('Значение уже есть!')
+        elif not new_val:
+            self.show_error('Пустое значение недопустимо!')
         else:
             self.ui_values.append(new_val)
         self.refresh_values()
