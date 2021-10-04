@@ -16,48 +16,58 @@ class UIRuleWindow(object):
         name_l = QtWidgets.QLabel('Имя переменной:')
 
         self.name_le = QtWidgets.QLineEdit()
-        self.name_le.setObjectName('name')
 
         requisite_gb = QtWidgets.QGroupBox('Посылка:', rule_view)
+        requisite_vlayout = QtWidgets.QVBoxLayout()
+        requisite_hlayout = QtWidgets.QHBoxLayout()
 
         self.requisite_tw = QtWidgets.QTableWidget(requisite_gb)
-        self.requisite_tw.setObjectName('requisite_tw')
         self.requisite_tw.setColumnCount(2)
         self.requisite_tw.setHorizontalHeaderLabels(['Переменная', 'Значение'])
         self.requisite_tw.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.requisite_tw.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
         self.add_requisite_button = QtWidgets.QPushButton(requisite_gb)
-        self.add_requisite_button.setObjectName('add_requisite_button')
 
         self.edit_requisite_button = QtWidgets.QPushButton(requisite_gb)
-        self.edit_requisite_button.setObjectName('edit_requisite_button')
 
         self.remove_requisite_button = QtWidgets.QPushButton(requisite_gb)
-        self.remove_requisite_button.setObjectName('remove_requisite_button')
+
+        requisite_hlayout.addWidget(self.add_requisite_button)
+        requisite_hlayout.addWidget(self.edit_requisite_button)
+        requisite_hlayout.addWidget(self.remove_requisite_button)
+        requisite_vlayout.addWidget(self.requisite_tw)
+        requisite_vlayout.addLayout(requisite_hlayout)
+        requisite_gb.setLayout(requisite_vlayout)
+        requisite_gb.setMinimumHeight(300)
 
         conclusion_gb = QtWidgets.QGroupBox('Заключение:', rule_view)
+        conclusion_vlayout = QtWidgets.QVBoxLayout()
+        conclusion_hlayout = QtWidgets.QHBoxLayout()
 
         self.conclusion_tw = QtWidgets.QTableWidget(conclusion_gb)
-        self.conclusion_tw.setObjectName('conclusion_tw')
         self.conclusion_tw.setColumnCount(2)
         self.conclusion_tw.setHorizontalHeaderLabels(['Переменная', 'Значение'])
         self.conclusion_tw.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.conclusion_tw.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
         self.add_conclusion_button = QtWidgets.QPushButton(conclusion_gb)
-        self.add_conclusion_button.setObjectName('add_conclusion_button')
 
         self.edit_conclusion_button = QtWidgets.QPushButton(conclusion_gb)
-        self.edit_conclusion_button.setObjectName('edit_conclusion_button')
 
         self.remove_conclusion_button = QtWidgets.QPushButton(conclusion_gb)
-        self.remove_conclusion_button.setObjectName('remove_conclusion_button')
+
+        conclusion_hlayout.addWidget(self.add_conclusion_button)
+        conclusion_hlayout.addWidget(self.edit_conclusion_button)
+        conclusion_hlayout.addWidget(self.remove_conclusion_button)
+        conclusion_vlayout.addWidget(self.conclusion_tw)
+        conclusion_vlayout.addLayout(conclusion_hlayout)
+        conclusion_gb.setLayout(conclusion_vlayout)
+        conclusion_gb.setMinimumHeight(300)
 
         description_l = QtWidgets.QLabel('Пояснение:')
 
         self.description_le = QtWidgets.QTextEdit()
-        self.description_le.setObjectName('description_le')
 
         buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
         self.button_box = QtWidgets.QDialogButtonBox(buttons)
@@ -67,17 +77,6 @@ class UIRuleWindow(object):
 
         grid.addWidget(requisite_gb, 2, 0, 5, 5)
         grid.addWidget(conclusion_gb, 2, 6, 5, 5)
-
-        grid.addWidget(self.requisite_tw, 5, 0, 1, 5)
-        grid.addWidget(self.conclusion_tw, 5, 6, 1, 5)
-
-        grid.addWidget(self.add_requisite_button, 6, 0)
-        grid.addWidget(self.edit_requisite_button, 6, 2)
-        grid.addWidget(self.remove_requisite_button, 6, 4)
-
-        grid.addWidget(self.add_conclusion_button, 6, 6)
-        grid.addWidget(self.edit_conclusion_button, 6, 8)
-        grid.addWidget(self.remove_conclusion_button, 6, 10)
 
         grid.addWidget(description_l, 7, 0)
         grid.addWidget(self.description_le, 8, 0, 1, 11)
