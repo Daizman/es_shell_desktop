@@ -1,16 +1,15 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 
-import model.Shell as ShellModel
-import controller.Shell as ShellController
+from model.Shell import Shell as ShellModel
+from controller.Shell import Shell as ShellController
 
 
 def main():
     app = QApplication(sys.argv)
 
-    model = ShellModel.Shell()
-    controller = ShellController.Shell(model)
-
+    controller = ShellController(ShellModel(''))
+    controller.show()
     app.exec_()
 
 

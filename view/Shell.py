@@ -1,6 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QTableWidgetItem, QAbstractItemView, QFileDialog
-
-import sys
+from PyQt5.QtWidgets import QMainWindow, QAction, QTableWidgetItem, QFileDialog
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -82,7 +80,9 @@ class Shell(QMainWindow, IShowError):
         self.ui.vars_view.clearContents()
         self.ui.vars_view.setRowCount(len(self.ui_shell_vars))
         for i, var in enumerate(self.ui_shell_vars):
-            self.ui.vars_view.setItem(i, 0, QTableWidgetItem(var.name))
+            var_name = QTableWidgetItem(var.name)
+            var_name.setToolTip(var.name)
+            self.ui.vars_view.setItem(i, 0, var_name)
             var_type = QTableWidgetItem(var.var_type_str)
             var_type.setToolTip(var.var_type_str)
             self.ui.vars_view.setItem(i, 1, var_type)
@@ -266,11 +266,3 @@ class Shell(QMainWindow, IShowError):
             self.ui_shell_rules.remove(rule)
 
         self.refresh_all()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    ui = Shell(ShellModel(''))
-    ui.show()
-    sys.exit(app.exec_())

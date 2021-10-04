@@ -1,8 +1,5 @@
-import sys
+from PyQt5.QtWidgets import QDialog
 
-from PyQt5.QtWidgets import QDialog, QApplication
-
-from model.Rule import Rule as RuleModel
 from view.Rule import Rule as RuleView
 
 
@@ -39,15 +36,3 @@ class Rule:
 
     def get_rule(self):
         return self.__view.exec()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    glob_variants_list = []
-    glob_domains_list = []
-    _model = RuleModel()
-
-    controller = Rule(_model, glob_variants_list, glob_domains_list)
-    controller.get_rule()
-    sys.exit(app.exec_())

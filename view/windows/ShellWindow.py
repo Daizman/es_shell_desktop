@@ -164,6 +164,7 @@ class UIShellWindow(object):
         view.setHorizontalHeaderLabels(cols)
         view.horizontalHeader().setSectionResizeMode(len(cols) - 1, QtWidgets.QHeaderView.Stretch)
         view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        view.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
     def _gen_tab_template(self):
         tab = QtWidgets.QWidget()
