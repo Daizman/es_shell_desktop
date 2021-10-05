@@ -83,3 +83,7 @@ class Shell:
     def backup(self, path):
         with open(path, 'w') as backup:
             backup.write(jsonpickle.encode(self))
+
+    def clear(self):
+        self.__name = ''
+        self.__memory = Memory()

@@ -6,8 +6,6 @@ from PyQt5.QtCore import pyqtSignal, QModelIndex
 
 from view.windows.ShellWindow import UIShellWindow
 
-from model.Shell import Shell as ShellModel
-
 from model.Domain import Domain as DomainModel
 from controller.Domain import Domain as DomainController
 
@@ -21,16 +19,15 @@ from utils.Mixins import *
 
 
 class Shell(QMainWindow, IShowError):
-    change_signal = pyqtSignal()
-
-    def __init__(self, shell, parent=None):
+    def __init__(self, controller, parent=None):
         super(Shell, self).__init__(parent)
 
-        self.ui_name = shell.name
+        self.controller = controller
 
-        self.ui_shell_domains = shell.domains
-        self.ui_shell_vars = shell.vars
-        self.ui_shell_rules = shell.rules
+        self.ui_name = controller.get_name()
+        self.ui_shell_domains = controller.get_domains()
+        self.ui_shell_vars = controller.get_variants()
+        self.ui_shell_rules = controller.get_rules()
 
         self.ui = UIShellWindow()
         self.ui.setup_ui(self)
@@ -133,11 +130,10 @@ class Shell(QMainWindow, IShowError):
             self.show_error(b_e)
 
     def load_shell_from(self, f_name):
-        new_shell = ShellModel()
-        new_shell.load(f_name)
-        self.ui_shell_domains = new_shell.domains
-        self.ui_shell_vars = new_shell.vars
-        self.ui_shell_rules = new_shell.rules
+        self.controller.load(f_name)
+        self.ui_shell_domains = self.controller.get_domains()
+        self.ui_shell_vars = self.controller.get_variants()
+        self.ui_shell_rules = self.controller.get_rules()
         self.refresh_all()
 
     def backup(self):
@@ -155,26 +151,18 @@ class Shell(QMainWindow, IShowError):
             f_name += '.json'
         try:
             self.backup_shell_to(f_name)
-            self.change_signal.emit()
         except ValueError as v_e:
             self.show_error(v_e)
 
     def backup_shell_to(self, f_name):
-        self.ui_name = f_name.split('/')[-1]
-        shell = ShellModel(self.ui_name)
-        shell.domains = self.ui_shell_domains
-        shell.vars = self.ui_shell_vars
-        shell.rules = self.ui_shell_rules
-        shell.backup(f_name)
+        self.controller.set_name(f_name.split('/')[-1])
+        self.controller.backup(f_name)
 
     def open_consult_dialog(self):
         pass
 
     def exit_sys(self):
-        shell = ShellModel('')
-        self.ui_shell_domains = shell.domains
-        self.ui_shell_vars = shell.vars
-        self.ui_shell_rules = shell.rules
+        self.controller.clear_shell()
         self.refresh_all()
 
     def drop_rule_cb(self, drop_row, rows):
@@ -190,10 +178,8 @@ class Shell(QMainWindow, IShowError):
         new_domain = DomainModel()
         new_domain_controller = DomainController(new_domain, self)
         if new_domain_controller.exec_view():
-            if new_domain in self.ui_shell_domains:
-                self.show_error('Такой домен уже есть')
-                return
-            self.ui_shell_domains.append(new_domain)
+            self.controller.add_domain(new_domain)
+            self.ui_shell_domains = self.controller.get_domains()
             self.refresh_all()
 
     def open_edit_domain_dialog(self):
@@ -204,6 +190,7 @@ class Shell(QMainWindow, IShowError):
             domain = self.ui_shell_domains[domain_idx[0].row()]
             domain_controller = DomainController(domain, self)
             if domain_controller.exec_view():
+                self.controller.set_domains(self.ui_shell_domains)
                 self.refresh_all()
 
     def remove_domain(self):
@@ -216,6 +203,7 @@ class Shell(QMainWindow, IShowError):
                 self.show_error('Попытка удалить используемый домен')
                 return
             self.ui_shell_domains.remove(domain)
+            self.controller.set_domains(self.ui_shell_domains)
 
         self.refresh_all()
 
@@ -223,10 +211,9 @@ class Shell(QMainWindow, IShowError):
         new_var = VarModel()
         new_var_controller = VarController(new_var, self.ui_shell_domains, parent=self)
         if new_var_controller.get_var():
-            if new_var in self.ui_shell_vars:
-                self.show_error('Такая переменная уже есть')
-                return
-            self.ui_shell_vars.append(new_var)
+            self.controller.set_domains(self.ui_shell_domains)
+            self.controller.add_var(new_var)
+            self.ui_shell_vars = self.controller.get_variants()
             self.refresh_all()
 
     def open_edit_var_dialog(self):
@@ -237,6 +224,8 @@ class Shell(QMainWindow, IShowError):
             var = self.ui_shell_vars[var_idx[0].row()]
             var_controller = VarController(var, self.ui_shell_domains, self)
             if var_controller.get_var():
+                self.controller.set_domains(self.ui_shell_domains)
+                self.controller.set_variants(self.ui_shell_vars)
                 self.refresh_all()
 
     def remove_var(self):
@@ -249,6 +238,7 @@ class Shell(QMainWindow, IShowError):
                 self.show_error('Попытка удалить используемую переменную')
                 return
             self.ui_shell_vars.remove(var)
+            self.controller.set_variants(self.ui_shell_vars)
 
         self.refresh_all()
 
@@ -256,10 +246,10 @@ class Shell(QMainWindow, IShowError):
         new_rule = RuleModel()
         new_rule_controller = RuleController(new_rule, self.ui_shell_vars, self.ui_shell_domains, self)
         if new_rule_controller.get_rule():
-            if new_rule in self.ui_shell_rules:
-                self.show_error('Такое правило уже есть')
-                return
-            self.ui_shell_rules.append(new_rule)
+            self.controller.set_domains(self.ui_shell_domains)
+            self.controller.set_variants(self.ui_shell_vars)
+            self.controller.add_rule(new_rule)
+            self.ui_shell_rules = self.controller.get_rules()
             self.refresh_all()
 
     def open_edit_rule_dialog(self):
@@ -270,6 +260,9 @@ class Shell(QMainWindow, IShowError):
             rule = self.ui_shell_rules[len(self.ui_shell_rules) - rule_idx[0].row() - 1]
             rule_controller = RuleController(rule, self.ui_shell_vars, self.ui_shell_domains, self)
             if rule_controller.get_rule():
+                self.controller.set_domains(self.ui_shell_domains)
+                self.controller.set_variants(self.ui_shell_vars)
+                self.controller.set_rules(self.ui_shell_rules)
                 self.refresh_all()
 
     def remove_rule(self):
@@ -279,5 +272,6 @@ class Shell(QMainWindow, IShowError):
         else:
             rule = self.ui_shell_rules[len(self.ui_shell_rules) - rule_idx[0].row() - 1]
             self.ui_shell_rules.remove(rule)
+            self.controller.set_rules(self.ui_shell_rules)
 
         self.refresh_all()
