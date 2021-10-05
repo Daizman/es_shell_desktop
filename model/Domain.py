@@ -48,6 +48,9 @@ class Domain:
     def __str__(self):
         return self.name + ':\n' + '\n'.join(map(str, self.values))
 
+    def __hash__(self):
+        return hash((self.name, sum(hash(val) for val in self.values)))
+
     def add_value(self, value):
         value = str(value).upper().strip()
         if value in self.values:

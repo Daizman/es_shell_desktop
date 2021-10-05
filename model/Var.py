@@ -103,6 +103,9 @@ class Var:
                f'\nQuestion: {self.question};' \
                f'\nType: {self.var_type_str}'
 
+    def __hash__(self):
+        return hash((self.name, self.question, self.var_type, self.can_be_goal, self.domain))
+
     def used_in_fact(self, fact):
         return fact in self.__facts
 

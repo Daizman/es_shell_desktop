@@ -15,6 +15,9 @@ from controller.Var import Var as VarController
 from model.Rule import Rule as RuleModel
 from controller.Rule import Rule as RuleController
 
+from model.Consult import Consult as ConsultModel
+from controller.Consult import Consult as ConsultController
+
 from utils.Mixins import *
 
 
@@ -159,7 +162,12 @@ class Shell(QMainWindow, IShowError):
         self.controller.backup(f_name)
 
     def open_consult_dialog(self):
-        pass
+        if len(list(filter(lambda var: var.can_be_goal, self.controller.get_variants()))) == 0:
+            self.show_error('Нет целей')
+            return
+        consult = ConsultModel(self.controller.get_variants(), self.controller.get_rules())
+        consult_controller = ConsultController(consult, self)
+        consult_controller.show()
 
     def exit_sys(self):
         self.controller.clear_shell()
