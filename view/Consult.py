@@ -32,7 +32,8 @@ class Consult(IShowErrorDialog):
     def consult(self):
         var = self.ui.answer_cb.currentData()
         answer = self.controller.consult(var)
-        self.show_answer(answer)
+        if answer:
+            self.show_answer(answer)
 
     def ask_var(self, var):
         dlg = QInputDialog(self)
