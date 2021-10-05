@@ -62,15 +62,6 @@ class Shell:
     def add_domain(self, name, values):
         self.__memory.add_domain(Domain(name, values))
 
-    def get_rule_index(self, name):
-        return self.__memory.get_rule_index(name)
-
-    def insert_rule(self, name, description, reasons, conclusion, pos):
-        self.__memory.insert_rule(Rule(name, description, reasons, conclusion), pos)
-
-    def swap_rules(self, pos_from, pos_to):
-        self.__memory.swap_rules(pos_from, pos_to)
-
     def load(self, path):
         with open(path, 'r') as kb_backup:
             restored_es_json = kb_backup.readline()

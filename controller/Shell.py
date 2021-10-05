@@ -54,34 +54,9 @@ class Shell:
         self.__model.add_domain(domain.name, domain.values)
 
     @controller_setter
-    def set_domain(self, domain):
-        pass
-
-    @controller_setter
-    def remove_domain(self, domain):
-        pass
-
-    @controller_setter
     def add_var(self, var):
         self.__model.add_var(var.name, var.domain, var.question, var.var_type)
 
     @controller_setter
-    def set_var(self, var):
-        pass
-
-    @controller_setter
-    def remove_var(self, var):
-        pass
-
-    @controller_setter
     def add_rule(self, rule):
         self.__model.add_rule(rule.name, rule.description, rule.reasons, rule.conclusion)
-
-    @controller_setter
-    def set_rule(self, rule):
-        pass
-
-    @controller_setter
-    def remove_rule(self, rule):
-        pass
-
