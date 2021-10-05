@@ -22,6 +22,8 @@ class Base(metaclass=ABCMeta):
             self._view.accept()
         except ValueError as v_e:
             self._view.show_error(v_e)
+        except BaseException as b_e:
+            self._view.show_error(b_e)
 
     @property
     def model(self):

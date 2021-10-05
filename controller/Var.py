@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog
 
 from view.Var import Var as VarView
+from model.exceptions.UsedVar import UsedVar
 
 
 class Var:
@@ -25,6 +26,8 @@ class Var:
             self.__view.accept()
         except ValueError as v_e:
             self.__view.show_error(v_e)
+        except UsedVar as u_v:
+            self.__view.show_error(u_v)
 
     @property
     def model(self):

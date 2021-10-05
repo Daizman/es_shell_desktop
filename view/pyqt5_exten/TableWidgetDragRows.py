@@ -29,15 +29,18 @@ class TableWidgetDragRows(QTableWidget):
         return rows
 
     def dropEvent(self, event: QDropEvent):
+        drop_row = rows_to_move = None
         if not event.isAccepted() and event.source() == self:
             drop_row = self.drop_on(event)
             if drop_row == self.rowCount():
                 return
             rows = sorted({item.row() for item in self.selectedItems()})
+            # создаем отсортированное множество строк выбранных
             rows_to_move = [
                 [QTableWidgetItem(self.item(row_index, column_index)) for column_index in range(self.columnCount())]
                 for row_index in rows
             ]
+            # собираем все строки для перемещения
 
             for row_index in reversed(rows):
                 self.removeRow(row_index)
@@ -48,9 +51,9 @@ class TableWidgetDragRows(QTableWidget):
                 for column_index, column_data in enumerate(data):
                     self.setItem(row_index, column_index, column_data)
             event.accept()
-            if self.drop_event_callback:
-                self.drop_event_callback(drop_row, rows_to_move)
         super().dropEvent(event)
+        if self.drop_event_callback and drop_row and rows:
+            self.drop_event_callback(drop_row, rows)
 
     def drop_on(self, event):
         index = self.indexAt(event.pos())

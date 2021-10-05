@@ -10,9 +10,9 @@ class Shell:
 
     def handle_change(self):
         self.__model.name = self.__view.ui_name
-        self.__model.domains = self.__view.ui_domains
-        self.__model.vars = self.__view.ui_vars
-        self.__model.rules = self.__view.ui_rules
+        self.__model.domains = self.__view.ui_shell_domains
+        self.__model.vars = self.__view.ui_shell_vars
+        self.__model.rules = self.__view.ui_shell_rules
 
     def show(self):
         self.__view.show()

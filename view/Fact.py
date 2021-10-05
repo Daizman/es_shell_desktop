@@ -29,6 +29,7 @@ class Fact(IValidateMyFields, IShowErrorDialog):
 
         if not self.ui_var and len(variants) > 0:
             self.ui_var = variants[0]
+            self.ui_value = variants[0].domain.values[0]
 
         self.ui = UIFactWindow()
         self.ui.setup_ui(self)

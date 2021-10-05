@@ -21,7 +21,7 @@ class Domain:
 
     @property
     def connected_vars(self):
-        return self.__connected_vars[:]
+        return self.__connected_vars
 
     @property
     def values(self):
@@ -67,4 +67,3 @@ class Domain:
         if var not in self.connected_vars:
             raise ValueError('Попытка удалить переменную, которая не связана с доменом')
         self.connected_vars.remove(var)
-        var.domain = []

@@ -1,6 +1,8 @@
+import os
+
 from PyQt5.QtWidgets import QMainWindow, QAction, QTableWidgetItem, QFileDialog
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QModelIndex
 
 from view.windows.ShellWindow import UIShellWindow
 
@@ -55,9 +57,9 @@ class Shell(QMainWindow, IShowError):
 
     def setup_events(self):
         self.ui.rules_view.set_drop_event_callback(self.drop_rule_cb)
-        self.ui.domains_view.cellClicked[int, int].connect(self.fill_domain_info)
-        self.ui.vars_view.cellClicked[int, int].connect(self.fill_var_info)
-        self.ui.rules_view.cellClicked[int, int].connect(self.fill_rule_info)
+        self.ui.domains_view.selectionModel().currentRowChanged[QModelIndex, QModelIndex].connect(self.fill_domain_info)
+        self.ui.vars_view.selectionModel().currentRowChanged[QModelIndex, QModelIndex].connect(self.fill_var_info)
+        self.ui.rules_view.selectionModel().currentRowChanged[QModelIndex, QModelIndex].connect(self.fill_rule_info)
 
     def refresh_all(self):
         self.refresh_rules()
@@ -67,7 +69,7 @@ class Shell(QMainWindow, IShowError):
     def refresh_rules(self):
         self.ui.rules_view.clearContents()
         self.ui.rules_view.setRowCount(len(self.ui_shell_rules))
-        for i, rule in enumerate(self.ui_shell_rules):
+        for i, rule in enumerate(reversed(self.ui_shell_rules)):
             name = QTableWidgetItem(rule.name)
             name.setToolTip(rule.name)
             self.ui.rules_view.setItem(i, 0, name)
@@ -96,25 +98,29 @@ class Shell(QMainWindow, IShowError):
         for i, domain in enumerate(self.ui_shell_domains):
             self.ui.domains_view.setItem(i, 0, QTableWidgetItem(domain.name))
 
-    def fill_rule_info(self, row, col):
+    def fill_rule_info(self, current, prev):
+        if current.row() == -1:
+            return
+        row = len(self.ui_shell_rules) - current.row() - 1
         reasons = [f'{reason.var.name}={reason.value}' for reason in self.ui_shell_rules[row].reasons]
         self.ui.requisite_te.setText('\n'.join(reasons))
         conclusions = [f'{conclusion.var.name}={conclusion.value}' for conclusion in self.ui_shell_rules[row].conclusions]
         self.ui.conclusion_te.setText('\n'.join(conclusions))
 
-    def fill_var_info(self, row, col):
+    def fill_var_info(self, current, prev):
+        row = current.row()
         self.ui.var_values_te.setText(str(self.ui_shell_vars[row].domain))
         self.ui.question_te.setText(str(self.ui_shell_vars[row].question))
 
-    def fill_domain_info(self, row, col):
-        self.ui.domain_values_te.setText(str(self.ui_shell_domains[row]))
+    def fill_domain_info(self, current, prev):
+        self.ui.domain_values_te.setText(str(self.ui_shell_domains[current.row()]))
 
     def load(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getOpenFileName(self,
                                                 'Открытие ЭС',
-                                                r'D:\projects\es_shell_desktop\backups\\',
+                                                os.environ['backup_folder'],
                                                 'ExpSys Files(*.json)',
                                                 options=options)
         if not f_name.strip():
@@ -139,7 +145,7 @@ class Shell(QMainWindow, IShowError):
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getSaveFileName(self,
                                                 'QFileDialog.getSaveFileName()',
-                                                r'D:\projects\es_shell_desktop\backups\\' + self.ui_name,
+                                                os.environ['backup_folder'] + self.ui_name,
                                                 'ExpSys Files(*.json)',
                                                 options=options)
         if not f_name.strip():
@@ -171,13 +177,13 @@ class Shell(QMainWindow, IShowError):
         self.ui_shell_rules = shell.rules
         self.refresh_all()
 
-    def drop_rule_cb(self, drop_row, rows_to_move):
-        rules = self.ui_shell_rules
-        for row_index, data in enumerate(rows_to_move):
-            row_index += drop_row
-            temp = rules[drop_row]
-            self.ui_shell_rules[drop_row] = rules[rows_to_move]
-            self.ui_shell_rules[rows_to_move] = temp
+    def drop_rule_cb(self, drop_row, rows):
+        rows_to_rem = [self.ui_shell_rules[row] for row in rows]
+        for row in rows_to_rem:
+            self.ui_shell_rules.remove(row)
+
+        for i, row in enumerate(rows_to_rem):
+            self.ui_shell_rules.insert(i + drop_row, row)
         self.refresh_rules()
 
     def open_add_domain_dialog(self):
@@ -201,8 +207,11 @@ class Shell(QMainWindow, IShowError):
                 self.refresh_all()
 
     def remove_domain(self):
-        for i in self.ui.domains_view.selectedIndexes():
-            domain = self.ui_shell_domains[i]
+        domain_idx = self.ui.domains_view.selectedIndexes()
+        if len(domain_idx) == 0:
+            self.show_error('Выберите домен')
+        else:
+            domain = self.ui_shell_domains[domain_idx[0].row()]
             if domain.used:
                 self.show_error('Попытка удалить используемый домен')
                 return
@@ -231,8 +240,11 @@ class Shell(QMainWindow, IShowError):
                 self.refresh_all()
 
     def remove_var(self):
-        for i in self.ui.vars_view.selectedIndexes():
-            var = self.ui_shell_vars[i]
+        var_idx = self.ui.vars_view.selectedItems()
+        if len(var_idx) == 0:
+            self.show_error('Выберите переменную')
+        else:
+            var = self.ui_shell_vars[var_idx[0].row()]
             if var.used:
                 self.show_error('Попытка удалить используемую переменную')
                 return
@@ -255,14 +267,17 @@ class Shell(QMainWindow, IShowError):
         if len(rule_idx) == 0:
             self.show_error('Выберите правило')
         else:
-            rule = self.ui_shell_rules[rule_idx[0].row()]
+            rule = self.ui_shell_rules[len(self.ui_shell_rules) - rule_idx[0].row() - 1]
             rule_controller = RuleController(rule, self.ui_shell_vars, self.ui_shell_domains, self)
             if rule_controller.get_rule():
                 self.refresh_all()
 
     def remove_rule(self):
-        for i in self.ui.rules_view.selectedIndexes():
-            rule = self.ui_shell_rules[i]
+        rule_idx = self.ui.rules_view.selectedIndexes()
+        if len(rule_idx) == 0:
+            self.show_error('Выберите правило')
+        else:
+            rule = self.ui_shell_rules[len(self.ui_shell_rules) - rule_idx[0].row() - 1]
             self.ui_shell_rules.remove(rule)
 
         self.refresh_all()
