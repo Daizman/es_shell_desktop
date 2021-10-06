@@ -171,6 +171,10 @@ class Shell(QMainWindow, IShowError):
 
     def exit_sys(self):
         self.controller.clear_shell()
+        self.ui_name = self.controller.get_name()
+        self.ui_shell_domains = self.controller.get_domains()
+        self.ui_shell_vars = self.controller.get_variants()
+        self.ui_shell_rules = self.controller.get_rules()
         self.refresh_all()
 
     def drop_rule_cb(self, drop_row, rows):

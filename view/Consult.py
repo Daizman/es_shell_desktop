@@ -34,6 +34,8 @@ class Consult(IShowErrorDialog):
         answer = self.controller.consult(var)
         if answer:
             self.show_answer(answer)
+        else:
+            self.show_error('Не удалось найти удовлетворяющий ответ в базе знаний')
 
     def ask_var(self, var):
         dlg = QInputDialog(self)
@@ -48,6 +50,7 @@ class Consult(IShowErrorDialog):
 
     def show_answer(self, answer_text):
         answer = QMessageBox(self)
+        answer.resize(500, 500)
         answer.setWindowTitle('Результат консультации!')
         answer.setText(answer_text)
         answer.exec_()
