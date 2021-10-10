@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtWidgets import QMainWindow, QAction, QTableWidgetItem, QFileDialog
 
-from PyQt5.QtCore import pyqtSignal, QModelIndex
+from PyQt5.QtCore import QModelIndex
 
 from view.windows.ShellWindow import UIShellWindow
 
@@ -17,6 +17,8 @@ from controller.Rule import Rule as RuleController
 
 from model.Consult import Consult as ConsultModel
 from controller.Consult import Consult as ConsultController
+
+from view.Consult import Consult as ConsultView
 
 from utils.Mixins import *
 
@@ -120,7 +122,7 @@ class Shell(QMainWindow, IShowError):
         options |= QFileDialog.DontUseNativeDialog
         f_name, _ = QFileDialog.getOpenFileName(self,
                                                 'Открытие ЭС',
-                                                os.environ['backup_folder'],
+                                                os.environ['BACKUP_FOLDER'],
                                                 'ExpSys Files(*.json)',
                                                 options=options)
         if not f_name.strip():
@@ -166,7 +168,7 @@ class Shell(QMainWindow, IShowError):
             self.show_error('Нет целей')
             return
         consult = ConsultModel(self.controller.get_variants(), self.controller.get_rules())
-        consult_controller = ConsultController(consult, self)
+        consult_controller = ConsultController(consult, ConsultView, self)
         consult_controller.show()
 
     def exit_sys(self):

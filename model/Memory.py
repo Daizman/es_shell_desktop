@@ -34,3 +34,7 @@ class Memory:
     def add_var(self, var):
         self.vars.append(var)
 
+    def get_var_by_name(self, name):
+        for var in self.vars:
+            if var.name == name.strip().upper():
+                return var

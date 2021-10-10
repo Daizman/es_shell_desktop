@@ -1,17 +1,10 @@
-
-
 class Consult:
     def __init__(self, variants, rules):
-        self.__goal = None
         self.__active_rules = []
         self.__vars_with_values = {}
 
         self.__rules = rules
         self.__variants = variants
-
-    @property
-    def goal(self):
-        return self.__goal
 
     @property
     def active_rules(self):
@@ -35,9 +28,6 @@ class Consult:
     def add_var_with_value(self, var, value):
         self.__vars_with_values[var] = value
 
-    def clear_goal(self):
-        self.__goal = None
-
     def clear_active_rules(self):
         self.__active_rules = []
 
@@ -45,6 +35,5 @@ class Consult:
         self.__vars_with_values = {}
 
     def clear(self):
-        self.__goal = None
         self.__active_rules = []
         self.__vars_with_values = {}

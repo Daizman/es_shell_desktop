@@ -9,3 +9,4 @@ gen
 # My files
 tests*.py
 /backups
+/excel_tablets_for_dev

@@ -1,12 +1,10 @@
-from view.Consult import Consult as ConsultView
-
 from model.types.VarType import VarType
 
 
 class Consult:
-    def __init__(self, model, parent=None):
+    def __init__(self, model, view_class, parent=None):
         self.__model = model
-        self.__view = ConsultView(self, parent)
+        self.__view = view_class(self, parent)
 
     def show(self):
         self.__view.show()

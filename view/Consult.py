@@ -1,4 +1,3 @@
-from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QInputDialog, QMessageBox
 
 from view.windows.ConsultWindow import UIConsultWindow
@@ -7,8 +6,6 @@ from utils.Mixins import *
 
 
 class Consult(IShowErrorDialog):
-    change_signal = pyqtSignal()
-
     def __init__(self, controller, parent=None):
         super(Consult, self).__init__(parent)
 

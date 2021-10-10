@@ -62,6 +62,9 @@ class Shell:
     def add_domain(self, name, values):
         self.__memory.add_domain(Domain(name, values))
 
+    def get_var_by_name(self, name):
+        return self.__memory.get_var_by_name(name)
+
     def load(self, path):
         with open(path, 'r') as kb_backup:
             restored_es_json = kb_backup.readline()
