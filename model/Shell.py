@@ -38,11 +38,11 @@ class Shell:
             self.__memory.add_rule(rule)
 
     @property
-    def vars(self):
+    def variants(self):
         return self.__memory.vars[:]
 
-    @vars.setter
-    def vars(self, variants):
+    @variants.setter
+    def variants(self, variants):
         self.__memory.clear_vars()
         for var in variants:
             self.__memory.add_var(var)
@@ -71,7 +71,7 @@ class Shell:
             restored_es = jsonpickle.decode(restored_es_json)
             self.__name = restored_es.name
             self.domains = restored_es.domains
-            self.vars = restored_es.vars
+            self.variants = restored_es.variants
             self.rules = restored_es.rules
 
     def backup(self, path):

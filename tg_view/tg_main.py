@@ -14,8 +14,8 @@ from model.types.VarType import *
 bot = telebot.TeleBot(env_constants.API_TOKEN)
 shell = ShellModel()
 shell.load(env_constants.ES_PATH)
-consult_model = ConsultModel(shell.vars, shell.rules)
-goals = list(filter(lambda var: var.can_be_goal, shell.vars))
+consult_model = ConsultModel(shell.variants, shell.rules)
+goals = list(filter(lambda var: var.can_be_goal, shell.variants))
 goal = None
 
 

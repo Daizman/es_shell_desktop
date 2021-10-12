@@ -15,7 +15,7 @@ class Shell:
         return self.__model.domains
 
     def get_variants(self):
-        return self.__model.vars
+        return self.__model.variants
 
     def get_rules(self):
         return self.__model.rules
@@ -33,7 +33,7 @@ class Shell:
 
     @controller_setter
     def set_variants(self, variants):
-        self.__model.vars = variants
+        self.__model.variants = variants
 
     @controller_setter
     def set_rules(self, rules):

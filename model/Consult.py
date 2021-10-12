@@ -37,3 +37,13 @@ class Consult:
     def clear(self):
         self.__active_rules = []
         self.__vars_with_values = {}
+
+    def var_is_assigned(self, var):
+        return var in self.__vars_with_values.keys()
+
+    def check_conclusion(self, var, rule):
+        return any(
+            conclusion.var.name == var.name
+            and rule not in self.active_rules
+            for conclusion in rule.conclusions
+        )
