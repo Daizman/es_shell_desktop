@@ -18,7 +18,7 @@ class Consult:
 
     def take_goal(self, var):
         goal_value = ''
-        for rule_ind, rule in enumerate(self.__model.rules):
+        for rule in self.__model.rules:
             follow_rule = True
             var_val = ''
             conclusion_has_var = any(

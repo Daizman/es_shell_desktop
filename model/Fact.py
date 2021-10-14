@@ -10,13 +10,13 @@ class Fact:
         return self.__var
 
     @var.setter
-    def var(self, var):
-        if not var:
+    def var(self, variable):
+        if not variable:
             raise ValueError('Попытка присвоить пустую переменную')
         if self.__var:
             self.__var.remove_fact(self)
-        self.__var = var
-        var.connect_fact(self)
+        self.__var = variable
+        variable.connect_fact(self)
 
     @property
     def value(self):
