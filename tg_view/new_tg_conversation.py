@@ -71,7 +71,6 @@ def start(message: types.Message) -> None:
     bot.register_next_step_handler(message, partial(consult))
 
 
-@print_enter
 def consult(message) -> None:
     global goal
     if message.text == 'Выйти':
@@ -81,7 +80,6 @@ def consult(message) -> None:
     con_step(goal, message)
 
 
-@print_enter
 def con_step(c_goal, message):
     if not consult_model.check_var_can_be_reached(c_goal):
         return False
@@ -92,7 +90,6 @@ def con_step(c_goal, message):
             check_rule(True, rule, None, 0, message)
 
 
-@print_enter
 def check_rule(follow_rule, rule, var_to_assign, cur_step, message) -> bool:
     global i_asked_var, goal, che
 
@@ -137,7 +134,6 @@ def check_rule(follow_rule, rule, var_to_assign, cur_step, message) -> bool:
     return follow_rule
 
 
-@print_enter
 def ask_var(var, message, follow_rule, rule, step) -> None:
     markup = create_reply_keyboard_markup(gen_reply_keyboard(var.domain.values))
     message = bot.send_message(
@@ -150,7 +146,7 @@ def ask_var(var, message, follow_rule, rule, step) -> None:
 
 def check_goal(message):
     global goal, i_answered
-    if goal and consult_model.var_can_be_assigned_by_rule(goal):
+    if goal and consult_model.var_can_be_assigned_by_rule(goal) and not i_answered:
         i_answered = True
         bot.send_message(
             message.chat.id,
