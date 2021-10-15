@@ -59,4 +59,4 @@ class Shell:
 
     @controller_setter
     def add_rule(self, rule):
-        self.__model.add_rule(rule.name, rule.description, rule.reasons, rule.conclusion)
+        self.__model.add_rule(rule.name, rule.description, rule.reasons, rule.conclusions)

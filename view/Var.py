@@ -46,6 +46,8 @@ class Var(IValidateMyFields, IShowErrorDialog):
         else:
             self.ui.var_type_radio_out_requested.setChecked(True)
 
+        self.ui.can_be_goal.setChecked(var.can_be_goal)
+
         self.refresh_domains()
 
         self.setup_buttons()
