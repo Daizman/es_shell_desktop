@@ -107,9 +107,11 @@ def check_rule(follow_rule, rule, var_to_assign, cur_step, message) -> bool:
             consult_model.add_var_with_value(var_to_assign, message.text)
             i_asked_var = False
             con_step(goal, message)
+        check_goal(message)
         return follow_rule
 
     if not follow_rule or i_asked_var:
+        check_goal(message)
         return follow_rule
     for step in range(cur_step, len(rule.reasons)):
         if consult_model.check_var_is_assigned(rule.reasons[step].var):
@@ -131,6 +133,7 @@ def check_rule(follow_rule, rule, var_to_assign, cur_step, message) -> bool:
                     ask_var(var, message, follow_rule, rule, step)
                 break
 
+    check_goal(message)
     return follow_rule
 
 
