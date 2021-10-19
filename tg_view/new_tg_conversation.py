@@ -82,6 +82,7 @@ def consult(message) -> None:
 
 def con_step(c_goal, message):
     if not consult_model.check_var_can_be_reached(c_goal):
+        check_exit(message, c_goal)
         return False
     if consult_model.check_var_is_assigned(c_goal):
         return True
@@ -153,7 +154,16 @@ def check_goal(message):
         i_answered = True
         bot.send_message(
             message.chat.id,
-            f'Результат консультации: {consult_model.vars_with_values[goal]}'
+            f'Результат консультации: {consult_model.vars_with_values[goal]}.'
+        )
+
+
+def check_exit(message, c_goal):
+    global goal
+    if c_goal == goal and not consult_model.check_var_can_be_reached(c_goal):
+        bot.send_message(
+            message.chat.id,
+            'Не удалось найти ответ в системе, случай будет передан администратору.'
         )
 
 
